@@ -14,8 +14,9 @@
 
 minimap英雄坐标提取：颜色阈值法（AGE-45：MVP不用YOLOv8），阶段2迁移。
 
-已知工程债务：HUD/minimap裁剪坐标目前按验证素材（1290×2796竖屏录屏，解码帧
-为横向）硬编码默认值，需做成config可配置项（AGE-49）。
+HUD/minimap裁剪坐标与采样参数从 config.yaml 的 `video:` 节读取（AGE-49），
+不再硬编码；config缺失/不完整时回落到验证素材（1290×2796竖屏录屏，解码帧
+为横向）上标定出的默认值，保证脱离config也能跑（如单测、脚本直接调用）。
 """
 
 from __future__ import annotations
@@ -25,16 +26,51 @@ import tempfile
 from pathlib import Path
 from typing import Any, Callable, Optional
 
+from utils import config_utils
+
 # (K, D, A) 读数；None 表示该帧HUD不可见/读取失败
 KDA = tuple[int, int, int]
 KdaReader = Callable[[Path], Optional[KDA]]
 
-# 验证素材上的HUD计数器区域（解码帧坐标 x:1650-2300, y:0-140）。AGE-49: 待配置化。
-DEFAULT_HUD_CROP = {"x": 1650, "y": 0, "w": 650, "h": 140}
+# 验证素材上标定出的兜底值（config.yaml缺失/字段不全时使用）。
+_FALLBACK_HUD_CROP = {"x": 1650, "y": 0, "w": 650, "h": 140}
+_FALLBACK_MINIMAP_CROP = {"x": 0, "y": 0, "w": 420, "h": 320}
+_FALLBACK_COARSE_INTERVAL = 75.0
+_FALLBACK_PRECISION = 3.0
 
-# 粗采样间隔与二分收敛窗口（秒），tech spec 4.1.1
-DEFAULT_COARSE_INTERVAL = 75.0
-DEFAULT_PRECISION = 3.0
+
+def _load_video_config() -> dict[str, Any]:
+    """读取config.yaml的video节；文件缺失/字段缺失/解析出错都静默回落。"""
+    try:
+        return config_utils.load_config().get("video") or {}
+    except Exception:
+        return {}
+
+
+def _crop_from_config(key: str, fallback: dict[str, int]) -> dict[str, int]:
+    cfg = _load_video_config().get(key)
+    if not isinstance(cfg, dict):
+        return dict(fallback)
+    try:
+        return {k: int(cfg[k]) for k in ("x", "y", "w", "h")}
+    except (KeyError, TypeError, ValueError):
+        return dict(fallback)
+
+
+def _number_from_config(key: str, fallback: float) -> float:
+    cfg = _load_video_config().get(key)
+    try:
+        return float(cfg) if cfg is not None else fallback
+    except (TypeError, ValueError):
+        return fallback
+
+
+# 模块加载时从config读取一次，作为各函数的默认参数值；调用方仍可显式传参覆盖。
+DEFAULT_HUD_CROP = _crop_from_config("hud_crop", _FALLBACK_HUD_CROP)
+DEFAULT_MINIMAP_CROP = _crop_from_config("minimap_crop", _FALLBACK_MINIMAP_CROP)
+DEFAULT_COARSE_INTERVAL = _number_from_config("coarse_interval_sec", _FALLBACK_COARSE_INTERVAL)
+DEFAULT_PRECISION = _number_from_config("precision_sec", _FALLBACK_PRECISION)
+
 # HUD不可见时在邻近时刻重采的偏移序列（秒）
 _RESAMPLE_OFFSETS = (1.0, -1.0, 2.0, -2.0, 4.0, -4.0)
 
@@ -120,7 +156,7 @@ def extract_death_events(
         kda_reader: HUD裁剪图 → (K, D, A) 或 None（HUD不可见）。
         coarse_interval: 粗采样间隔（秒），spec建议60-90。
         precision: 二分收敛窗口（秒）。
-        hud_crop: HUD计数器裁剪区域（AGE-49配置化前使用验证素材默认值）。
+        hud_crop: HUD计数器裁剪区域（默认从config.yaml的video.hud_crop读取）。
 
     Returns:
         按时间升序的事件列表，每项:
@@ -175,8 +211,6 @@ def extract_death_events(
 # Minimap英雄位置检测（阶段0验证方案：HSV颜色阈值+连通域面积过滤，AGE-45）
 # ---------------------------------------------------------------------------
 
-# 验证素材上的minimap区域（左上角420×320）。AGE-49: 待配置化。
-DEFAULT_MINIMAP_CROP = {"x": 0, "y": 0, "w": 420, "h": 320}
 # 英雄头像圆环连通域面积（阶段0实测：英雄200-700px，图标类干扰项15-45px）
 _MIN_ICON_AREA = 120
 _MAX_ICON_AREA = 1500
