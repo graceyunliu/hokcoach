@@ -1,0 +1,176 @@
+
+---
+
+### 文件二：开源资源清单.md
+
+```markdown
+# 开源项目与技术资源清单
+
+**项目代号：** Coach  
+**用途：** 技术选型参考 & 开发资源池  
+**整理日期：** 2025-08-11
+
+---
+
+## 一、王者荣耀专项项目
+
+### 1. [hok-framework](https://github.com/orgs/hok-framework/repositories) ⭐⭐⭐⭐⭐
+**王者荣耀自动化框架**  
+英雄技能数据解析、游戏状态监控、基于图像识别的实时小地图分析。最接近“王者荣耀SDK”，可直接做回放解析底层。
+
+### 2. [King-of-Glory-AI-Challenge](https://github.com/AiRobot-lab/King-of-Glory-AI-Challenge) ⭐⭐⭐⭐
+**王者荣耀AI挑战赛开源方案**  
+腾讯官方AI竞赛参赛方案全集，含英雄建模、对战策略。可用于校准AI教练的决策评判标准。
+
+### 3. [smoba-data-mining](https://github.com/search?q=smoba+data) ⭐⭐⭐
+**王者荣耀数据挖掘项目**  
+英雄、装备数据JSON，对战统计管道。可省去手动整理游戏数据的时间。
+
+### 4. [wzry-ai-coach](https://github.com/search?q=wzry+ai+coach) ⭐⭐⭐⭐
+**王者荣耀AI教练相关项目**  
+多个中文项目在做类似方向，已实现出装推荐、对局分析等。参考避坑。
+
+---
+
+## 二、游戏回放处理 & 计算机视觉
+
+### 5. [ultralytics/ultralytics](https://github.com/ultralytics/ultralytics) ⭐⭐⭐⭐⭐
+**YOLOv8 对象检测**  
+训练识别小地图英雄头像、击杀图标。核心视觉引擎。
+
+### 6. [pbugnion/unity-ocr](https://github.com/pbugnion/unity-ocr) ⭐⭐⭐⭐
+**Unity游戏画面OCR**  
+识别击杀信息、经济面板。王者同为Unity引擎，适配性好。
+
+### 7. [opendota/opendota](https://github.com/odota/opendota) ⭐⭐⭐⭐
+**Dota2开源数据平台**  
+成熟MOBA数据架构，API设计、数据模型值得借鉴。
+
+### 8. [LeagueSandbox/definitions](https://github.com/LeagueSandbox/definitions) ⭐⭐⭐
+**LOL数据规格定义**  
+英雄、技能数据标准化格式，可参考定义王者荣耀数据结构。
+
+### 9. [vengle/awesome-ml-game-data](https://github.com/vengle/awesome-ml-game-data) ⭐⭐⭐
+**游戏数据+ML资源合集**  
+论文和工具列表，了解行业现有方案。
+
+---
+
+## 三、自适应学习 & 教学系统
+
+### 10. [CAHLR/pyBKT](https://github.com/CAHLR/pyBKT) ⭐⭐⭐⭐
+**贝叶斯知识追踪**  
+追踪技能掌握程度，驱动训练任务自动进阶。
+
+### 11. [google/bayes-irt](https://github.com/google/bayes-irt) ⭐⭐⭐⭐
+**贝叶斯项目反应理论**  
+评估玩家真实水平，实现段位感知和难度匹配。
+
+### 12. [adaptive-learning/awesome-adaptive-learning](https://github.com/adaptive-learning/awesome-adaptive-learning) ⭐⭐⭐
+**自适应学习资源合集**  
+教育领域成熟算法汇总。
+
+### 13. [tensorflow/neural-structured-learning](https://github.com/tensorflow/neural-structured-learning) ⭐⭐⭐ (v2.0)
+**神经结构化学习**  
+建模技能依赖关系，构建技能树。
+
+### 14. [openai/CLIP](https://github.com/openai/CLIP) ⭐⭐⭐ (v2.0)
+**图文匹配模型**  
+自动识别游戏场景（优势期、团战站位等）。
+
+---
+
+## 四、语音交互 & 对话质量
+
+### 15. [fixie-ai/ultravox](https://github.com/fixie-ai/ultravox) ⭐⭐⭐⭐⭐
+**端到端实时语音对话**  
+延迟<300ms，支持打断。实时复盘对话首选引擎。
+
+### 16. [FunAudioLLM/CosyVoice](https://github.com/FunAudioLLM/CosyVoice) ⭐⭐⭐⭐
+**阿里开源情感语音合成**  
+让AI教练说话有情绪起伏，不是念稿机器。
+
+### 17. [RVC-Boss/GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) ⭐⭐⭐
+**少样本声音克隆**  
+可定制教练声音，中文效果极佳。
+
+### 18. [mlc-ai/web-llm](https://github.com/mlc-ai/web-llm) ⭐⭐⭐
+**浏览器内运行大模型**  
+降低服务端延迟和成本。
+
+### 19. [deepset-ai/haystack](https://github.com/deepset-ai/haystack) ⭐⭐⭐⭐
+**RAG管道框架**  
+实现跨会话记忆，让教练记得“你上周也犯过这个错”。
+
+### 20. [langfuse/langfuse](https://github.com/langfuse/langfuse) ⭐⭐⭐
+**LLM可观测性平台**  
+追踪对话质量、延迟，监控教练话术效果。
+
+### 21. [explodinggradients/ragas](https://github.com/explodinggradients/ragas) ⭐⭐⭐
+**RAG质量评估**  
+检测教练引用的案例是否准确。
+
+---
+
+## 五、快速原型 & 测试工具
+
+### 22. [streamlit/streamlit](https://github.com/streamlit/streamlit) ⭐⭐⭐⭐⭐
+**纯Python快速搭建数据应用**  
+MVP首选，无需前端知识，3天出原型。
+
+### 23. [gradio-app/gradio](https://github.com/gradio-app/gradio) ⭐⭐⭐⭐
+**ML模型演示界面生成器**  
+内置语音组件，适合快速搭建语音交互MVP。
+
+### 24. [langgenius/dify](https://github.com/langgenius/dify) ⭐⭐⭐⭐⭐
+**LLM应用开发平台**  
+可视化编排AI工作流，内置RAG和对话记忆。先跑通对话逻辑再工程化。
+
+### 25. [PostHog/posthog](https://github.com/PostHog/posthog) ⭐⭐
+**开源产品分析**  
+追踪自我使用行为，分析流失点。
+
+### 26. [traceloop/openllmetry](https://github.com/traceloop/openllmetry) ⭐⭐
+**LLM应用可观测性**  
+监控API调用、Token消耗。
+
+---
+
+## 六、前端技术（v2.0储备）
+
+### 27. [shadcn-ui/ui](https://github.com/shadcn-ui/ui) ⭐⭐⭐
+**现代React组件库**  
+未来Web版UI快速搭建。
+
+### 28. [xyflow/xyflow](https://github.com/xyflow/xyflow) ⭐⭐⭐
+**交互式节点图**  
+可视化技能树，点击节点进入训练。
+
+### 29. [rive-app/rive-renderer](https://github.com/rive-app/rive-renderer) ⭐⭐
+**实时交互动画引擎**  
+创建AI教练虚拟形象。
+
+### 30. [recharts/recharts](https://github.com/recharts/recharts) ⭐⭐⭐
+**React图表库**  
+战力增长曲线、训练打卡热力图。
+
+---
+
+## MVP 推荐技术栈组合
+
+| 层级 | 技术选择 |
+|------|----------|
+| MVP前端 | Streamlit 或 Gradio |
+| 回放分析 | hok-framework + YOLOv8 + Unity-OCR |
+| AI教练大脑 | Dify + 通义千问/DeepSeek |
+| 语音合成 | CosyVoice |
+| 语音对话引擎 | Ultravox |
+| 数据存储 | 本地JSON (v1.0) |
+| 自适应学习 | pyBKT + google-bayes-irt |
+| 质量监控 | Langfuse |
+| 产品分析 | PostHog |
+
+---
+
+**文档状态：** ✅ 开源资源清单完成  
+**下一步：** 技术规格文档 + 实现计划

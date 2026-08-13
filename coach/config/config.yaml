@@ -1,0 +1,36 @@
+# Coach 全局配置
+app:
+  name: "AI王者荣耀决策思维教练"
+  codename: "Coach"
+  version: "0.2.0"          # 阶段2/3引擎已接通
+
+paths:
+  data_dir: "data"
+  replays_dir: "data/replays"
+  knowledge_base_dir: "knowledge_base"
+  prompts_dir: "prompts"
+
+# LLM 配置（OpenAI兼容接口；tech spec选型 DeepSeek / 通义千问，均兼容）
+# 未配置API key时自动进入降级模式（规则归因+知识库原文，无AI点评）。
+llm:
+  base_url: "https://api.deepseek.com/v1"    # 或通义: https://dashscope.aliyuncs.com/compatible-mode/v1
+  model: "deepseek-chat"                     # 通义可用 qwen-plus
+  api_key_env: "COACH_LLM_API_KEY"           # 在环境变量中设置key，不写进文件
+  timeout_sec: 120
+  # 视觉模型：HUD KDA读数、战绩截图OCR（DeepSeek无视觉，默认走通义qwen-vl）
+  vision:
+    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    model: "qwen-vl-plus"
+    api_key_env: "COACH_VLM_API_KEY"         # 缺省回落到COACH_LLM_API_KEY
+
+# 视频检测区域（AGE-49：基于验证素材1290×2796竖屏录屏标定，
+# 换设备/游戏UI改版后需重新标定）
+video:
+  hud_crop:      {x: 1650, y: 0, w: 650, h: 140}   # KDA计数器区域
+  minimap_crop:  {x: 0,    y: 0, w: 420, h: 320}   # 小地图区域
+  coarse_interval_sec: 75
+  precision_sec: 3
+
+# 语音层已移出MVP（实现计划v1.0调整1），v1.1+再启用
+voice:
+  enabled: false

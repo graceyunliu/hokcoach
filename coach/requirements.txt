@@ -1,0 +1,13 @@
+# 核心运行：纯标准库即可（降级模式/手动录入/训练闭环/打卡/周报数据版）。
+# 以下均为可选依赖，按需安装：
+
+# 配置读取（未安装时自动降级到内置极简YAML解析器）
+pyyaml
+
+# 视频自动复盘（--replay <video>）：minimap颜色阈值检测
+# 另需系统安装 ffmpeg/ffprobe（非pip包）
+opencv-python
+numpy
+
+# 知识库冷启动：YouTube字幕拉取（python -m utils.transcript_utils）
+youtube-transcript-api

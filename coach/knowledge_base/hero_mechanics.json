@@ -1,0 +1,4 @@
+{
+  "_comment": "Tier 1机制事实（官方数据）。冷启动时参考 qing762/honor-of-kings-api 思路从pvp.qq.com抓取。schema见tech spec 3.1知识库条目。",
+  "entries": []
+}

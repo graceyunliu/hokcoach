@@ -1,0 +1,461 @@
+# -*- coding: utf-8 -*-
+"""视频分析工具（阶段0核心产出的正式归位处）。
+
+死亡事件提取采用 tech spec 4.1.1（v1.2，AGE-44修订）方案：
+    HUD KDA计数器60-90秒间隔粗采样 → 命中窗口后二分加密定位。
+不做全视频scdet扫描（阶段0实测在实际算力下超时不可行，见 阶段0验证结论.md）。
+
+管线分工：
+- 本模块负责：采样调度、ffmpeg单帧解码+HUD区域裁剪、二分定位算法（含同一
+  粗采样窗口内计数器跳变≥2的拆分定位）、HUD不可见帧的邻近重采。
+- 计数器读数（从HUD裁剪图读出K/D/A三个数字）由调用方注入 ``kda_reader``
+  （VLM或轻量OCR均可，阶段2接入LLM配置后提供默认实现）。读不出时返回None
+  即视为该帧HUD不可见。
+
+minimap英雄坐标提取：颜色阈值法（AGE-45：MVP不用YOLOv8），阶段2迁移。
+
+已知工程债务：HUD/minimap裁剪坐标目前按验证素材（1290×2796竖屏录屏，解码帧
+为横向）硬编码默认值，需做成config可配置项（AGE-49）。
+"""
+
+from __future__ import annotations
+
+import subprocess
+import tempfile
+from pathlib import Path
+from typing import Any, Callable, Optional
+
+# (K, D, A) 读数；None 表示该帧HUD不可见/读取失败
+KDA = tuple[int, int, int]
+KdaReader = Callable[[Path], Optional[KDA]]
+
+# 验证素材上的HUD计数器区域（解码帧坐标 x:1650-2300, y:0-140）。AGE-49: 待配置化。
+DEFAULT_HUD_CROP = {"x": 1650, "y": 0, "w": 650, "h": 140}
+
+# 粗采样间隔与二分收敛窗口（秒），tech spec 4.1.1
+DEFAULT_COARSE_INTERVAL = 75.0
+DEFAULT_PRECISION = 3.0
+# HUD不可见时在邻近时刻重采的偏移序列（秒）
+_RESAMPLE_OFFSETS = (1.0, -1.0, 2.0, -2.0, 4.0, -4.0)
+
+
+def video_duration(video_path: str) -> float:
+    """用ffprobe读取视频时长（秒）。"""
+    out = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+         "-of", "default=noprint_wrappers=1:nokey=1", video_path],
+        capture_output=True, text=True, check=True,
+    )
+    return float(out.stdout.strip())
+
+
+def grab_hud_frame(video_path: str, ts: float, out_path: Path,
+                   crop: dict[str, int] = DEFAULT_HUD_CROP) -> Path:
+    """在时刻ts解码单帧并裁剪HUD计数器区域，写入out_path。
+
+    -ss 放在 -i 之前走关键帧快速seek，单帧解码成本很低（这正是本方案
+    相对全视频scdet扫描的成本优势所在）。
+    """
+    vf = f"crop={crop['w']}:{crop['h']}:{crop['x']}:{crop['y']}"
+    subprocess.run(
+        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+         "-ss", f"{max(ts, 0):.3f}", "-i", video_path,
+         "-frames:v", "1", "-vf", vf, str(out_path)],
+        check=True,
+    )
+    return out_path
+
+
+def _read_kda_at(video_path: str, ts: float, kda_reader: KdaReader,
+                 workdir: Path, crop: dict[str, int],
+                 duration: float) -> Optional[KDA]:
+    """读取时刻ts的KDA；HUD不可见时在邻近时刻重采（tech spec 4.1.1已知局限(2)）。"""
+    for offset in (0.0, *_RESAMPLE_OFFSETS):
+        t = min(max(ts + offset, 0.0), max(duration - 0.1, 0.0))
+        frame = workdir / f"hud_{t:.3f}.png"
+        try:
+            grab_hud_frame(video_path, t, frame, crop)
+        except subprocess.CalledProcessError:
+            continue
+        kda = kda_reader(frame)
+        if kda is not None:
+            return kda
+    return None
+
+
+def _bisect_one_death(read: Callable[[float], Optional[KDA]],
+                      lo: float, hi: float, target_deaths: int,
+                      precision: float) -> tuple[float, float]:
+    """在(lo, hi]内二分定位死亡数首次达到target_deaths的时刻，收敛到precision秒。
+
+    read(lo).deaths < target_deaths <= read(hi).deaths 为前置条件。
+    中点读取失败（重采后仍不可见）时按"未达到"处理向右收敛，保守不丢事件。
+    """
+    while hi - lo > precision:
+        mid = (lo + hi) / 2.0
+        kda = read(mid)
+        if kda is not None and kda[1] >= target_deaths:
+            hi = mid
+        else:
+            lo = mid
+    return lo, hi
+
+
+def extract_death_events(
+    video_path: str,
+    kda_reader: KdaReader,
+    coarse_interval: float = DEFAULT_COARSE_INTERVAL,
+    precision: float = DEFAULT_PRECISION,
+    hud_crop: dict[str, int] = DEFAULT_HUD_CROP,
+) -> list[dict[str, Any]]:
+    """从回放视频提取死亡事件列表（tech spec 4.1.1 v1.2方案）。
+
+    步骤：
+    1. 以coarse_interval为间隔粗采样，只解码+裁剪HUD计数器区域；
+    2. 相邻可读采样点间死亡计数递增 → 命中候选窗口；
+    3. 窗口内对每一次递增分别二分定位（跳变≥2时拆分），收敛到precision秒。
+
+    Args:
+        video_path: 回放视频路径。
+        kda_reader: HUD裁剪图 → (K, D, A) 或 None（HUD不可见）。
+        coarse_interval: 粗采样间隔（秒），spec建议60-90。
+        precision: 二分收敛窗口（秒）。
+        hud_crop: HUD计数器裁剪区域（AGE-49配置化前使用验证素材默认值）。
+
+    Returns:
+        按时间升序的事件列表，每项:
+        {"ts": 定位窗口中点秒, "window": (lo, hi),
+         "kda_before": (K,D,A), "kda_after": (K,D,A),
+         "kill_traded": 该次死亡同窗口内击杀数是否同步增加（"换头"信号）}
+    """
+    duration = video_duration(video_path)
+    events: list[dict[str, Any]] = []
+
+    with tempfile.TemporaryDirectory(prefix="coach_hud_") as tmp:
+        workdir = Path(tmp)
+
+        def read(ts: float) -> Optional[KDA]:
+            return _read_kda_at(video_path, ts, kda_reader, workdir,
+                                hud_crop, duration)
+
+        # 1. 粗采样（跳过不可读点，窗口自然拉宽到下一个可读点）
+        samples: list[tuple[float, KDA]] = []
+        ts = 0.0
+        while ts < duration:
+            kda = read(ts)
+            if kda is not None:
+                samples.append((ts, kda))
+            ts += coarse_interval
+        if not samples or samples[-1][0] < duration - coarse_interval / 2:
+            kda = read(duration - 1.0)
+            if kda is not None:
+                samples.append((duration - 1.0, kda))
+
+        # 2+3. 找死亡计数递增的窗口，逐次二分定位
+        for (t0, kda0), (t1, kda1) in zip(samples, samples[1:]):
+            d0, d1 = kda0[1], kda1[1]
+            lo = t0
+            for target in range(d0 + 1, d1 + 1):
+                lo, hi = _bisect_one_death(read, lo, t1, target, precision)
+                kda_before = read(lo) or kda0
+                kda_after = read(hi) or kda1
+                events.append({
+                    "ts": (lo + hi) / 2.0,
+                    "window": (lo, hi),
+                    "kda_before": kda_before,
+                    "kda_after": kda_after,
+                    "kill_traded": kda_after[0] > kda_before[0],
+                })
+                lo = hi  # 下一次递增只可能在其后
+
+    return events
+
+
+# ---------------------------------------------------------------------------
+# Minimap英雄位置检测（阶段0验证方案：HSV颜色阈值+连通域面积过滤，AGE-45）
+# ---------------------------------------------------------------------------
+
+# 验证素材上的minimap区域（左上角420×320）。AGE-49: 待配置化。
+DEFAULT_MINIMAP_CROP = {"x": 0, "y": 0, "w": 420, "h": 320}
+# 英雄头像圆环连通域面积（阶段0实测：英雄200-700px，图标类干扰项15-45px）
+_MIN_ICON_AREA = 120
+_MAX_ICON_AREA = 1500
+
+_ROW_NAMES = ("上", "中", "下")
+_COL_NAMES = ("左", "中", "右")
+
+
+def region_label(cx: float, cy: float, w: int, h: int) -> str:
+    """minimap坐标 → 3×3粗粒度区域名（"左上"/"中路"级别即可，见实现计划阶段0）。"""
+    col = _COL_NAMES[min(int(cx / w * 3), 2)]
+    row = _ROW_NAMES[min(int(cy / h * 3), 2)]
+    if row == "中" and col == "中":
+        return "地图中部(中路/河道)"
+    return f"{col}{row}区域"
+
+
+def grab_minimap_frame(video_path: str, ts: float, out_path: Path,
+                       crop: dict[str, int] = DEFAULT_MINIMAP_CROP) -> Path:
+    """在时刻ts解码单帧并裁剪minimap区域。"""
+    vf = f"crop={crop['w']}:{crop['h']}:{crop['x']}:{crop['y']}"
+    subprocess.run(
+        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+         "-ss", f"{max(ts, 0):.3f}", "-i", video_path,
+         "-frames:v", "1", "-vf", vf, str(out_path)],
+        check=True,
+    )
+    return out_path
+
+
+def detect_hero_icons(minimap_image: Path,
+                      crop: dict[str, int] = DEFAULT_MINIMAP_CROP) -> dict[str, list[dict[str, Any]]]:
+    """在minimap裁剪图上检测敌方（红环）/己方（蓝环）英雄图标。
+
+    阶段0验证结论：敌我用红/蓝圆环颜色编码，HSV阈值+连通域面积过滤即可
+    可靠区分，无需YOLOv8。隐身/草丛内英雄本就不可见（预期内"证据不足"）。
+    """
+    try:
+        import cv2  # type: ignore
+        import numpy as np  # type: ignore
+    except ImportError as e:
+        raise RuntimeError(
+            "minimap检测需要 opencv-python 与 numpy："
+            "pip install opencv-python numpy"
+        ) from e
+
+    img = cv2.imread(str(minimap_image))
+    if img is None:
+        raise ValueError(f"无法读取图片: {minimap_image}")
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+    # 红色跨HSV色相环两端
+    red = cv2.inRange(hsv, np.array([0, 90, 90]), np.array([10, 255, 255])) | \
+          cv2.inRange(hsv, np.array([170, 90, 90]), np.array([180, 255, 255]))
+    blue = cv2.inRange(hsv, np.array([95, 90, 90]), np.array([130, 255, 255]))
+
+    def _components(mask) -> list[dict[str, Any]]:
+        n, _, stats, centroids = cv2.connectedComponentsWithStats(mask)
+        out = []
+        for i in range(1, n):
+            area = int(stats[i, cv2.CC_STAT_AREA])
+            if _MIN_ICON_AREA <= area <= _MAX_ICON_AREA:
+                cx, cy = centroids[i]
+                out.append({
+                    "cx": float(cx), "cy": float(cy), "area": area,
+                    "region": region_label(cx, cy, crop["w"], crop["h"]),
+                })
+        return out
+
+    return {"enemies": _components(red), "allies": _components(blue)}
+
+
+def extract_minimap_positions(
+    video_path: str,
+    around_ts: float,
+    window_sec: float = 15.0,
+    sample_interval: float = 3.0,
+    crop: dict[str, int] = DEFAULT_MINIMAP_CROP,
+) -> list[dict[str, Any]]:
+    """提取around_ts前window_sec内敌方英雄的minimap大致位置轨迹。
+
+    Returns:
+        按时间升序，每项:
+        {"ts": 秒, "enemies": [{"cx","cy","area","region"}...],
+         "enemy_visible_count": int, "ally_visible_count": int}
+        敌方图标不可见（隐身/草丛/无视野）时enemies为空——这本身是可靠的
+        "视野缺失"信号（阶段0验证结论二）。
+    """
+    duration = video_duration(video_path)
+    start = max(around_ts - window_sec, 0.0)
+    end = min(around_ts, duration - 0.1)
+    positions: list[dict[str, Any]] = []
+    with tempfile.TemporaryDirectory(prefix="coach_mm_") as tmp:
+        ts = start
+        while ts <= end + 1e-6:
+            frame = Path(tmp) / f"mm_{ts:.3f}.png"
+            try:
+                grab_minimap_frame(video_path, ts, frame, crop)
+                icons = detect_hero_icons(frame, crop)
+            except (subprocess.CalledProcessError, ValueError):
+                ts += sample_interval
+                continue
+            positions.append({
+                "ts": ts,
+                "enemies": icons["enemies"],
+                "enemy_visible_count": len(icons["enemies"]),
+                "ally_visible_count": len(icons["allies"]),
+            })
+            ts += sample_interval
+    return positions
+
+
+def summarize_minimap_context(positions: list[dict[str, Any]],
+                              death_ts: float) -> str | None:
+    """把minimap轨迹压缩成一句给分类器/复盘prompt用的中文摘要。
+
+    诚实原则：看不见就说看不见，不推测（tech spec 4.1.3规则6）。
+    """
+    if not positions:
+        return None
+    parts = []
+    for p in positions:
+        rel = int(round(death_ts - p["ts"]))
+        if p["enemy_visible_count"] == 0:
+            parts.append(f"死亡前{rel}秒：小地图上敌方英雄均不可见（无视野）")
+        else:
+            regions = "、".join(sorted({e["region"] for e in p["enemies"]}))
+            parts.append(f"死亡前{rel}秒：可见敌方{p['enemy_visible_count']}人"
+                         f"（{regions}）")
+    # 只保留首/中/尾三个采样点，避免prompt冗长
+    if len(parts) > 3:
+        parts = [parts[0], parts[len(parts) // 2], parts[-1]]
+    return "；".join(parts)
+
+
+# ---------------------------------------------------------------------------
+# 死亡位置"X"标记检测（AGE-46：独立于敌方轨迹的高优先级死亡地点数据源）
+# ---------------------------------------------------------------------------
+#
+# 阶段0验证发现：玩家死亡后，系统会在minimap上直接画一个红色"X"标出死亡
+# 地点，并伴随复活倒计时——这比"从死亡前敌方轨迹反推死亡地点"更直接可靠，
+# 见 tech spec 4.1.2。本节实现该标记的读取，输出作为death_location的
+# 首选数据源；死亡前15秒敌方轨迹（summarize_minimap_context）保留作为
+# 辅助上下文（推断"谁/怎么打死的"仍需要它），两者互补而非互相替代。
+#
+# 识别依据：X标记与英雄头像圆环共用红色色相，但形状不同——头像是实心圆环，
+# 连通域接近其外接矩形面积（extent高）；X是两条交叉笔画，连通域内有大片
+# 背景镂空（extent低）。用extent（面积/外接矩形面积）区分两者，不依赖
+# 额外模型。
+
+_MARKER_MIN_AREA = 30
+_MARKER_MAX_AREA = 500
+# 实心圆形图标extent实测约0.7-0.9；X交叉笔画extent明显更低，阈值取0.45
+_MARKER_MAX_EXTENT = 0.45
+
+
+def detect_death_marker(minimap_image: Path,
+                        crop: dict[str, int] = DEFAULT_MINIMAP_CROP
+                        ) -> Optional[dict[str, Any]]:
+    """在单帧minimap裁剪图上检测系统自动标记的死亡位置红色"X"。
+
+    与detect_hero_icons共用红色HSV阈值，但用extent（连通域面积/外接矩形
+    面积）区分"X"（低extent，笔画间镂空）与英雄圆环图标（高extent，实心）。
+
+    Returns:
+        命中时: {"cx","cy","area","extent","region"}（取extent最低的候选）
+        未命中: None
+    """
+    try:
+        import cv2  # type: ignore
+        import numpy as np  # type: ignore
+    except ImportError as e:
+        raise RuntimeError(
+            "死亡标记检测需要 opencv-python 与 numpy："
+            "pip install opencv-python numpy"
+        ) from e
+
+    img = cv2.imread(str(minimap_image))
+    if img is None:
+        raise ValueError(f"无法读取图片: {minimap_image}")
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    red = cv2.inRange(hsv, np.array([0, 90, 90]), np.array([10, 255, 255])) | \
+          cv2.inRange(hsv, np.array([170, 90, 90]), np.array([180, 255, 255]))
+
+    n, _, stats, centroids = cv2.connectedComponentsWithStats(red)
+    best: Optional[dict[str, Any]] = None
+    for i in range(1, n):
+        area = int(stats[i, cv2.CC_STAT_AREA])
+        if not (_MARKER_MIN_AREA <= area <= _MARKER_MAX_AREA):
+            continue
+        bbox_area = int(stats[i, cv2.CC_STAT_WIDTH]) * int(stats[i, cv2.CC_STAT_HEIGHT])
+        if bbox_area == 0:
+            continue
+        extent = area / bbox_area
+        if extent > _MARKER_MAX_EXTENT:
+            continue  # 太"实心"，更像英雄头像圆环而非X
+        if best is None or extent < best["extent"]:
+            cx, cy = centroids[i]
+            best = {"cx": float(cx), "cy": float(cy), "area": area,
+                    "extent": round(extent, 3),
+                    "region": region_label(cx, cy, crop["w"], crop["h"])}
+    return best
+
+
+def extract_death_location(
+    video_path: str,
+    death_ts: float,
+    crop: dict[str, int] = DEFAULT_MINIMAP_CROP,
+    search_window: float = 6.0,
+    sample_interval: float = 1.0,
+) -> Optional[dict[str, Any]]:
+    """在死亡时刻之后的窗口内寻找系统自动画出的死亡"X"标记（AGE-46）。
+
+    X标记在角色死亡的瞬间出现并伴随复活倒计时持续显示，故从death_ts起
+    （而非之前）向后采样；search_window默认6秒足以覆盖标记出现的延迟。
+    命中第一帧即返回——标记位置在整个显示期间不变，无需继续采样。
+
+    Returns:
+        命中: {"region","cx","cy","ts_offset","source": "minimap_x_marker"}
+        窗口内未命中（如镜头被UI遮挡、录制帧率丢帧）: None
+    """
+    duration = video_duration(video_path)
+    ts = death_ts
+    end = min(death_ts + search_window, duration - 0.1)
+    with tempfile.TemporaryDirectory(prefix="coach_dm_") as tmp:
+        while ts <= end + 1e-6:
+            frame = Path(tmp) / f"dm_{ts:.3f}.png"
+            try:
+                grab_minimap_frame(video_path, ts, frame, crop)
+                marker = detect_death_marker(frame, crop)
+            except (subprocess.CalledProcessError, ValueError):
+                ts += sample_interval
+                continue
+            if marker is not None:
+                return {
+                    "region": marker["region"],
+                    "cx": marker["cx"],
+                    "cy": marker["cy"],
+                    "ts_offset": round(ts - death_ts, 2),
+                    "source": "minimap_x_marker",
+                }
+            ts += sample_interval
+    return None
+
+
+# ---------------------------------------------------------------------------
+# 默认KDA读数器（VLM实现，阶段2接入LLM配置后可用）
+# ---------------------------------------------------------------------------
+
+_KDA_PROMPT = (
+    "这是一张王者荣耀对局界面顶部HUD计数器区域的截图，"
+    "包含 击杀/死亡/助攻 三个数字（形如 2/1/8）。"
+    "请只输出JSON数组 [击杀, 死亡, 助攻]，例如 [2, 1, 8]。"
+    "如果图中看不清或没有这三个数字，只输出 null。"
+)
+
+
+def make_vlm_kda_reader(vlm_client: Any) -> KdaReader:
+    """用视觉LLM（如qwen-vl）构造kda_reader（core.llm_client.LLMClient实例）。
+
+    读不出/调用失败返回None → extract_death_events视为该帧HUD不可见，
+    走邻近重采逻辑。
+    """
+    from core.llm_client import LLMError, extract_json  # 延迟导入避免循环
+
+    def reader(image_path: Path) -> Optional[KDA]:
+        try:
+            raw = vlm_client.chat_image(_KDA_PROMPT, image_path)
+        except LLMError:
+            return None
+        if "null" in raw.lower() and "[" not in raw:
+            return None
+        try:
+            data = extract_json(raw)
+        except ValueError:
+            return None
+        if (isinstance(data, list) and len(data) == 3
+                and all(isinstance(x, int) and x >= 0 for x in data)):
+            return (data[0], data[1], data[2])
+        return None
+
+    return reader

@@ -1,0 +1,23 @@
+# 原始回放录屏（单文件动辄1-2GB+，不适合放git；分析产物见coach/data/replays）
+/Replay/
+*.mp4
+*.MP4
+*.mov
+*.MOV
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 玩家数据（含个人档案/复盘记录，生成产物，不入库；如需示例数据用.example后缀）
+coach/data/player_profile.json
+coach/data/replays/
+coach/data/*.json
+
+# 系统文件
+.DS_Store
+
+# 本地环境
+.env
+*.log
