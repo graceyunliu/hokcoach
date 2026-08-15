@@ -185,6 +185,12 @@ def classify_manual_replay(replay: dict[str, Any],
     cats = replay["death_analysis"]["categories"]
     for detail in replay["death_analysis"]["details"]:
         if detail.get("type"):
+            # 用户手动指定了死亡类型：不跑分类器，但仍需补齐置信度/理由字段
+            # 并计入分类统计，否则会出现"置信度0%、无理由"且categories漏计的问题。
+            detail.setdefault("confidence", 1.0)
+            detail.setdefault("classify_reason", "用户手动指定死亡类型")
+            detail.setdefault("evidence_sufficient", True)
+            cats[detail["type"]] += 1
             continue
         cls = classify_death({
             "death_time": detail.get("timestamp"),
