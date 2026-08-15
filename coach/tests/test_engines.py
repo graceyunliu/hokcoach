@@ -35,7 +35,7 @@ class TestMiniYaml(unittest.TestCase):
         text = config_utils.CONFIG_PATH.read_text(encoding="utf-8")
         cfg = config_utils._mini_yaml(text)
         self.assertEqual(cfg["llm"]["api_key_env"], "COACH_LLM_API_KEY")
-        self.assertEqual(cfg["llm"]["vision"]["model"], "qwen-vl-plus")
+        self.assertEqual(cfg["llm"]["vision"]["model"], "qwen3-vl-plus")
         self.assertEqual(cfg["video"]["coarse_interval_sec"], 75)
         self.assertFalse(cfg["voice"]["enabled"])
 

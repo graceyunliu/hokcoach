@@ -45,7 +45,8 @@ class LLMClient:
 
     @classmethod
     def from_config(cls, config: dict[str, Any],
-                    vision: bool = False) -> Optional["LLMClient"]:
+                    vision: bool = False,
+                    section: str | None = None) -> Optional["LLMClient"]:
         """从config.yaml的llm段构造。未配置key/model时返回None（降级模式）。
 
         config.yaml 结构：
@@ -54,25 +55,35 @@ class LLMClient:
           model: "deepseek-chat"
           api_key_env: "COACH_LLM_API_KEY"
           vision:
-            base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
-            model: "qwen-vl-plus"
+            base_url: "https://ws-xxxxx.<region>.maas.aliyuncs.com/compatible-mode/v1"
+            model: "qwen3-vl-plus"
             api_key_env: "COACH_VLM_API_KEY"   # 缺省回落到llm.api_key_env
+          vision_fallback:                     # 可选：vision主力失败时兜底
+            base_url: "https://api.openai.com/v1"
+            model: "gpt-4o-mini"
+            api_key_env: "OPENAI_API_KEY"
+
+        section: 显式指定要读取的子段名（如 "vision_fallback"），优先于vision参数；
+        不传就沿用vision=True/False的老行为（读"vision"或顶层）。
         """
         llm_cfg = (config or {}).get("llm") or {}
-        if vision:
-            v = llm_cfg.get("vision") or {}
+        section_name = section if section is not None else ("vision" if vision else None)
+        if section_name:
+            v = llm_cfg.get(section_name) or {}
             base_url = v.get("base_url") or llm_cfg.get("base_url")
             model = v.get("model")
             key_env = v.get("api_key_env") or llm_cfg.get("api_key_env") or ""
+            timeout_sec = v.get("timeout_sec") or llm_cfg.get("timeout_sec")
         else:
             base_url = llm_cfg.get("base_url")
             model = llm_cfg.get("model")
             key_env = llm_cfg.get("api_key_env") or ""
+            timeout_sec = llm_cfg.get("timeout_sec")
         api_key = os.environ.get(key_env, "") if key_env else ""
         if not (base_url and model and api_key):
             return None
         return cls(base_url=base_url, model=model, api_key=api_key,
-                   timeout=int(llm_cfg.get("timeout_sec") or 120))
+                   timeout=int(timeout_sec or 120))
 
     # ------------------------------------------------------------------
     # 调用
@@ -132,6 +143,49 @@ class LLMClient:
             ],
         }]
         return self.chat(messages, temperature=temperature, max_tokens=500)
+
+
+class VisionClient:
+    """视觉客户端外壳：主视觉模型失败时自动切换到备用视觉模型。
+
+    背景：项目一度只配了通义千问(DashScope)一个视觉源，中间踩过账号未开通/
+    模型未购买(AccessDenied.Unpurchased)之类的坑，导致视觉功能整个不可用。
+    加一个独立厂商的兜底（默认OpenAI gpt-4o-mini）之后，Qwen那边出问题时
+    HUD/KDA读数和OCR不会跟着全部瘫痪。
+
+    对外接口只有 chat_image()，跟 LLMClient.chat_image 签名一致，
+    ocr_adapter.py / video_utils.py 等调用方完全不需要改代码。
+    """
+
+    def __init__(self, primary: LLMClient, fallback: LLMClient | None = None):
+        self.primary = primary
+        self.fallback = fallback
+
+    @classmethod
+    def from_config(cls, config: dict[str, Any]) -> Optional["VisionClient"]:
+        primary = LLMClient.from_config(config, section="vision")
+        fallback = LLMClient.from_config(config, section="vision_fallback")
+        if primary is None and fallback is None:
+            return None
+        if primary is None:
+            # 只配了兜底、没配主力：直接把兜底当主力用，别浪费这个key
+            return cls(primary=fallback, fallback=None)
+        return cls(primary=primary, fallback=fallback)
+
+    def chat_image(self, prompt: str, image_path: str | Path,
+                   temperature: float = 0.0) -> str:
+        try:
+            return self.primary.chat_image(prompt, image_path, temperature=temperature)
+        except LLMError as primary_err:
+            if self.fallback is None:
+                raise
+            try:
+                return self.fallback.chat_image(prompt, image_path, temperature=temperature)
+            except LLMError as fallback_err:
+                raise LLMError(
+                    f"主视觉模型({self.primary.model})失败: {primary_err}；"
+                    f"兜底视觉模型({self.fallback.model})也失败: {fallback_err}"
+                ) from fallback_err
 
 
 def extract_json(text: str) -> Any:

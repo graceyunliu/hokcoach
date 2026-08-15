@@ -19,7 +19,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from utils import data_utils
+from utils import config_utils, data_utils
+
+# 自动从项目根目录的secrets.local.txt加载API key（如果存在），无需手动export。
+config_utils.load_local_secrets()
 
 
 # ---------------------------------------------------------------------------

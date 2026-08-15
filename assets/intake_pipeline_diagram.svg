@@ -1,0 +1,122 @@
+<svg viewBox="0 0 680 1280" xmlns="http://www.w3.org/2000/svg" role="img" font-family="-apple-system,Helvetica,Arial,sans-serif">
+  <title>王者荣耀版本情报管线架构图</title>
+  <desc>GitHub Actions双周触发，GLM/Qwen动态选择检索中文信源，DeepSeek起草知识库草案，人工审核后合并进正式知识库，供教练引擎检索使用。</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4b4b52"/>
+    </marker>
+    <marker id="arrowDash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#a3a3ab"/>
+    </marker>
+  </defs>
+
+  <style>
+    .box { fill: #f7f7f9; stroke: #d7d7dc; stroke-width: 1; }
+    .boxAlt { fill: #eef1fb; stroke: #c3cbf0; stroke-width: 1; }
+    .boxAccent { fill: #fbf3ea; stroke: #d99a3f; stroke-width: 1.5; }
+    .title { fill: #1c1c22; font-size: 14px; font-weight: 600; text-anchor: middle; }
+    .titleAccent { fill: #a15c14; font-size: 14px; font-weight: 600; text-anchor: middle; }
+    .sub { fill: #63636c; font-size: 11px; text-anchor: middle; }
+    .chip { fill: #ffffff; stroke: #d7d7dc; stroke-width: 1; }
+    .chipText { fill: #63636c; font-size: 10.5px; text-anchor: middle; }
+    .edge { stroke: #4b4b52; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+    .edgeDash { stroke: #a3a3ab; stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; marker-end: url(#arrowDash); }
+    .lbl { fill: #8a8a92; font-size: 10.5px; text-anchor: middle; }
+    .sectionLbl { fill: #8a8a92; font-size: 10px; text-anchor: middle; letter-spacing: 0.5px; }
+  </style>
+
+  <rect width="680" height="1280" fill="#ffffff"/>
+
+  <!-- Trigger -->
+  <rect class="box" x="200" y="16" width="280" height="56" rx="10"/>
+  <text class="title" x="340" y="38">GitHub Actions</text>
+  <text class="sub" x="340" y="56">双周定时（1号/15号 09:00北京时间）+ 手动触发</text>
+
+  <line class="edge" x1="340" y1="72" x2="340" y2="104"/>
+
+  <!-- Source chips -->
+  <text class="sectionLbl" x="340" y="118">检索层信源（11条查询）</text>
+  <rect class="chip" x="50"  y="128" width="140" height="34" rx="8"/>
+  <text class="chipText" x="120" y="149">官方版本说明</text>
+  <rect class="chip" x="198" y="128" width="140" height="34" rx="8"/>
+  <text class="chipText" x="268" y="149">社区百科/攻略站</text>
+  <rect class="chip" x="346" y="128" width="140" height="34" rx="8"/>
+  <text class="chipText" x="416" y="149">微博/TapTap/NGA</text>
+  <rect class="chip" x="494" y="128" width="140" height="34" rx="8"/>
+  <text class="chipText" x="564" y="149">B站/抖音/虎牙主播·教练·选手</text>
+
+  <line class="edge" x1="120" y1="162" x2="310" y2="196"/>
+  <line class="edge" x1="268" y1="162" x2="325" y2="196"/>
+  <line class="edge" x1="416" y1="162" x2="355" y2="196"/>
+  <line class="edge" x1="564" y1="162" x2="370" y2="196"/>
+
+  <!-- Engine selection -->
+  <rect class="boxAlt" x="150" y="198" width="380" height="94" rx="10"/>
+  <text class="title" x="340" y="220">检索层：动态选择引擎</text>
+  <text class="sub" x="340" y="238">谁配置了 API key 就用谁</text>
+
+  <rect class="chip" x="170" y="248" width="160" height="34" rx="8"/>
+  <text class="chipText" x="250" y="269">GLM · web_search（主力）</text>
+  <rect class="chip" x="350" y="248" width="160" height="34" rx="8"/>
+  <text class="chipText" x="430" y="269">Qwen · DashScope（兜底）</text>
+
+  <line class="edge" x1="340" y1="292" x2="340" y2="324"/>
+
+  <!-- DeepSeek draft -->
+  <rect class="box" x="200" y="326" width="280" height="58" rx="10"/>
+  <text class="title" x="340" y="349">起草层：DeepSeek</text>
+  <text class="sub" x="340" y="367">按知识库schema整理条目草案</text>
+
+  <line class="edge" x1="340" y1="384" x2="340" y2="416"/>
+
+  <!-- write proposal file -->
+  <rect class="box" x="160" y="418" width="360" height="58" rx="10"/>
+  <text class="title" x="340" y="441">写入草案文件</text>
+  <text class="sub" x="340" y="459">_pending_updates/{date}_proposal.md + CHANGELOG</text>
+
+  <line class="edge" x1="340" y1="476" x2="340" y2="508"/>
+
+  <!-- PR -->
+  <rect class="box" x="220" y="510" width="240" height="52" rx="10"/>
+  <text class="title" x="340" y="531">GitHub PR</text>
+  <text class="sub" x="340" y="548">分支 intake/auto-update</text>
+
+  <line class="edge" x1="340" y1="562" x2="340" y2="596"/>
+
+  <!-- Human review diamond -->
+  <polygon class="boxAccent" points="340,598 435,648 340,698 245,648"/>
+  <text class="titleAccent" x="340" y="644">人工审核</text>
+  <text class="sub" x="340" y="660">Tier分级 / 信息属实？</text>
+
+  <!-- discard branch -->
+  <path class="edgeDash" d="M245,648 C150,648 110,600 110,530 C110,380 110,260 160,200"/>
+  <text class="lbl" x="88" y="440" transform="rotate(-90 88 440)">不通过：丢弃草案</text>
+
+  <!-- approve branch -->
+  <line class="edge" x1="340" y1="698" x2="340" y2="730"/>
+  <text class="lbl" x="400" y="715">通过</text>
+
+  <!-- merge into KB -->
+  <rect class="box" x="160" y="732" width="360" height="58" rx="10"/>
+  <text class="title" x="340" y="755">人工合并进正式知识库</text>
+  <text class="sub" x="340" y="773">macro_principles.md / map_mechanics.md / hero_mechanics.json</text>
+
+  <line class="edge" x1="340" y1="790" x2="340" y2="822"/>
+
+  <!-- knowledge engine -->
+  <rect class="box" x="190" y="824" width="300" height="58" rx="10"/>
+  <text class="title" x="340" y="847">knowledge_engine.py</text>
+  <text class="sub" x="340" y="865">加载 + 过滤tier3 + 按标签检索</text>
+
+  <line class="edge" x1="340" y1="882" x2="340" y2="914"/>
+
+  <!-- coach output -->
+  <rect class="box" x="220" y="916" width="240" height="52" rx="10"/>
+  <text class="title" x="340" y="937">Coach 教练输出</text>
+  <text class="sub" x="340" y="954">复盘点评引用最新原则</text>
+
+  <!-- footnote -->
+  <text class="lbl" x="340" y="1000">草案文件不会被 knowledge_engine.py 自动加载 —— 合并前对教练输出零影响</text>
+  <text class="lbl" x="340" y="1018">检索引擎按可用key动态切换：只配一个就单用，两个都配GLM为主Qwen兜底</text>
+</svg>

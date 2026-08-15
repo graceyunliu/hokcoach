@@ -2,8 +2,12 @@
 """数据情报管线主流程：双周巡检 → 起草知识库更新草案（不自动合并）。
 
 流程：
-    1. 检索层（GLM + web_search插件）按 sources.SOURCE_QUERIES 逐条查询，
-       GLM能直接访问中文网站（官网/百科/论坛/视频平台相关页面）。
+    1. 检索层按 sources.SOURCE_QUERIES 逐条查询中文网站（官网/百科/论坛/视频
+       平台相关页面）。检索引擎动态选择：GLM（web_search插件）和Qwen
+       （DashScope enable_search）哪个配了key就用哪个；两个都配了，GLM是
+       主力（结果更结构化）、Qwen兜底；只配了一个就单用那一个，没有备用。
+       只申请到DashScope key、还没申请到智谱key时也能正常跑，之后补上
+       智谱key会自动切回"GLM主力+Qwen兜底"，不用改代码。
     2. 读取现有知识库条目id，避免起草层重复造重复条目。
     3. 起草层（DeepSeek）把检索到的原始材料整理成符合 macro_principles.md
        条目schema的草案，标注 status: pending_review / change_type。
@@ -11,8 +15,8 @@
        追加 CHANGELOG.md 一行摘要。绝不直接改 macro_principles.md 等正式文件
        ——由人工审核后手动合并（见 _pending_updates/README.md）。
 
-用法：
-    export ZHIPU_API_KEY=...
+用法（至少配置ZHIPU_API_KEY或DASHSCOPE_API_KEY其中一个，加上DEEPSEEK_API_KEY）：
+    export DASHSCOPE_API_KEY=...   # 或 ZHIPU_API_KEY，或两个都配
     export DEEPSEEK_API_KEY=...
     cd coach && python -m intake.run_intake
 
@@ -36,7 +40,10 @@ from intake.glm_search import GLMSearchClient, GLMSearchError  # noqa: E402
 from intake.qwen_search import QwenSearchClient, QwenSearchError  # noqa: E402
 from intake.search_types import SearchResult  # noqa: E402
 from intake.sources import CATEGORY_LABEL, SOURCE_QUERIES  # noqa: E402
-from utils.config_utils import load_config  # noqa: E402
+from utils.config_utils import load_config, load_local_secrets  # noqa: E402
+
+# 自动从项目根目录的secrets.local.txt加载API key（如果存在），无需手动export。
+load_local_secrets()
 
 PENDING_DIR = BASE_DIR / "knowledge_base" / "_pending_updates"
 CHANGELOG_PATH = PENDING_DIR / "CHANGELOG.md"
@@ -87,8 +94,7 @@ def format_search_material(results: list[SearchResult],
         if r is None:
             block.append("（本条查询失败，跳过）")
         else:
-            if r.engine == "qwen":
-                block.append("（本条由Qwen兜底检索，GLM当次失败/无结果）")
+            block.append(f"（检索引擎: {r.engine}）")
             if r.answer:
                 block.append(f"综合回答：{r.answer}")
             for h in r.hits:
@@ -110,41 +116,68 @@ def format_existing_ids(config: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def _search_with_fallback(query: str, category: str, *, recency_days: int,
-                          glm_client: GLMSearchClient,
-                          qwen_client: QwenSearchClient | None) -> SearchResult | None:
-    """先用GLM检索；GLM报错或返回空结果时，有配置Qwen就兜底重试一次。
+# 检索客户端的公共接口:  .search(query, recency_days=...) -> SearchResult，
+# 失败时抛一个 RuntimeError 子类。GLMSearchClient/QwenSearchClient都符合。
+SearchClient = "GLMSearchClient | QwenSearchClient"
 
-    GLM的web_search插件是主检索源（返回结构化命中网页列表，信息更丰富）；
-    Qwen只在GLM"挂了"或"这条查完全没找到东西"时才顶上，且顶上的结果也
-    会在草案里如实标注是Qwen查到的，不冒充GLM结果。
+
+def _pick_search_engines(config: dict[str, Any]
+                         ) -> tuple[SearchClient | None, SearchClient | None]:
+    """按"谁配置了key就用谁"动态决定主/备检索引擎，而不是写死GLM必须是主力。
+
+    GLM的web_search插件返回结构化命中网页列表，信息通常比Qwen的enable_search
+    更丰富，所以两边都配置了key时优先GLM主力、Qwen兜底；只配置了其中一个时，
+    那一个就是唯一的检索引擎（没有备用）。这样在只申请到DashScope key、
+    还没申请到智谱key的阶段（比如现在）也能正常跑，之后补上智谱key会自动
+    切回"GLM主力+Qwen兜底"，不用改代码。
     """
-    try:
-        r = glm_client.search(query, recency_days=recency_days)
-        if not r.is_empty():
-            print(f"  ✓ [{category}][glm] {query} — 命中{len(r.hits)}条网页")
-            return r
-        glm_failed_reason = "GLM返回空结果"
-    except GLMSearchError as e:
-        glm_failed_reason = str(e)
+    glm_client = GLMSearchClient.from_config(config)
+    qwen_client = QwenSearchClient.from_config(config)
+    if glm_client is not None:
+        return glm_client, qwen_client  # 有Qwen就当兜底，没有就是None
+    if qwen_client is not None:
+        return qwen_client, None
+    return None, None
 
-    if qwen_client is None:
-        print(f"  ✗ [{category}][glm] {query} — {glm_failed_reason}（未配置Qwen兜底）",
-              file=sys.stderr)
+
+def _search_with_fallback(query: str, category: str, *, recency_days: int,
+                          primary: SearchClient,
+                          fallback: SearchClient | None) -> SearchResult | None:
+    """先用主检索引擎；报错或返回空结果时，有配置备用引擎就重试一次。
+
+    备用引擎顶上的结果会在草案里如实标注是哪个引擎查到的，不冒充主引擎结果。
+    """
+    primary_name = primary.__class__.__name__.replace("SearchClient", "").lower()
+    try:
+        r = primary.search(query, recency_days=recency_days)
+        if not r.is_empty():
+            print(f"  ✓ [{category}][{primary_name}] {query} — 命中{len(r.hits)}条网页")
+            return r
+        primary_failed_reason = f"{primary_name}返回空结果"
+    except RuntimeError as e:
+        primary_failed_reason = str(e)
+
+    if fallback is None:
+        print(f"  ✗ [{category}][{primary_name}] {query} — {primary_failed_reason}"
+              f"（未配置备用检索引擎）", file=sys.stderr)
         return None
 
+    fallback_name = fallback.__class__.__name__.replace("SearchClient", "").lower()
     try:
-        r = qwen_client.search(query, recency_days=recency_days)
+        r = fallback.search(query, recency_days=recency_days)
         if r.is_empty():
-            print(f"  ✗ [{category}][glm→qwen] {query} — GLM({glm_failed_reason})"
-                  f"和Qwen兜底均无结果", file=sys.stderr)
+            print(f"  ✗ [{category}][{primary_name}→{fallback_name}] {query} — "
+                  f"{primary_name}({primary_failed_reason})和{fallback_name}均无结果",
+                  file=sys.stderr)
             return None
-        print(f"  ⚠ [{category}][qwen兜底] {query} — GLM失败({glm_failed_reason})，"
-              f"Qwen兜底命中{len(r.hits)}条网页")
+        print(f"  ⚠ [{category}][{fallback_name}兜底] {query} — "
+              f"{primary_name}失败({primary_failed_reason})，"
+              f"{fallback_name}兜底命中{len(r.hits)}条网页")
         return r
-    except QwenSearchError as e:
-        print(f"  ✗ [{category}][glm→qwen] {query} — GLM({glm_failed_reason})和"
-              f"Qwen兜底({e})均失败", file=sys.stderr)
+    except RuntimeError as e:
+        print(f"  ✗ [{category}][{primary_name}→{fallback_name}] {query} — "
+              f"{primary_name}({primary_failed_reason})和{fallback_name}({e})均失败",
+              file=sys.stderr)
         return None
 
 
@@ -152,15 +185,18 @@ def run(config: dict[str, Any] | None = None) -> int:
     config = config if config is not None else load_config()
     lookback_days = int(((config.get("intake") or {}).get("lookback_days")) or 14)
 
-    search_client = GLMSearchClient.from_config(config)
-    if search_client is None:
-        print("[intake] 缺少检索层配置（ZHIPU_API_KEY未设置或config.yaml intake.search"
-              "不完整），中止。", file=sys.stderr)
+    primary_search, fallback_search = _pick_search_engines(config)
+    if primary_search is None:
+        print("[intake] 缺少检索层配置（ZHIPU_API_KEY和DASHSCOPE_API_KEY均未设置"
+              "，至少需要配置一个），中止。", file=sys.stderr)
         return 1
-    qwen_fallback_client = QwenSearchClient.from_config(config)
-    if qwen_fallback_client is None:
-        print("[intake] 未配置Qwen兜底（DASHSCOPE_API_KEY/视觉层key均未设置），"
-              "GLM单条查询失败时将直接跳过该查询，不影响正常运行。")
+    primary_name = primary_search.__class__.__name__
+    if fallback_search is None:
+        print(f"[intake] 当前只用 {primary_name} 检索，未配置备用引擎"
+              f"（另一个的key没设置），单条查询失败时会直接跳过，不影响正常运行。")
+    else:
+        print(f"[intake] 主检索引擎: {primary_name}；备用: "
+              f"{fallback_search.__class__.__name__}")
     draft_client = draft_client_from_config(config)
     if draft_client is None:
         print("[intake] 缺少起草层配置（DEEPSEEK_API_KEY未设置或config.yaml intake.draft"
@@ -171,14 +207,15 @@ def run(config: dict[str, Any] | None = None) -> int:
     results: list[SearchResult | None] = []
     ok_count = 0
     fallback_count = 0
+    primary_engine_tag = "qwen" if isinstance(primary_search, QwenSearchClient) else "glm"
     for category, query in SOURCE_QUERIES:
         r = _search_with_fallback(query, category, recency_days=lookback_days,
-                                  glm_client=search_client,
-                                  qwen_client=qwen_fallback_client)
+                                  primary=primary_search,
+                                  fallback=fallback_search)
         results.append(r)
         if r is not None:
             ok_count += 1
-            if r.engine == "qwen":
+            if r.engine != primary_engine_tag:
                 fallback_count += 1
 
     if ok_count == 0:
@@ -186,7 +223,7 @@ def run(config: dict[str, Any] | None = None) -> int:
               file=sys.stderr)
         return 1
     if fallback_count:
-        print(f"[intake] 其中{fallback_count}条查询由Qwen兜底完成。")
+        print(f"[intake] 其中{fallback_count}条查询由备用引擎兜底完成。")
 
     material = format_search_material(results, SOURCE_QUERIES)
     existing = format_existing_ids(config)

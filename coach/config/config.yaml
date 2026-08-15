@@ -18,10 +18,23 @@ llm:
   api_key_env: "COACH_LLM_API_KEY"           # 在环境变量中设置key，不写进文件
   timeout_sec: 120
   # 视觉模型：HUD KDA读数、战绩截图OCR（DeepSeek无视觉，默认走通义qwen-vl）
+  # 注意：Model Studio的key分两种——通用DashScope key用下面这个通用域名；
+  # "工作空间专属"(Token Plan/dedicated workspace)key必须用控制台API-Key
+  # 弹窗里显示的专属域名（形如 ws-xxxxx.ap-southeast-1.maas.aliyuncs.com），
+  # 通用域名会直接401。当前这个key是工作空间专属的，见下方实际配置。
   vision:
-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    model: "qwen-vl-plus"
+    base_url: "https://ws-yfy87cpz51i0gg8r.us-east-1.maas.aliyuncs.com/compatible-mode/v1"
+    model: "qwen3-vl-plus"    # qwen-vl-plus是旧代模型，官方示例已全面转向qwen3-vl系列
+                               # （便宜/快速可选qwen3-vl-flash，效果稍弱）
     api_key_env: "COACH_VLM_API_KEY"         # 缺省回落到COACH_LLM_API_KEY
+  # 视觉兜底：Qwen踩过账号未开通/模型未购买的坑（AccessDenied.Unpurchased），
+  # 加一个独立厂商的兜底，主视觉模型失败时自动切换，两边都没配key就不启用，
+  # 不影响原本"未配置视觉key就跳过视觉功能"的降级行为。
+  vision_fallback:
+    base_url: "https://api.openai.com/v1"
+    model: "gpt-4o-mini"
+    api_key_env: "OPENAI_API_KEY"
+    timeout_sec: 120
 
 # 视频检测区域（AGE-49：基于验证素材1290×2796竖屏录屏标定，
 # 换设备/游戏UI改版后需重新标定）
@@ -49,8 +62,10 @@ intake:
   # 检索兜底：GLM单条查询失败/无结果时，用Qwen(DashScope) enable_search重试一次。
   # 未设置DASHSCOPE_API_KEY时，自动复用上面llm.vision.api_key_env那个DashScope
   # key（同一供应商），两边都没配就直接不启用兜底，不影响主流程。
+  # base_url同上面vision段的注意事项——工作空间专属key要用专属域名，不能用
+  # 通用dashscope.aliyuncs.com（会401）。
   search_fallback:
-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    base_url: "https://ws-yfy87cpz51i0gg8r.us-east-1.maas.aliyuncs.com/compatible-mode/v1"
     model: "qwen-plus"
     api_key_env: "DASHSCOPE_API_KEY"
     timeout_sec: 120

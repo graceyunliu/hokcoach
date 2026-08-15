@@ -20,4 +20,5 @@ coach/data/*.json
 
 # 本地环境
 .env
+secrets.local.txt
 *.log

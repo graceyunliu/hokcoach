@@ -42,7 +42,13 @@ class QwenSearchClient:
     @classmethod
     def from_config(cls, config: dict[str, Any]) -> "QwenSearchClient | None":
         cfg = ((config or {}).get("intake") or {}).get("search_fallback") or {}
-        base_url = cfg.get("base_url") or "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        # DASHSCOPE_BASE_URL环境变量优先——工作空间专属(Token Plan)key的域名是
+        # 每个工作空间独有的（形如 ws-xxxxx.ap-southeast-1.maas.aliyuncs.com），
+        # 写死在config.yaml里方便本地跑，但如果密钥/工作空间换了，不用改代码，
+        # 设个环境变量就能覆盖。
+        base_url = (os.environ.get("DASHSCOPE_BASE_URL")
+                   or cfg.get("base_url")
+                   or "https://dashscope.aliyuncs.com/compatible-mode/v1")
         model = cfg.get("model") or "qwen-plus"
         key_env = cfg.get("api_key_env") or ""
         api_key = os.environ.get(key_env, "") if key_env else ""

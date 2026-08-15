@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 from core import constraints_engine, knowledge_engine, replay_engine, training_engine
-from core.llm_client import LLMClient, LLMError
+from core.llm_client import LLMClient, LLMError, VisionClient
 from utils import config_utils, data_utils
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,7 +45,7 @@ class Orchestrator:
         self.config = config_utils.load_config()
         self.persona = config_utils.load_persona()
         self.llm: Optional[LLMClient] = LLMClient.from_config(self.config)
-        self.vlm: Optional[LLMClient] = LLMClient.from_config(self.config, vision=True)
+        self.vlm: Optional[VisionClient] = VisionClient.from_config(self.config)
         self.principles = knowledge_engine.load_all_principles()
         self.profile = data_utils.load_player_profile()
 

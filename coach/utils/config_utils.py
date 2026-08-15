@@ -8,12 +8,34 @@ config.yaml / coach_persona.yaml 用到的子集：嵌套dict、标量、行内�
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 CONFIG_PATH = BASE_DIR / "config" / "config.yaml"
 PERSONA_PATH = BASE_DIR / "config" / "coach_persona.yaml"
+
+# 本地密钥文件（项目根目录，与coach/同级）：纯文本 KEY=VALUE 格式，方便
+# 不想用终端export的用户直接编辑。已在.gitignore中排除，切勿提交/分享。
+SECRETS_PATH = BASE_DIR.parent / "secrets.local.txt"
+
+
+def load_local_secrets(path: Path = SECRETS_PATH) -> None:
+    """把secrets.local.txt里的KEY=VALUE行注入os.environ（不覆盖已有的环境变量）。
+
+    找不到文件/文件为空时静默跳过——终端手动export的用法依然完全兼容。
+    """
+    if not path.exists():
+        return
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key, value = key.strip(), value.strip().strip('"').strip("'")
+        if key and value and value != "your-key-here":
+            os.environ.setdefault(key, value)
 
 
 def _parse_scalar(raw: str) -> Any:
