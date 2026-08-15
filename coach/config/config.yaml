@@ -34,3 +34,22 @@ video:
 # 语音层已移出MVP（实现计划v1.0调整1），v1.1+再启用
 voice:
   enabled: false
+
+# 数据情报管线（intake/run_intake.py）：双周抓取版本/攻略动态，起草知识库
+# 更新草案到 knowledge_base/_pending_updates/，人工审核后合并，绝不自动写入
+# macro_principles.md 等正式文件。设计上由 GitHub Actions 定时触发（见
+# .github/workflows/hok-intake.yml），也可本地手动运行。
+intake:
+  # 检索层：智谱GLM，自带web_search插件，能访问中文网站（官网/贴吧/B站相关讨论等）
+  search:
+    base_url: "https://open.bigmodel.cn/api/paas/v4"
+    model: "glm-4-plus"
+    api_key_env: "ZHIPU_API_KEY"
+    timeout_sec: 120
+  # 起草层：DeepSeek，把检索结果整理成符合知识库schema的条目草案
+  draft:
+    base_url: "https://api.deepseek.com/v1"
+    model: "deepseek-chat"
+    api_key_env: "DEEPSEEK_API_KEY"
+    timeout_sec: 180
+  lookback_days: 14

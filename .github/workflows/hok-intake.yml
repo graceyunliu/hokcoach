@@ -1,0 +1,50 @@
+name: HoK version intake (biweekly)
+
+# 双周巡检：cron是UTC时间，01:00 UTC = 北京时间09:00。
+# 1号/15号各跑一次，近似"每两周"（cron标准语法不支持严格的14天间隔）。
+on:
+  schedule:
+    - cron: "0 1 1,15 * *"
+  workflow_dispatch: {}   # 也支持手动在Actions页面点触发，方便调试
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Run intake pipeline
+        working-directory: coach
+        env:
+          ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: python -m intake.run_intake
+
+      - name: Open PR with draft for review
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "情报管线：新增待审核知识库草案"
+          branch: intake/auto-update
+          delete-branch: true
+          title: "[情报管线] 版本情报草案待审核"
+          body: |
+            自动生成，来自 `intake/run_intake.py` 的双周巡检。
+
+            **请人工审核后再合并**：确认信息属实、tier分级正确（尤其tier 3
+            风格化内容不能进 `macro_principles.md`），再手动把条目剪切进对应的
+            正式知识库文件，本PR只改动 `coach/knowledge_base/_pending_updates/`
+            下的草案文件，不触碰正式文件。
+          add-paths: |
+            coach/knowledge_base/_pending_updates/*
