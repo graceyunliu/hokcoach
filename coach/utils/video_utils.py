@@ -215,6 +215,14 @@ def extract_death_events(
 _MIN_ICON_AREA = 120
 _MAX_ICON_AREA = 1500
 
+# 一方最多5名英雄（物理上限）。AGE-130验证发现：真实录屏上偶尔会出现
+# 与常规缩略minimap不同的画面（如玩家点开放大地图查看战况），此时防御塔/
+# 野怪buff图标的颜色+面积会大量落入英雄阈值区间，static_zones也未必能
+# 覆盖（这类画面出现频率低、位置和常规minimap不对应）。单方命中数超过5
+# 本身就说明这帧不是可靠的常规minimap读数——诚实原则下应按"该帧不可靠/
+# 无法读取"处理，而不是猜测其中哪些是真英雄。
+_MAX_HEROES_PER_SIDE = 5
+
 _ROW_NAMES = ("上", "中", "下")
 _COL_NAMES = ("左", "中", "右")
 
@@ -241,12 +249,122 @@ def grab_minimap_frame(video_path: str, ts: float, out_path: Path,
     return out_path
 
 
+# ---------------------------------------------------------------------------
+# 固定UI元素（防御塔/buff图标/地图装饰）排除区探测（AGE-130 / AGE-131修复）
+# ---------------------------------------------------------------------------
+#
+# 阶段2真实录屏验证发现：颜色阈值法把minimap上颜色/面积恰好落入阈值区间的
+# 固定UI元素（防御塔crown图标、野怪/buff菱形图标、地图装饰纹理等）也当成
+# 了英雄图标或死亡X标记，导致大量误报（AGE-130/AGE-131）。这些元素与
+# 英雄/死亡标记的关键区别是"位置持续性"：英雄会移动，死亡X标记只在死亡
+# 后短暂窗口内出现后消失；而防御塔等UI元素在同一像素位置长期不变。
+#
+# 用同一视频内多个时间点探测同色系连通域，位置跨采样点重复出现则视为
+# "固定不动"，作为该视频的排除区，供detect_hero_icons/detect_death_marker
+# 过滤。这样不需要为每份录屏重新标定颜色/面积阈值。
+
+_STATIC_MATCH_RADIUS = 10.0  # px：两次探测视为"同一位置"的容差
+
+
+def _cluster_positions(points: list[tuple[float, float]],
+                       radius: float = _STATIC_MATCH_RADIUS
+                       ) -> list[tuple[float, float, int]]:
+    """把(cx,cy)点按邻近程度聚类，返回[(簇质心x, 簇质心y, 命中次数)]。"""
+    clusters: list[list[float]] = []  # 每项 [sum_x, sum_y, n]
+    for x, y in points:
+        for c in clusters:
+            mx, my = c[0] / c[2], c[1] / c[2]
+            if (x - mx) ** 2 + (y - my) ** 2 <= radius ** 2:
+                c[0] += x
+                c[1] += y
+                c[2] += 1
+                break
+        else:
+            clusters.append([x, y, 1])
+    return [(c[0] / c[2], c[1] / c[2], int(c[2])) for c in clusters]
+
+
+def find_static_red_blue_zones(
+    video_path: str,
+    probe_ts: Optional[list[float]] = None,
+    crop: dict[str, int] = DEFAULT_MINIMAP_CROP,
+    min_hits: int = 3,
+) -> list[tuple[float, float]]:
+    """探测minimap裁剪区域内跨多个时间点位置不变的红/蓝色斑块。
+
+    这些"固定不动"的斑块（防御塔、buff/野怪图标、地图装饰等）是
+    AGE-130（英雄图标误报）/AGE-131（死亡X标记误报）的常见误报源——
+    英雄会移动，死亡X标记只在死亡后短暂出现，两者都不会在多个相隔较远
+    的时间点稳定出现在同一像素位置。
+
+    Args:
+        video_path: 回放视频路径。
+        probe_ts: 探测用的采样时刻；默认在视频时长内均匀取6个点。
+        crop: minimap裁剪区域。
+        min_hits: 同一位置至少命中多少次探测才判定为"固定不动"（默认3）。
+
+    Returns:
+        [(cx, cy), ...] 固定UI元素位置列表（裁剪坐标系），供
+        detect_hero_icons/detect_death_marker的exclude_zones参数使用。
+    """
+    try:
+        import cv2  # type: ignore
+        import numpy as np  # type: ignore
+    except ImportError as e:
+        raise RuntimeError(
+            "静态区域探测需要 opencv-python 与 numpy："
+            "pip install opencv-python numpy"
+        ) from e
+
+    duration = video_duration(video_path)
+    if probe_ts is None:
+        n = 6
+        probe_ts = [duration * (i + 1) / (n + 1) for i in range(n)]
+
+    all_points: list[tuple[float, float]] = []
+    with tempfile.TemporaryDirectory(prefix="coach_static_") as tmp:
+        for i, t in enumerate(probe_ts):
+            frame = Path(tmp) / f"probe_{i}.png"
+            try:
+                grab_minimap_frame(video_path, t, frame, crop)
+            except subprocess.CalledProcessError:
+                continue
+            img = cv2.imread(str(frame))
+            if img is None:
+                continue
+            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            red = cv2.inRange(hsv, np.array([0, 90, 90]), np.array([10, 255, 255])) | \
+                  cv2.inRange(hsv, np.array([170, 90, 90]), np.array([180, 255, 255]))
+            blue = cv2.inRange(hsv, np.array([95, 90, 90]), np.array([130, 255, 255]))
+            for mask in (red, blue):
+                n_comp, _, stats, centroids = cv2.connectedComponentsWithStats(mask)
+                for j in range(1, n_comp):
+                    if int(stats[j, cv2.CC_STAT_AREA]) < 20:  # 噪点不参与聚类
+                        continue
+                    cx, cy = centroids[j]
+                    all_points.append((float(cx), float(cy)))
+
+    clusters = _cluster_positions(all_points)
+    return [(cx, cy) for cx, cy, count in clusters if count >= min_hits]
+
+
+def _in_zones(cx: float, cy: float, zones: list[tuple[float, float]],
+             radius: float = _STATIC_MATCH_RADIUS) -> bool:
+    return any((cx - zx) ** 2 + (cy - zy) ** 2 <= radius ** 2 for zx, zy in zones)
+
+
 def detect_hero_icons(minimap_image: Path,
-                      crop: dict[str, int] = DEFAULT_MINIMAP_CROP) -> dict[str, list[dict[str, Any]]]:
+                      crop: dict[str, int] = DEFAULT_MINIMAP_CROP,
+                      exclude_zones: Optional[list[tuple[float, float]]] = None
+                      ) -> dict[str, list[dict[str, Any]]]:
     """在minimap裁剪图上检测敌方（红环）/己方（蓝环）英雄图标。
 
     阶段0验证结论：敌我用红/蓝圆环颜色编码，HSV阈值+连通域面积过滤即可
     可靠区分，无需YOLOv8。隐身/草丛内英雄本就不可见（预期内"证据不足"）。
+
+    阶段2真实录屏验证（AGE-130）发现该方案会把防御塔/buff图标等固定UI
+    元素误判为英雄，用exclude_zones（见find_static_red_blue_zones）排除
+    这些已知固定位置的干扰源。
     """
     try:
         import cv2  # type: ignore
@@ -267,6 +385,8 @@ def detect_hero_icons(minimap_image: Path,
           cv2.inRange(hsv, np.array([170, 90, 90]), np.array([180, 255, 255]))
     blue = cv2.inRange(hsv, np.array([95, 90, 90]), np.array([130, 255, 255]))
 
+    zones = exclude_zones or []
+
     def _components(mask) -> list[dict[str, Any]]:
         n, _, stats, centroids = cv2.connectedComponentsWithStats(mask)
         out = []
@@ -274,10 +394,16 @@ def detect_hero_icons(minimap_image: Path,
             area = int(stats[i, cv2.CC_STAT_AREA])
             if _MIN_ICON_AREA <= area <= _MAX_ICON_AREA:
                 cx, cy = centroids[i]
+                if _in_zones(cx, cy, zones):
+                    continue  # 固定UI元素（防御塔/图标），非英雄
                 out.append({
                     "cx": float(cx), "cy": float(cy), "area": area,
                     "region": region_label(cx, cy, crop["w"], crop["h"]),
                 })
+        if len(out) > _MAX_HEROES_PER_SIDE:
+            # 超过物理上限：这帧大概率不是常规minimap画面，识别结果不可信，
+            # 按"不可见"处理（丢弃）而非猜测其中5个是真的。
+            return []
         return out
 
     return {"enemies": _components(red), "allies": _components(blue)}
@@ -289,8 +415,14 @@ def extract_minimap_positions(
     window_sec: float = 15.0,
     sample_interval: float = 3.0,
     crop: dict[str, int] = DEFAULT_MINIMAP_CROP,
+    static_zones: Optional[list[tuple[float, float]]] = None,
 ) -> list[dict[str, Any]]:
     """提取around_ts前window_sec内敌方英雄的minimap大致位置轨迹。
+
+    Args:
+        static_zones: 该视频的固定UI元素排除区（见find_static_red_blue_zones）。
+            未传入时自动探测一次（AGE-130修复）；同一视频多次调用本函数时，
+            建议调用方预先算好并传入，避免重复探测的解码开销。
 
     Returns:
         按时间升序，每项:
@@ -299,6 +431,9 @@ def extract_minimap_positions(
         敌方图标不可见（隐身/草丛/无视野）时enemies为空——这本身是可靠的
         "视野缺失"信号（阶段0验证结论二）。
     """
+    if static_zones is None:
+        static_zones = find_static_red_blue_zones(video_path, crop=crop)
+
     duration = video_duration(video_path)
     start = max(around_ts - window_sec, 0.0)
     end = min(around_ts, duration - 0.1)
@@ -309,7 +444,7 @@ def extract_minimap_positions(
             frame = Path(tmp) / f"mm_{ts:.3f}.png"
             try:
                 grab_minimap_frame(video_path, ts, frame, crop)
-                icons = detect_hero_icons(frame, crop)
+                icons = detect_hero_icons(frame, crop, exclude_zones=static_zones)
             except (subprocess.CalledProcessError, ValueError):
                 ts += sample_interval
                 continue
@@ -367,17 +502,17 @@ _MARKER_MAX_AREA = 500
 _MARKER_MAX_EXTENT = 0.45
 
 
-def detect_death_marker(minimap_image: Path,
-                        crop: dict[str, int] = DEFAULT_MINIMAP_CROP
-                        ) -> Optional[dict[str, Any]]:
-    """在单帧minimap裁剪图上检测系统自动标记的死亡位置红色"X"。
+def _death_marker_candidates(minimap_image: Path,
+                             crop: dict[str, int] = DEFAULT_MINIMAP_CROP
+                             ) -> list[dict[str, Any]]:
+    """返回单帧minimap裁剪图上所有满足X标记面积/extent条件的候选连通域
+    （未做exclude_zones过滤、未挑选最优），按extent升序排列。
 
-    与detect_hero_icons共用红色HSV阈值，但用extent（连通域面积/外接矩形
-    面积）区分"X"（低extent，笔画间镂空）与英雄圆环图标（高extent，实心）。
-
-    Returns:
-        命中时: {"cx","cy","area","extent","region"}（取extent最低的候选）
-        未命中: None
+    AGE-131复盘发现：符合"低extent红色小块"条件的候选在minimap顶部区域
+    经常不止一个（多个持续存在的UI噪点），只排除其中extent最低的一个
+    不够——detect_death_marker会退而选中下一个同样是噪点的候选。本函数
+    把全部候选暴露出来，供extract_death_location的死亡前基线帧一次性
+    排除所有已知噪点位置，而不只是排除"最像"的那一个。
     """
     try:
         import cv2  # type: ignore
@@ -396,7 +531,7 @@ def detect_death_marker(minimap_image: Path,
           cv2.inRange(hsv, np.array([170, 90, 90]), np.array([180, 255, 255]))
 
     n, _, stats, centroids = cv2.connectedComponentsWithStats(red)
-    best: Optional[dict[str, Any]] = None
+    candidates: list[dict[str, Any]] = []
     for i in range(1, n):
         area = int(stats[i, cv2.CC_STAT_AREA])
         if not (_MARKER_MIN_AREA <= area <= _MARKER_MAX_AREA):
@@ -407,12 +542,39 @@ def detect_death_marker(minimap_image: Path,
         extent = area / bbox_area
         if extent > _MARKER_MAX_EXTENT:
             continue  # 太"实心"，更像英雄头像圆环而非X
-        if best is None or extent < best["extent"]:
-            cx, cy = centroids[i]
-            best = {"cx": float(cx), "cy": float(cy), "area": area,
-                    "extent": round(extent, 3),
-                    "region": region_label(cx, cy, crop["w"], crop["h"])}
-    return best
+        cx, cy = centroids[i]
+        candidates.append({"cx": float(cx), "cy": float(cy), "area": area,
+                           "extent": round(extent, 3),
+                           "region": region_label(cx, cy, crop["w"], crop["h"])})
+    candidates.sort(key=lambda c: c["extent"])
+    return candidates
+
+
+def detect_death_marker(minimap_image: Path,
+                        crop: dict[str, int] = DEFAULT_MINIMAP_CROP,
+                        exclude_zones: Optional[list[tuple[float, float]]] = None
+                        ) -> Optional[dict[str, Any]]:
+    """在单帧minimap裁剪图上检测系统自动标记的死亡位置红色"X"。
+
+    与detect_hero_icons共用红色HSV阈值，但用extent（连通域面积/外接矩形
+    面积）区分"X"（低extent，笔画间镂空）与英雄圆环图标（高extent，实心）。
+
+    阶段2真实录屏验证（AGE-131）发现：某些固定UI元素（技能指示器/图标
+    残影等）的extent也恰好落在X标记的范围内，且长期停留在同一位置——
+    用exclude_zones（见find_static_red_blue_zones，或extract_death_location
+    中death_ts前一刻的基线帧）排除这些已知固定位置的候选。
+
+    Returns:
+        命中时: {"cx","cy","area","extent","region"}（取排除固定区域后
+        extent最低的候选）
+        未命中: None
+    """
+    zones = exclude_zones or []
+    for c in _death_marker_candidates(minimap_image, crop):
+        if _in_zones(c["cx"], c["cy"], zones):
+            continue  # 固定位置的长期存在UI元素，非本次死亡产生的X标记
+        return c  # 候选已按extent升序排列，第一个未被排除的即最优
+    return None
 
 
 def extract_death_location(
@@ -421,37 +583,81 @@ def extract_death_location(
     crop: dict[str, int] = DEFAULT_MINIMAP_CROP,
     search_window: float = 6.0,
     sample_interval: float = 1.0,
+    static_zones: Optional[list[tuple[float, float]]] = None,
 ) -> Optional[dict[str, Any]]:
     """在死亡时刻之后的窗口内寻找系统自动画出的死亡"X"标记（AGE-46）。
 
     X标记在角色死亡的瞬间出现并伴随复活倒计时持续显示，故从death_ts起
     （而非之前）向后采样；search_window默认6秒足以覆盖标记出现的延迟。
-    命中第一帧即返回——标记位置在整个显示期间不变，无需继续采样。
+
+    AGE-131修复（真实录屏验证发现两类误报源，分别处理）：
+
+    1. 长期存在的固定UI噪点（如某个技能/图标残影，整个死亡前就已经在
+       同一位置满足X标记的面积/extent条件）——取death_ts之前一刻（此时
+       死亡尚未发生，minimap上不可能有真正的X标记）的一帧，把该帧上
+       *所有*满足条件的候选位置（而不仅仅是extent最低的那一个：验证中
+       发现同一帧常常有不止一个候选）都加入排除区，供窗口内检测排除。
+       此外与调用方可传入的全局static_zones（见find_static_red_blue_zones）
+       合并使用。
+    2. 逐帧闪烁的瞬时噪点（画面纹理/特效碎片，位置逐帧跳变，不像真正
+       X标记那样在整个显示期间停留在同一像素位置）——命中后不立即采信，
+       改为在+1秒处复核，位置仍在容差范围内才确认为真正的标记；否则视为
+       噪点，从该帧起继续向后搜索。
 
     Returns:
         命中: {"region","cx","cy","ts_offset","source": "minimap_x_marker"}
-        窗口内未命中（如镜头被UI遮挡、录制帧率丢帧）: None
+        窗口内未命中（如镜头被UI遮挡、录制帧率丢帧、候选全部被判定为
+        噪点）: None
     """
     duration = video_duration(video_path)
     ts = death_ts
     end = min(death_ts + search_window, duration - 0.1)
+    zones = list(static_zones or [])
+
     with tempfile.TemporaryDirectory(prefix="coach_dm_") as tmp:
+        baseline_ts = max(death_ts - 2.0, 0.0)
+        try:
+            baseline_frame = Path(tmp) / "baseline.png"
+            grab_minimap_frame(video_path, baseline_ts, baseline_frame, crop)
+            zones = zones + [(c["cx"], c["cy"])
+                             for c in _death_marker_candidates(baseline_frame, crop)]
+        except (subprocess.CalledProcessError, ValueError):
+            pass  # 基线帧取不到不影响主流程，退化为只用static_zones
+
         while ts <= end + 1e-6:
             frame = Path(tmp) / f"dm_{ts:.3f}.png"
             try:
                 grab_minimap_frame(video_path, ts, frame, crop)
-                marker = detect_death_marker(frame, crop)
+                marker = detect_death_marker(frame, crop, exclude_zones=zones)
             except (subprocess.CalledProcessError, ValueError):
                 ts += sample_interval
                 continue
             if marker is not None:
-                return {
-                    "region": marker["region"],
-                    "cx": marker["cx"],
-                    "cy": marker["cy"],
-                    "ts_offset": round(ts - death_ts, 2),
-                    "source": "minimap_x_marker",
-                }
+                # 位置持续性复核：真正的X标记应在+1秒后仍停留在原位；
+                # 逐帧跳变的画面噪点复核会失败，判定为误报继续向后搜索。
+                confirm_ts = min(ts + 1.0, end)
+                confirmed = False
+                if confirm_ts > ts:
+                    confirm_frame = Path(tmp) / f"dm_confirm_{ts:.3f}.png"
+                    try:
+                        grab_minimap_frame(video_path, confirm_ts, confirm_frame, crop)
+                        confirm_marker = detect_death_marker(confirm_frame, crop, exclude_zones=zones)
+                        confirmed = (confirm_marker is not None
+                                    and _in_zones(confirm_marker["cx"], confirm_marker["cy"],
+                                                 [(marker["cx"], marker["cy"])]))
+                    except (subprocess.CalledProcessError, ValueError):
+                        confirmed = False
+                else:
+                    confirmed = True  # 已经在搜索窗口末尾，无法复核，按命中采信
+                if confirmed:
+                    return {
+                        "region": marker["region"],
+                        "cx": marker["cx"],
+                        "cy": marker["cy"],
+                        "ts_offset": round(ts - death_ts, 2),
+                        "source": "minimap_x_marker",
+                    }
+                zones = zones + [(marker["cx"], marker["cy"])]  # 噪点，排除后继续搜索
             ts += sample_interval
     return None
 
