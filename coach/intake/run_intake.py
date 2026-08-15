@@ -32,7 +32,9 @@ sys.path.insert(0, str(BASE_DIR))  # 允许 `python -m intake.run_intake` 之外
 
 from core.knowledge_engine import load_all_principles  # noqa: E402
 from intake.draft_client import draft_client_from_config  # noqa: E402
-from intake.glm_search import GLMSearchClient, GLMSearchError, SearchResult  # noqa: E402
+from intake.glm_search import GLMSearchClient, GLMSearchError  # noqa: E402
+from intake.qwen_search import QwenSearchClient, QwenSearchError  # noqa: E402
+from intake.search_types import SearchResult  # noqa: E402
 from intake.sources import CATEGORY_LABEL, SOURCE_QUERIES  # noqa: E402
 from utils.config_utils import load_config  # noqa: E402
 
@@ -85,6 +87,8 @@ def format_search_material(results: list[SearchResult],
         if r is None:
             block.append("（本条查询失败，跳过）")
         else:
+            if r.engine == "qwen":
+                block.append("（本条由Qwen兜底检索，GLM当次失败/无结果）")
             if r.answer:
                 block.append(f"综合回答：{r.answer}")
             for h in r.hits:
@@ -106,6 +110,44 @@ def format_existing_ids(config: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _search_with_fallback(query: str, category: str, *, recency_days: int,
+                          glm_client: GLMSearchClient,
+                          qwen_client: QwenSearchClient | None) -> SearchResult | None:
+    """先用GLM检索；GLM报错或返回空结果时，有配置Qwen就兜底重试一次。
+
+    GLM的web_search插件是主检索源（返回结构化命中网页列表，信息更丰富）；
+    Qwen只在GLM"挂了"或"这条查完全没找到东西"时才顶上，且顶上的结果也
+    会在草案里如实标注是Qwen查到的，不冒充GLM结果。
+    """
+    try:
+        r = glm_client.search(query, recency_days=recency_days)
+        if not r.is_empty():
+            print(f"  ✓ [{category}][glm] {query} — 命中{len(r.hits)}条网页")
+            return r
+        glm_failed_reason = "GLM返回空结果"
+    except GLMSearchError as e:
+        glm_failed_reason = str(e)
+
+    if qwen_client is None:
+        print(f"  ✗ [{category}][glm] {query} — {glm_failed_reason}（未配置Qwen兜底）",
+              file=sys.stderr)
+        return None
+
+    try:
+        r = qwen_client.search(query, recency_days=recency_days)
+        if r.is_empty():
+            print(f"  ✗ [{category}][glm→qwen] {query} — GLM({glm_failed_reason})"
+                  f"和Qwen兜底均无结果", file=sys.stderr)
+            return None
+        print(f"  ⚠ [{category}][qwen兜底] {query} — GLM失败({glm_failed_reason})，"
+              f"Qwen兜底命中{len(r.hits)}条网页")
+        return r
+    except QwenSearchError as e:
+        print(f"  ✗ [{category}][glm→qwen] {query} — GLM({glm_failed_reason})和"
+              f"Qwen兜底({e})均失败", file=sys.stderr)
+        return None
+
+
 def run(config: dict[str, Any] | None = None) -> int:
     config = config if config is not None else load_config()
     lookback_days = int(((config.get("intake") or {}).get("lookback_days")) or 14)
@@ -115,6 +157,10 @@ def run(config: dict[str, Any] | None = None) -> int:
         print("[intake] 缺少检索层配置（ZHIPU_API_KEY未设置或config.yaml intake.search"
               "不完整），中止。", file=sys.stderr)
         return 1
+    qwen_fallback_client = QwenSearchClient.from_config(config)
+    if qwen_fallback_client is None:
+        print("[intake] 未配置Qwen兜底（DASHSCOPE_API_KEY/视觉层key均未设置），"
+              "GLM单条查询失败时将直接跳过该查询，不影响正常运行。")
     draft_client = draft_client_from_config(config)
     if draft_client is None:
         print("[intake] 缺少起草层配置（DEEPSEEK_API_KEY未设置或config.yaml intake.draft"
@@ -124,20 +170,23 @@ def run(config: dict[str, Any] | None = None) -> int:
     print(f"[intake] 开始检索，共{len(SOURCE_QUERIES)}条查询，回看{lookback_days}天……")
     results: list[SearchResult | None] = []
     ok_count = 0
+    fallback_count = 0
     for category, query in SOURCE_QUERIES:
-        try:
-            r = search_client.search(query, recency_days=lookback_days)
-            results.append(r)
+        r = _search_with_fallback(query, category, recency_days=lookback_days,
+                                  glm_client=search_client,
+                                  qwen_client=qwen_fallback_client)
+        results.append(r)
+        if r is not None:
             ok_count += 1
-            print(f"  ✓ [{category}] {query} — 命中{len(r.hits)}条网页")
-        except GLMSearchError as e:
-            print(f"  ✗ [{category}] {query} — 失败: {e}", file=sys.stderr)
-            results.append(None)
+            if r.engine == "qwen":
+                fallback_count += 1
 
     if ok_count == 0:
         print("[intake] 所有查询均失败，中止（不生成草案，避免用空结果误导起草层）。",
               file=sys.stderr)
         return 1
+    if fallback_count:
+        print(f"[intake] 其中{fallback_count}条查询由Qwen兜底完成。")
 
     material = format_search_material(results, SOURCE_QUERIES)
     existing = format_existing_ids(config)

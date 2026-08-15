@@ -29,6 +29,7 @@ jobs:
         env:
           ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}   # 可选：GLM检索兜底
         run: python -m intake.run_intake
 
       - name: Open PR with draft for review

@@ -46,6 +46,14 @@ intake:
     model: "glm-4-plus"
     api_key_env: "ZHIPU_API_KEY"
     timeout_sec: 120
+  # 检索兜底：GLM单条查询失败/无结果时，用Qwen(DashScope) enable_search重试一次。
+  # 未设置DASHSCOPE_API_KEY时，自动复用上面llm.vision.api_key_env那个DashScope
+  # key（同一供应商），两边都没配就直接不启用兜底，不影响主流程。
+  search_fallback:
+    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    model: "qwen-plus"
+    api_key_env: "DASHSCOPE_API_KEY"
+    timeout_sec: 120
   # 起草层：DeepSeek，把检索结果整理成符合知识库schema的条目草案
   draft:
     base_url: "https://api.deepseek.com/v1"

@@ -16,26 +16,13 @@ from __future__ import annotations
 import json
 import urllib.error
 import urllib.request
-from dataclasses import dataclass, field
 from typing import Any
+
+from intake.search_types import SearchHit, SearchResult
 
 
 class GLMSearchError(RuntimeError):
     """GLM检索调用失败。"""
-
-
-@dataclass
-class SearchHit:
-    title: str = ""
-    link: str = ""
-    snippet: str = ""
-
-
-@dataclass
-class SearchResult:
-    query: str
-    answer: str = ""            # 模型综合搜索结果给出的文字回答
-    hits: list[SearchHit] = field(default_factory=list)  # 命中的网页（尽力解析）
 
 
 class GLMSearchClient:
@@ -99,7 +86,7 @@ class GLMSearchClient:
 
     @staticmethod
     def _parse(query: str, body: dict[str, Any]) -> SearchResult:
-        result = SearchResult(query=query)
+        result = SearchResult(query=query, engine="glm")
         try:
             msg = body["choices"][0]["message"]
         except (KeyError, IndexError, TypeError) as e:
