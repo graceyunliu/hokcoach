@@ -32,9 +32,19 @@ from utils import config_utils
 KDA = tuple[int, int, int]
 KdaReader = Callable[[Path], Optional[KDA]]
 
+# 复活倒计时读数：剩余秒数（int）；None 表示该帧未显示倒计时（未死亡/已复活）。
+# 用作AGE-131第三特征（respawn-HUD共现），而非独立计数信号——见
+# extract_death_location 中 respawn_reader 参数的说明。
+RespawnReader = Callable[[Path], Optional[int]]
+
 # 验证素材上标定出的兜底值（config.yaml缺失/字段不全时使用）。
 _FALLBACK_HUD_CROP = {"x": 1650, "y": 0, "w": 650, "h": 140}
 _FALLBACK_MINIMAP_CROP = {"x": 0, "y": 0, "w": 420, "h": 320}
+# TODO(AGE-131 follow-up)：复活倒计时HUD区域坐标尚未在真实录屏上标定，
+# 这里先给一个占位裁剪区（沿用HUD计数器同一竖直条带下方，倒计时通常在
+# 死亡/复活状态下于屏幕中上部弹出）。respawn_reader接入前必须先用真实
+# 素材标定实际坐标，否则该特征会因为裁剪区不对而恒返回None，等价于禁用。
+_FALLBACK_RESPAWN_CROP = {"x": 1650, "y": 140, "w": 650, "h": 120}
 _FALLBACK_COARSE_INTERVAL = 75.0
 _FALLBACK_PRECISION = 3.0
 
@@ -68,6 +78,7 @@ def _number_from_config(key: str, fallback: float) -> float:
 # 模块加载时从config读取一次，作为各函数的默认参数值；调用方仍可显式传参覆盖。
 DEFAULT_HUD_CROP = _crop_from_config("hud_crop", _FALLBACK_HUD_CROP)
 DEFAULT_MINIMAP_CROP = _crop_from_config("minimap_crop", _FALLBACK_MINIMAP_CROP)
+DEFAULT_RESPAWN_CROP = _crop_from_config("respawn_crop", _FALLBACK_RESPAWN_CROP)
 DEFAULT_COARSE_INTERVAL = _number_from_config("coarse_interval_sec", _FALLBACK_COARSE_INTERVAL)
 DEFAULT_PRECISION = _number_from_config("precision_sec", _FALLBACK_PRECISION)
 
@@ -239,6 +250,19 @@ def region_label(cx: float, cy: float, w: int, h: int) -> str:
 def grab_minimap_frame(video_path: str, ts: float, out_path: Path,
                        crop: dict[str, int] = DEFAULT_MINIMAP_CROP) -> Path:
     """在时刻ts解码单帧并裁剪minimap区域。"""
+    vf = f"crop={crop['w']}:{crop['h']}:{crop['x']}:{crop['y']}"
+    subprocess.run(
+        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+         "-ss", f"{max(ts, 0):.3f}", "-i", video_path,
+         "-frames:v", "1", "-vf", vf, str(out_path)],
+        check=True,
+    )
+    return out_path
+
+
+def grab_respawn_frame(video_path: str, ts: float, out_path: Path,
+                       crop: dict[str, int] = DEFAULT_RESPAWN_CROP) -> Path:
+    """在时刻ts解码单帧并裁剪复活倒计时HUD区域（AGE-131第三特征用）。"""
     vf = f"crop={crop['w']}:{crop['h']}:{crop['x']}:{crop['y']}"
     subprocess.run(
         ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
@@ -584,13 +608,24 @@ def extract_death_location(
     search_window: float = 6.0,
     sample_interval: float = 1.0,
     static_zones: Optional[list[tuple[float, float]]] = None,
+    respawn_reader: Optional[RespawnReader] = None,
+    respawn_crop: dict[str, int] = DEFAULT_RESPAWN_CROP,
 ) -> Optional[dict[str, Any]]:
     """在死亡时刻之后的窗口内寻找系统自动画出的死亡"X"标记（AGE-46）。
 
     X标记在角色死亡的瞬间出现并伴随复活倒计时持续显示，故从death_ts起
     （而非之前）向后采样；search_window默认6秒足以覆盖标记出现的延迟。
 
-    AGE-131修复（真实录屏验证发现两类误报源，分别处理）：
+    设计前提（AGE-131修复的方案1）：本函数只在**已经由extract_death_events
+    的HUD计数器确认过的单次死亡事件**窗口内调用，不做独立全视频扫描——
+    真正的"这一局死了几次"由计数器递增次数决定，本函数只负责在已知的
+    每一次死亡窗口内定位地点。这也是respawn_reader（方案3）不会造成
+    重复计数的前提：倒计时可能持续显示长达30-40秒、跨越多个采样点，
+    但因为本函数每次调用对应恰好一个已计数的死亡事件、且一旦确认立即
+    return，倒计时的多次出现只会被用来"确认同一个事件"，不会被误当成
+    多个事件。
+
+    AGE-131修复（真实录屏验证发现两类误报源+一层新增确认特征）：
 
     1. 长期存在的固定UI噪点（如某个技能/图标残影，整个死亡前就已经在
        同一位置满足X标记的面积/extent条件）——取death_ts之前一刻（此时
@@ -603,6 +638,23 @@ def extract_death_location(
        X标记那样在整个显示期间停留在同一像素位置）——命中后不立即采信，
        改为在+1秒处复核，位置仍在容差范围内才确认为真正的标记；否则视为
        噪点，从该帧起继续向后搜索。
+    3.（新增，方案3）复核结果仍有约7/10的抽样误报（见AGE-131评论），说明
+       仅靠位置持续性不够——真正的死亡X标记必定与复活倒计时HUD同时出现，
+       而minimap上的噪点源不会。传入respawn_reader时，标记只有在同一
+       时刻（ts）复活倒计时HUD也能读到数值（不为None）时才会被采信，
+       否则视为噪点继续向后搜索。respawn_reader为可选参数（默认None）：
+       未接入实现前退化为只用特征1+2，向后兼容。
+
+    Args:
+        respawn_reader: 复活倒计时HUD裁剪图 → 剩余秒数(int) 或 None
+            （倒计时未显示）。典型实现见make_vlm_respawn_reader。
+        respawn_crop: 复活倒计时HUD裁剪区域（默认从config.yaml的
+            video.respawn_crop读取；真实坐标需先标定，见该常量定义处
+            的TODO）。未标定（即仍等于_FALLBACK_RESPAWN_CROP占位值）时，
+            本函数会整体跳过特征3、只用1+2两层过滤——这是本次复查修复的
+            安全防护：占位坐标下respawn_reader读不到倒计时会恒返回None，
+            若不加这层防护，"未通过"会被当成"确认噪点"处理，导致所有
+            真实死亡X标记都被拒绝（而不是原先误认为的"等价于跳过"）。
 
     Returns:
         命中: {"region","cx","cy","ts_offset","source": "minimap_x_marker"}
@@ -633,23 +685,55 @@ def extract_death_location(
                 ts += sample_interval
                 continue
             if marker is not None:
-                # 位置持续性复核：真正的X标记应在+1秒后仍停留在原位；
-                # 逐帧跳变的画面噪点复核会失败，判定为误报继续向后搜索。
+                # 特征2：位置持续性复核——真正的X标记应在+1秒后仍停留在
+                # 原位；逐帧跳变的画面噪点复核会失败，判定为误报继续向后搜索。
                 confirm_ts = min(ts + 1.0, end)
-                confirmed = False
+                position_confirmed = False
                 if confirm_ts > ts:
                     confirm_frame = Path(tmp) / f"dm_confirm_{ts:.3f}.png"
                     try:
                         grab_minimap_frame(video_path, confirm_ts, confirm_frame, crop)
                         confirm_marker = detect_death_marker(confirm_frame, crop, exclude_zones=zones)
-                        confirmed = (confirm_marker is not None
-                                    and _in_zones(confirm_marker["cx"], confirm_marker["cy"],
-                                                 [(marker["cx"], marker["cy"])]))
+                        position_confirmed = (
+                            confirm_marker is not None
+                            and _in_zones(confirm_marker["cx"], confirm_marker["cy"],
+                                         [(marker["cx"], marker["cy"])])
+                        )
                     except (subprocess.CalledProcessError, ValueError):
-                        confirmed = False
+                        position_confirmed = False
                 else:
-                    confirmed = True  # 已经在搜索窗口末尾，无法复核，按命中采信
-                if confirmed:
+                    position_confirmed = True  # 已到搜索窗口末尾，无法复核，按命中采信
+
+                # 特征3：复活倒计时共现复核。respawn_reader未提供时跳过
+                # （视为通过），保持向后兼容；提供时必须在同一ts读到
+                # 非None的倒计时数值才算通过——噪点源没有理由和倒计时
+                # 同时出现。窗口锚定在已知死亡事件内（见函数docstring），
+                # 倒计时持续多秒跨越多个采样点只会重复确认同一个marker，
+                # 不会被计成多次死亡。
+                #
+                # 安全防护（本次AGE-131复查发现的bug）：respawn_crop在真实
+                # 坐标标定完成前是占位值（见_FALLBACK_RESPAWN_CROP/
+                # config.yaml的TODO）。占位坐标裁出的区域不是真正的复活
+                # 倒计时HUD，respawn_reader在其上必然读不到倒计时、恒
+                # 返回None——如果这里仍然照常执行"respawn_reader未落
+                # None即不通过"的判定，效果不是原设计注释所说的"该特征被
+                # 跳过、不影响原有过滤"，而是**respawn_confirmed恒为False，
+                # 导致所有真实死亡X标记都被误判为噪点拒绝**（相当于把
+                # extract_death_location的召回率打到接近0）。只要
+                # respawn_crop还是未标定的占位值，就必须整体跳过特征3
+                # （视为通过），等价于respawn_reader=None时的向后兼容行为；
+                # 待真实坐标标定完成、respawn_crop不再等于占位值后，特征3
+                # 才会真正生效。
+                respawn_confirmed = True
+                if respawn_reader is not None and respawn_crop != _FALLBACK_RESPAWN_CROP:
+                    respawn_frame = Path(tmp) / f"rs_{ts:.3f}.png"
+                    try:
+                        grab_respawn_frame(video_path, ts, respawn_frame, respawn_crop)
+                        respawn_confirmed = respawn_reader(respawn_frame) is not None
+                    except subprocess.CalledProcessError:
+                        respawn_confirmed = False
+
+                if position_confirmed and respawn_confirmed:
                     return {
                         "region": marker["region"],
                         "cx": marker["cx"],
@@ -672,6 +756,42 @@ _KDA_PROMPT = (
     "请只输出JSON数组 [击杀, 死亡, 助攻]，例如 [2, 1, 8]。"
     "如果图中看不清或没有这三个数字，只输出 null。"
 )
+
+
+_RESPAWN_PROMPT = (
+    "这是一张王者荣耀对局界面的截图局部，可能包含\"复活倒计时\"UI"
+    "（通常显示为剩余秒数，如\"复活: 8\"或纯数字倒计时）。"
+    "如果图中能看到复活倒计时，只输出该剩余秒数的整数，例如 8。"
+    "如果图中没有复活倒计时（角色存活或看不清），只输出 null。"
+)
+
+
+def make_vlm_respawn_reader(vlm_client: Any) -> RespawnReader:
+    """用视觉LLM构造respawn_reader（AGE-131方案3：respawn-HUD共现特征）。
+
+    读不出/调用失败/未显示倒计时统一返回None，供extract_death_location
+    的respawn_confirmed逻辑判定为"倒计时未共现"。
+    """
+    from core.llm_client import LLMError, extract_json  # 延迟导入避免循环
+
+    def reader(image_path: Path) -> Optional[int]:
+        try:
+            raw = vlm_client.chat_image(_RESPAWN_PROMPT, image_path)
+        except LLMError:
+            return None
+        if "null" in raw.lower() and not any(ch.isdigit() for ch in raw):
+            return None
+        try:
+            data = extract_json(raw)
+        except ValueError:
+            return None
+        if isinstance(data, int) and data >= 0:
+            return data
+        if isinstance(data, list) and len(data) == 1 and isinstance(data[0], int):
+            return data[0]
+        return None
+
+    return reader
 
 
 def make_vlm_kda_reader(vlm_client: Any) -> KdaReader:
