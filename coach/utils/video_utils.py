@@ -659,9 +659,19 @@ def extract_death_location(
 
     传入death_window还带来一层实质精度提升：counter二分只能把死亡时刻
     收敛到(lo, hi]（默认precision=3秒），而``death_ts``是该窗口中点。
-    真实死亡最早可能发生在lo，所以搜索应从lo而不是中点开始，基线帧
-    也必须取在lo之前——否则"死亡前基线"可能其实已经在死亡之后，把真正
-    的X标记自己加进了排除区。
+    窗口两端的语义是不对称的，两端各自有用：
+
+    - ``lo`` 是**已知的死亡之前**的读数（counter那时还没涨到本次死亡数），
+      所以基线帧必须锚在lo之前（``anchor - _BASELINE_OFFSETS``）——否则
+      "死亡前基线"可能其实已经在死亡之后，把真正的X标记自己加进排除区。
+    - ``hi`` 是**已知的死亡之后**的第一个确认读数，所以正向搜索必须从hi
+      开始。曾经从lo开始搜（AGE-131复查发现的漏洞）：lo本身是死亡前的
+      时刻，那一刻画面上任何"像X"的候选按定义都不可能是本次死亡的标记，
+      只要它再持续1秒就能通过特征2的位置持续性复核被采信——正是这条
+      分支制造了本次修复要堵掉的那类误报。
+      从hi起搜不会漏掉真实死亡：X标记至少持续约8秒，而search_window默认
+      6秒、hi - 真实死亡时刻至多一个precision窗口（默认3秒），即使死亡
+      发生在窗口最左端，标记在hi时也仍然挂在minimap上。
 
     AGE-131修复（真实录屏验证发现两类误报源+一层新增确认特征）：
 
@@ -704,7 +714,7 @@ def extract_death_location(
             防护，"未通过"会被当成"确认噪点"处理，导致所有真实死亡X标记
             都被拒绝（而不是原先注释误认为的"等价于跳过"）。
         death_window: extract_death_events给出的counter确认窗口(lo, hi)。
-            生产调用必须传入：搜索从lo开始、基线帧取在lo之前，见上文。
+            生产调用必须传入：基线帧取在lo之前、搜索从hi开始，见上文。
         allow_unanchored: 显式放弃锚点约束，只按death_ts搜索。仅供研究/
             复现脚本使用（无counter真值时的误报率测量）。生产路径不要用：
             无锚点扫描正是AGE-131误报的来源。
@@ -715,8 +725,9 @@ def extract_death_location(
     Returns:
         命中: {"region","cx","cy","ts_offset","source": "minimap_x_marker"}
         其中ts_offset是相对death_ts的偏移；传入death_window后搜索从窗口
-        下界开始，所以它可以是负数（death_ts只是窗口中点，真实死亡可能
-        更早）——下游只用region/source，这里保留原字段语义不变。
+        上界hi开始，所以它至少是(hi - death_ts) > 0，比"标记真正出现的
+        时刻距死亡多久"要大——下游只用region/source，这里保留原字段语义
+        不变，不要拿它当标记出现延迟来用。
         窗口内未命中（如镜头被UI遮挡、录制帧率丢帧、候选全部被判定为
         噪点）: None
     """
@@ -729,13 +740,16 @@ def extract_death_location(
         )
 
     duration = video_duration(video_path)
-    # 锚点：counter窗口下界（真实死亡最早可能发生的时刻）；无锚点模式退化为death_ts。
+    # anchor：counter窗口下界lo，**已知的死亡之前**时刻 → 基线帧取在它之前。
+    # latest：counter窗口上界hi，**已知的死亡之后**第一个确认读数 → 正向
+    # 搜索从它开始（从lo开始搜会把死亡前就存在的候选当成本次死亡的标记）。
+    # 无锚点模式（研究/复现用）两者都退化为death_ts。
     if death_window is not None:
         anchor = min(float(death_window[0]), death_ts)
         latest = max(float(death_window[1]), death_ts)
     else:
         anchor = latest = death_ts
-    ts = max(anchor, 0.0)
+    ts = max(latest, 0.0)  # 搜索起点：已确认的死亡之后，绝不早于lo
     end = min(latest + search_window, duration - 0.1)
     zones = list(static_zones or [])
 
