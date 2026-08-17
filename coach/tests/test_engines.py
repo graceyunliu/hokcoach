@@ -286,6 +286,60 @@ class TestDeathMarkerDetection(unittest.TestCase):
         self.assertIsNone(video_utils.detect_death_marker(frame))
 
 
+def _x_marker(img, cx: int, cy: int, r: int = 15, thickness: int = 4):
+    """在img上画一个死亡"X"标记（低extent的红色交叉笔画）。"""
+    cv2.line(img, (cx - r, cy - r), (cx + r, cy + r), (0, 0, 255), thickness)
+    cv2.line(img, (cx - r, cy + r), (cx + r, cy - r), (0, 0, 255), thickness)
+    return img
+
+
+def _build_clip(out_path: Path, segments: list[tuple[Path, float]]) -> Path:
+    """把[(静帧png, 时长秒), ...]拼成一段mp4。
+
+    -g 1 让每帧都是关键帧：extract_death_location用的是 -ss 前置快速seek，
+    只有全关键帧才能保证取到的确实是该时刻的画面，否则时间边界上的断言会
+    随GOP对齐随机漂移。
+    """
+    inputs: list[str] = []
+    for png, dur in segments:
+        inputs += ["-loop", "1", "-t", f"{dur}", "-i", str(png)]
+    chain = "".join(f"[{i}:v]" for i in range(len(segments)))
+    subprocess.run(
+        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", *inputs,
+         "-filter_complex", f"{chain}concat=n={len(segments)}:v=1:a=0,fps=5[v]",
+         "-map", "[v]", "-g", "1", str(out_path)],
+        check=True,
+    )
+    return out_path
+
+
+class TestDeathLocationAnchorGate(unittest.TestCase):
+    """AGE-131方案1：无锚点扫描必须显式opt-in，不能是默认路径。
+
+    不需要opencv/ffmpeg——参数校验发生在任何解码之前。
+    """
+
+    def test_missing_death_window_raises(self):
+        with self.assertRaises(ValueError) as ctx:
+            video_utils.extract_death_location("/nonexistent.mp4", death_ts=10.0)
+        self.assertIn("allow_unanchored", str(ctx.exception))
+
+    def test_unanchored_requires_explicit_optin(self):
+        # 显式opt-in后才会往下走（这里必然因为视频不存在而失败，
+        # 但失败点已经不是参数校验了——证明门禁只拦默认路径）。
+        with self.assertRaises(Exception) as ctx:
+            video_utils.extract_death_location(
+                "/nonexistent.mp4", death_ts=10.0, allow_unanchored=True)
+        self.assertNotIsInstance(ctx.exception, ValueError)
+
+    def test_orchestrator_passes_counter_window(self):
+        """生产路径（orchestrator）必须把counter窗口传下来，否则会撞门禁。"""
+        src = Path(video_utils.__file__).parent.parent / "core" / "orchestrator.py"
+        text = src.read_text(encoding="utf-8")
+        self.assertIn("death_window=e[\"window\"]", text)
+        self.assertNotIn("allow_unanchored", text)
+
+
 @unittest.skipUnless(_HAS_CV2 and _HAS_FFMPEG, "需要 opencv-python + numpy + ffmpeg")
 class TestExtractDeathLocation(unittest.TestCase):
     """端到端：合成一个短视频（前2秒无标记，之后出现X），验证向后搜索定位。"""
@@ -295,40 +349,201 @@ class TestExtractDeathLocation(unittest.TestCase):
         self.dir = Path(self._tmp.name)
 
         blank = np.zeros((320, 420, 3), dtype=np.uint8)
-        marked = np.zeros((320, 420, 3), dtype=np.uint8)
-        cv2.line(marked, (60, 60), (90, 90), (0, 0, 255), 4)
-        cv2.line(marked, (60, 90), (90, 60), (0, 0, 255), 4)
+        marked = _x_marker(np.zeros((320, 420, 3), dtype=np.uint8), 75, 75)
         f0, f1 = self.dir / "f0.png", self.dir / "f1.png"
         cv2.imwrite(str(f0), blank)
         cv2.imwrite(str(f1), marked)
-
-        self.video = self.dir / "clip.mp4"
-        subprocess.run(
-            ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-             "-loop", "1", "-t", "2", "-i", str(f0),
-             "-loop", "1", "-t", "3", "-i", str(f1),
-             "-filter_complex",
-             "[0:v][1:v]concat=n=2:v=1:a=0,fps=5[v]", "-map", "[v]",
-             str(self.video)],
-            check=True,
-        )
+        self.video = _build_clip(self.dir / "clip.mp4", [(f0, 2), (f1, 3)])
 
     def tearDown(self):
         self._tmp.cleanup()
 
     def test_finds_marker_after_death_ts(self):
         result = video_utils.extract_death_location(
-            str(self.video), death_ts=0.0, search_window=4.0,
-            sample_interval=1.0)
+            str(self.video), death_ts=0.0, death_window=(0.0, 0.0),
+            search_window=4.0, sample_interval=1.0)
         self.assertIsNotNone(result)
         self.assertEqual(result["source"], "minimap_x_marker")
         self.assertGreaterEqual(result["ts_offset"], 1.0)  # 出现在黑屏2秒之后
 
     def test_returns_none_when_outside_window(self):
         result = video_utils.extract_death_location(
-            str(self.video), death_ts=0.0, search_window=0.5,
-            sample_interval=1.0)
+            str(self.video), death_ts=0.0, death_window=(0.0, 0.0),
+            search_window=0.5, sample_interval=1.0)
         self.assertIsNone(result)
+
+
+@unittest.skipUnless(_HAS_CV2 and _HAS_FFMPEG, "需要 opencv-python + numpy + ffmpeg")
+class TestDeathLocationWindowedSearch(unittest.TestCase):
+    """AGE-131残留误报场景：搜索窗口正好盖住一个长期存在的静态噪点源。
+
+    合成素材复刻真实录屏里那个"整局都在同一位置、且能通过+1秒位置持续性
+    复核"的噪点（案例研究里残留的8/62误报源）：它同时出现在死亡前基线帧
+    和窗口内，只有死亡前基线排除能把它拦掉。
+    """
+
+    NOISE = (350, 40)   # 长期存在的噪点位置（minimap右上，形状同样满足X特征）
+    REAL = (100, 240)   # 本次死亡真正的X标记位置
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self._tmp.name)
+
+        noise_only = _x_marker(np.zeros((320, 420, 3), dtype=np.uint8), *self.NOISE)
+        noise_and_real = _x_marker(noise_only.copy(), *self.REAL)
+        self.f_noise = self.dir / "noise.png"
+        self.f_both = self.dir / "both.png"
+        cv2.imwrite(str(self.f_noise), noise_only)
+        cv2.imwrite(str(self.f_both), noise_and_real)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_static_noise_in_window_is_excluded_by_baseline(self):
+        """噪点贯穿全片、真X在死亡后出现：应命中真X而非噪点。"""
+        video = _build_clip(self.dir / "hit.mp4",
+                            [(self.f_noise, 8), (self.f_both, 4)])
+        result = video_utils.extract_death_location(
+            str(video), death_ts=8.25, death_window=(8.0, 8.5),
+            search_window=3.0, sample_interval=1.0)
+        self.assertIsNotNone(result)
+        self.assertAlmostEqual(result["cx"], self.REAL[0], delta=6)
+        self.assertAlmostEqual(result["cy"], self.REAL[1], delta=6)
+
+    def test_window_covering_only_noise_returns_none(self):
+        """窗口内只有静态噪点、没有真X：必须返回None，不能把噪点当死亡地点。
+
+        这是原实现在无锚点全扫描下产生44/62误报的那一类候选：它能通过
+        +1秒位置持续性复核（因为它确实一直在那儿），只有"死亡前它就已经
+        存在"这个证据能否掉它。
+        """
+        video = _build_clip(self.dir / "noise.mp4", [(self.f_noise, 14)])
+        result = video_utils.extract_death_location(
+            str(video), death_ts=8.25, death_window=(8.0, 8.5),
+            search_window=3.0, sample_interval=1.0)
+        self.assertIsNone(result)
+
+    def test_unanchored_scan_still_reports_the_same_noise(self):
+        """对照：同一段素材走无锚点路径就会误报——证明锚定是有效那一环，
+        也说明为什么无锚点路径不能是默认路径。
+
+        无锚点时基线帧按death_ts往前取，噪点当然也在里面，所以这里选一个
+        视频开头的death_ts（前面没有基线可取）来复刻真实全扫描的处境。
+        """
+        video = _build_clip(self.dir / "noise2.mp4", [(self.f_noise, 8)])
+        result = video_utils.extract_death_location(
+            str(video), death_ts=0.0, search_window=3.0, sample_interval=1.0,
+            allow_unanchored=True)
+        self.assertIsNotNone(result)  # 误报：噪点被当成死亡X标记
+        self.assertAlmostEqual(result["cx"], self.NOISE[0], delta=6)
+
+    def test_baseline_anchored_on_window_lo_not_midpoint(self):
+        """基线必须锚在窗口下界之前：真死亡发生在lo、而窗口较宽时，
+        按中点-2秒取基线会落在死亡之后，把真X自己拉黑。"""
+        video = _build_clip(self.dir / "wide.mp4",
+                            [(self.f_noise, 8), (self.f_both, 8)])
+        # counter窗口(8,14)，中点11 → 旧的"中点-2秒"基线会落在10秒（已在
+        # 死亡之后，真X已出现）；新实现锚在8秒之前，基线取6/4/2秒。
+        result = video_utils.extract_death_location(
+            str(video), death_ts=11.0, death_window=(8.0, 14.0),
+            search_window=1.0, sample_interval=1.0)
+        self.assertIsNotNone(result)
+        self.assertAlmostEqual(result["cx"], self.REAL[0], delta=6)
+
+
+@unittest.skipUnless(_HAS_CV2 and _HAS_FFMPEG, "需要 opencv-python + numpy + ffmpeg")
+class TestRespawnCoOccurrence(unittest.TestCase):
+    """AGE-131方案3（复活HUD共现）的标定门禁回归测试。
+
+    守住80582f5那次修复的核心行为：respawn_crop还是未标定占位值时，该特征
+    必须**整体跳过**而不是恒不通过——后者会把所有真实死亡X标记都拒掉，
+    召回率归零（而不是注释里原本以为的"等价于禁用"）。
+    """
+
+    CALIBRATED_CROP = {"x": 0, "y": 0, "w": 100, "h": 50}  # 与占位值不同即视为已标定
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self._tmp.name)
+        blank = np.zeros((320, 420, 3), dtype=np.uint8)
+        marked = _x_marker(np.zeros((320, 420, 3), dtype=np.uint8), 100, 240)
+        f0, f1 = self.dir / "f0.png", self.dir / "f1.png"
+        cv2.imwrite(str(f0), blank)
+        cv2.imwrite(str(f1), marked)
+        self.video = _build_clip(self.dir / "clip.mp4", [(f0, 8), (f1, 4)])
+        self.calls: list[Path] = []
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def _locate(self, **kw):
+        return video_utils.extract_death_location(
+            str(self.video), death_ts=8.25, death_window=(8.0, 8.5),
+            search_window=3.0, sample_interval=1.0, **kw)
+
+    def _reader(self, value):
+        def reader(path: Path):
+            self.calls.append(path)
+            return value
+        return reader
+
+    def test_uncalibrated_crop_skips_feature_and_keeps_recall(self):
+        """未标定：特征跳过，reader根本不被调用，真实死亡照常命中。"""
+        result = self._locate(respawn_reader=self._reader(None),
+                              respawn_crop=video_utils._FALLBACK_RESPAWN_CROP)
+        self.assertIsNotNone(result)
+        self.assertEqual(self.calls, [])
+
+    def test_config_default_crop_is_still_uncalibrated(self):
+        """config.yaml里那份respawn_crop目前仍是占位值 → 走跳过分支。
+
+        标定完成后本断言会失败，那正是提醒：该重跑方案3的端到端验证了。
+        """
+        self.assertFalse(
+            video_utils.respawn_crop_is_calibrated(video_utils.DEFAULT_RESPAWN_CROP))
+        result = self._locate(respawn_reader=self._reader(None))
+        self.assertIsNotNone(result)
+        self.assertEqual(self.calls, [])
+
+    def test_calibrated_crop_enforces_countdown(self):
+        """已标定 + 倒计时读不到 → 判为噪点，不采信。"""
+        result = self._locate(respawn_reader=self._reader(None),
+                              respawn_crop=self.CALIBRATED_CROP)
+        self.assertIsNone(result)
+        self.assertTrue(self.calls)  # 特征真的跑了
+
+    def test_calibrated_crop_confirms_with_countdown(self):
+        """已标定 + 读到倒计时秒数 → 采信。"""
+        result = self._locate(respawn_reader=self._reader(8),
+                              respawn_crop=self.CALIBRATED_CROP)
+        self.assertIsNotNone(result)
+        self.assertTrue(self.calls)
+
+    def test_respawn_frame_grab_failure_does_not_veto(self):
+        """取不到复活HUD帧是"取证失败"而非"倒计时没出现"，不能据此否决——
+        否则一个裁剪区越界的配置问题会重新变成召回崩塌。"""
+        def boom(*a, **kw):
+            raise subprocess.CalledProcessError(1, "ffmpeg")
+
+        with mock.patch.object(video_utils, "grab_respawn_frame", boom):
+            result = self._locate(respawn_reader=self._reader(None),
+                                  respawn_crop=self.CALIBRATED_CROP)
+        self.assertIsNotNone(result)
+        self.assertEqual(self.calls, [])  # reader没机会被调用
+
+
+class TestRespawnCropCalibrationGate(unittest.TestCase):
+    def test_fallback_placeholder_is_not_calibrated(self):
+        self.assertFalse(
+            video_utils.respawn_crop_is_calibrated(video_utils._FALLBACK_RESPAWN_CROP))
+        # 值相等即算未标定（config.yaml里的占位值就是同一份坐标）
+        self.assertFalse(video_utils.respawn_crop_is_calibrated(
+            dict(video_utils._FALLBACK_RESPAWN_CROP)))
+
+    def test_different_crop_is_calibrated(self):
+        crop = dict(video_utils._FALLBACK_RESPAWN_CROP)
+        crop["y"] += 200
+        self.assertTrue(video_utils.respawn_crop_is_calibrated(crop))
 
 
 # ---------------------------------------------------------------------------

@@ -85,6 +85,23 @@ DEFAULT_PRECISION = _number_from_config("precision_sec", _FALLBACK_PRECISION)
 # HUD不可见时在邻近时刻重采的偏移序列（秒）
 _RESAMPLE_OFFSETS = (1.0, -1.0, 2.0, -2.0, 4.0, -4.0)
 
+# 死亡前基线帧的采样偏移（秒，相对锚点向前）。AGE-131复查：只取单帧
+# （原实现只取death_ts-2.0）不足以覆盖"长期存在但逐帧轻微抖动/间歇出现"
+# 的噪点源——真实录屏残留的8/62误报正是这类。取多帧并集显著加宽黑名单，
+# 且成本只是每次死亡多解码2帧。
+_BASELINE_OFFSETS = (2.0, 4.0, 6.0)
+
+
+def respawn_crop_is_calibrated(crop: dict[str, int]) -> bool:
+    """判断复活倒计时裁剪区是否已用真实素材标定过（AGE-131方案3的开关）。
+
+    未标定时（仍等于_FALLBACK_RESPAWN_CROP占位值，含config.yaml里那份
+    同值占位）返回False，调用方必须整体跳过方案3——否则占位坐标下
+    respawn_reader恒返回None，会把所有真实死亡X标记都误判成噪点，
+    把召回率打到接近0（见extract_death_location中该特征的说明）。
+    """
+    return dict(crop) != _FALLBACK_RESPAWN_CROP
+
 
 def video_duration(video_path: str) -> float:
     """用ffprobe读取视频时长（秒）。"""
@@ -586,7 +603,13 @@ def detect_death_marker(minimap_image: Path,
     阶段2真实录屏验证（AGE-131）发现：某些固定UI元素（技能指示器/图标
     残影等）的extent也恰好落在X标记的范围内，且长期停留在同一位置——
     用exclude_zones（见find_static_red_blue_zones，或extract_death_location
-    中death_ts前一刻的基线帧）排除这些已知固定位置的候选。
+    中死亡锚点之前的基线帧）排除这些已知固定位置的候选。
+
+    注意本函数是**单帧原语**，不是死亡计数器：它只回答"这一帧上有没有
+    符合X标记特征的候选"。把它按固定间隔在整段视频上循环调用来数死亡
+    次数，会得到AGE-131里那个71%误报率的结果——真正的死亡次数只能由
+    HUD计数器给出（extract_death_events），定位请走extract_death_location
+    的锚定窗口路径。
 
     Returns:
         命中时: {"cx","cy","area","extent","region"}（取排除固定区域后
@@ -610,28 +633,46 @@ def extract_death_location(
     static_zones: Optional[list[tuple[float, float]]] = None,
     respawn_reader: Optional[RespawnReader] = None,
     respawn_crop: dict[str, int] = DEFAULT_RESPAWN_CROP,
+    death_window: Optional[tuple[float, float]] = None,
+    *,
+    allow_unanchored: bool = False,
 ) -> Optional[dict[str, Any]]:
     """在死亡时刻之后的窗口内寻找系统自动画出的死亡"X"标记（AGE-46）。
 
-    X标记在角色死亡的瞬间出现并伴随复活倒计时持续显示，故从death_ts起
+    X标记在角色死亡的瞬间出现并伴随复活倒计时持续显示，故从死亡时刻起
     （而非之前）向后采样；search_window默认6秒足以覆盖标记出现的延迟。
 
-    设计前提（AGE-131修复的方案1）：本函数只在**已经由extract_death_events
-    的HUD计数器确认过的单次死亡事件**窗口内调用，不做独立全视频扫描——
-    真正的"这一局死了几次"由计数器递增次数决定，本函数只负责在已知的
-    每一次死亡窗口内定位地点。这也是respawn_reader（方案3）不会造成
-    重复计数的前提：倒计时可能持续显示长达30-40秒、跨越多个采样点，
-    但因为本函数每次调用对应恰好一个已计数的死亡事件、且一旦确认立即
-    return，倒计时的多次出现只会被用来"确认同一个事件"，不会被误当成
-    多个事件。
+    设计前提（AGE-131修复的方案1，本次复查强制化）：本函数只在**已经由
+    extract_death_events的HUD计数器确认过的单次死亡事件**窗口内调用，
+    不做独立全视频扫描——真正的"这一局死了几次"由计数器递增次数决定，
+    本函数只负责在已知的每一次死亡窗口内定位地点。这也是respawn_reader
+    （方案3）不会造成重复计数的前提：倒计时可能持续显示长达30-40秒、
+    跨越多个采样点，但因为本函数每次调用对应恰好一个已计数的死亡事件、
+    且一旦确认立即return，倒计时的多次出现只会被用来"确认同一个事件"，
+    不会被误当成多个事件。
+
+    这个前提以前只写在注释里，无法阻止调用方把本函数当独立扫描器循环
+    调用（AGE-131的44/62误报复现脚本正是这么用的）。现在改为在签名上
+    强制：生产调用必须传入counter确认过的``death_window``，否则报错；
+    研究/复现脚本要跑无锚点扫描必须显式写``allow_unanchored=True``，
+    使这条路径既不会被误用成默认路径，也可被grep审计。
+
+    传入death_window还带来一层实质精度提升：counter二分只能把死亡时刻
+    收敛到(lo, hi]（默认precision=3秒），而``death_ts``是该窗口中点。
+    真实死亡最早可能发生在lo，所以搜索应从lo而不是中点开始，基线帧
+    也必须取在lo之前——否则"死亡前基线"可能其实已经在死亡之后，把真正
+    的X标记自己加进了排除区。
 
     AGE-131修复（真实录屏验证发现两类误报源+一层新增确认特征）：
 
     1. 长期存在的固定UI噪点（如某个技能/图标残影，整个死亡前就已经在
-       同一位置满足X标记的面积/extent条件）——取death_ts之前一刻（此时
-       死亡尚未发生，minimap上不可能有真正的X标记）的一帧，把该帧上
+       同一位置满足X标记的面积/extent条件）——取死亡锚点之前的若干帧
+       （此时死亡尚未发生，minimap上不可能有真正的X标记），把这些帧上
        *所有*满足条件的候选位置（而不仅仅是extent最低的那一个：验证中
        发现同一帧常常有不止一个候选）都加入排除区，供窗口内检测排除。
+       本次复查把基线从单帧扩为_BASELINE_OFFSETS多帧并集：残留的8/62
+       误报源是长期存在、但位置逐帧轻微抖动/间歇出现的噪点，单帧基线
+       只能排掉它"这一帧"的位置，多帧并集才能覆盖其抖动范围。
        此外与调用方可传入的全局static_zones（见find_static_red_blue_zones）
        合并使用。
     2. 逐帧闪烁的瞬时噪点（画面纹理/特效碎片，位置逐帧跳变，不像真正
@@ -646,35 +687,66 @@ def extract_death_location(
        未接入实现前退化为只用特征1+2，向后兼容。
 
     Args:
+        death_ts: counter二分定位出的死亡时刻（窗口中点）。
         respawn_reader: 复活倒计时HUD裁剪图 → 剩余秒数(int) 或 None
             （倒计时未显示）。典型实现见make_vlm_respawn_reader。
         respawn_crop: 复活倒计时HUD裁剪区域（默认从config.yaml的
             video.respawn_crop读取；真实坐标需先标定，见该常量定义处
-            的TODO）。未标定（即仍等于_FALLBACK_RESPAWN_CROP占位值）时，
-            本函数会整体跳过特征3、只用1+2两层过滤——这是本次复查修复的
-            安全防护：占位坐标下respawn_reader读不到倒计时会恒返回None，
-            若不加这层防护，"未通过"会被当成"确认噪点"处理，导致所有
-            真实死亡X标记都被拒绝（而不是原先误认为的"等价于跳过"）。
+            的TODO）。未标定（见respawn_crop_is_calibrated）时本函数会
+            整体跳过特征3、只用1+2两层过滤——这是复查修复的安全防护：
+            占位坐标下respawn_reader读不到倒计时会恒返回None，若不加这层
+            防护，"未通过"会被当成"确认噪点"处理，导致所有真实死亡X标记
+            都被拒绝（而不是原先注释误认为的"等价于跳过"）。
+        death_window: extract_death_events给出的counter确认窗口(lo, hi)。
+            生产调用必须传入：搜索从lo开始、基线帧取在lo之前，见上文。
+        allow_unanchored: 显式放弃锚点约束，只按death_ts搜索。仅供研究/
+            复现脚本使用（无counter真值时的误报率测量）。生产路径不要用：
+            无锚点扫描正是AGE-131误报的来源。
+
+    Raises:
+        ValueError: 既没传death_window又没显式allow_unanchored=True。
 
     Returns:
         命中: {"region","cx","cy","ts_offset","source": "minimap_x_marker"}
+        其中ts_offset是相对death_ts的偏移；传入death_window后搜索从窗口
+        下界开始，所以它可以是负数（death_ts只是窗口中点，真实死亡可能
+        更早）——下游只用region/source，这里保留原字段语义不变。
         窗口内未命中（如镜头被UI遮挡、录制帧率丢帧、候选全部被判定为
         噪点）: None
     """
+    if death_window is None and not allow_unanchored:
+        raise ValueError(
+            "extract_death_location 必须锚定在counter确认过的死亡窗口内"
+            "（AGE-131方案1）：请传入 extract_death_events 事件里的 "
+            "death_window=e[\"window\"]。确实要做无锚点扫描（研究/复现用）"
+            "请显式传 allow_unanchored=True。"
+        )
+
     duration = video_duration(video_path)
-    ts = death_ts
-    end = min(death_ts + search_window, duration - 0.1)
+    # 锚点：counter窗口下界（真实死亡最早可能发生的时刻）；无锚点模式退化为death_ts。
+    if death_window is not None:
+        anchor = min(float(death_window[0]), death_ts)
+        latest = max(float(death_window[1]), death_ts)
+    else:
+        anchor = latest = death_ts
+    ts = max(anchor, 0.0)
+    end = min(latest + search_window, duration - 0.1)
     zones = list(static_zones or [])
 
     with tempfile.TemporaryDirectory(prefix="coach_dm_") as tmp:
-        baseline_ts = max(death_ts - 2.0, 0.0)
-        try:
-            baseline_frame = Path(tmp) / "baseline.png"
-            grab_minimap_frame(video_path, baseline_ts, baseline_frame, crop)
-            zones = zones + [(c["cx"], c["cy"])
-                             for c in _death_marker_candidates(baseline_frame, crop)]
-        except (subprocess.CalledProcessError, ValueError):
-            pass  # 基线帧取不到不影响主流程，退化为只用static_zones
+        # 特征1：死亡前多帧基线，把此刻已存在的候选全部拉黑（死亡尚未发生，
+        # 这些不可能是本次死亡的X标记）。取并集而非单帧，见docstring。
+        for i, offset in enumerate(_BASELINE_OFFSETS):
+            baseline_ts = anchor - offset
+            if baseline_ts < 0:
+                continue  # 死亡发生在视频开头，前面没有可用基线
+            try:
+                baseline_frame = Path(tmp) / f"baseline_{i}.png"
+                grab_minimap_frame(video_path, baseline_ts, baseline_frame, crop)
+                zones = zones + [(c["cx"], c["cy"])
+                                 for c in _death_marker_candidates(baseline_frame, crop)]
+            except (subprocess.CalledProcessError, ValueError):
+                continue  # 单帧基线取不到不影响主流程，其余基线/static_zones照用
 
         while ts <= end + 1e-6:
             frame = Path(tmp) / f"dm_{ts:.3f}.png"
@@ -687,7 +759,10 @@ def extract_death_location(
             if marker is not None:
                 # 特征2：位置持续性复核——真正的X标记应在+1秒后仍停留在
                 # 原位；逐帧跳变的画面噪点复核会失败，判定为误报继续向后搜索。
-                confirm_ts = min(ts + 1.0, end)
+                # 复核帧允许越过搜索窗口末尾（它只是对同一个候选再看一眼，
+                # 不是继续搜索），否则窗口最后一个采样点永远无法复核、只能
+                # 无条件采信——那正好是噪点最容易漏过的位置。
+                confirm_ts = min(ts + 1.0, duration - 0.1)
                 position_confirmed = False
                 if confirm_ts > ts:
                     confirm_frame = Path(tmp) / f"dm_confirm_{ts:.3f}.png"
@@ -711,7 +786,7 @@ def extract_death_location(
                 # 倒计时持续多秒跨越多个采样点只会重复确认同一个marker，
                 # 不会被计成多次死亡。
                 #
-                # 安全防护（本次AGE-131复查发现的bug）：respawn_crop在真实
+                # 安全防护（AGE-131复查发现的bug）：respawn_crop在真实
                 # 坐标标定完成前是占位值（见_FALLBACK_RESPAWN_CROP/
                 # config.yaml的TODO）。占位坐标裁出的区域不是真正的复活
                 # 倒计时HUD，respawn_reader在其上必然读不到倒计时、恒
@@ -720,18 +795,23 @@ def extract_death_location(
                 # 跳过、不影响原有过滤"，而是**respawn_confirmed恒为False，
                 # 导致所有真实死亡X标记都被误判为噪点拒绝**（相当于把
                 # extract_death_location的召回率打到接近0）。只要
-                # respawn_crop还是未标定的占位值，就必须整体跳过特征3
-                # （视为通过），等价于respawn_reader=None时的向后兼容行为；
-                # 待真实坐标标定完成、respawn_crop不再等于占位值后，特征3
-                # 才会真正生效。
+                # respawn_crop还没标定，就必须整体跳过特征3（视为通过），
+                # 等价于respawn_reader=None时的向后兼容行为；待真实坐标
+                # 标定完成后，特征3才会真正生效。
+                #
+                # 同理，取不到复活HUD帧（裁剪区越界/丢帧/ffmpeg报错）是
+                # "取证失败"而不是"证明了倒计时没出现"，不能据此否决候选：
+                # 那会把同一个配置问题重新变成召回崩塌。按"本特征无结论"
+                # 处理，退回特征1+2的判定。
                 respawn_confirmed = True
-                if respawn_reader is not None and respawn_crop != _FALLBACK_RESPAWN_CROP:
+                if respawn_reader is not None and respawn_crop_is_calibrated(respawn_crop):
                     respawn_frame = Path(tmp) / f"rs_{ts:.3f}.png"
                     try:
                         grab_respawn_frame(video_path, ts, respawn_frame, respawn_crop)
-                        respawn_confirmed = respawn_reader(respawn_frame) is not None
                     except subprocess.CalledProcessError:
-                        respawn_confirmed = False
+                        pass  # 取证失败 → 本特征无结论，不否决
+                    else:
+                        respawn_confirmed = respawn_reader(respawn_frame) is not None
 
                 if position_confirmed and respawn_confirmed:
                     return {

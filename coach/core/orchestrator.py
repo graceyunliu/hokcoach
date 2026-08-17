@@ -238,8 +238,11 @@ class Orchestrator:
 
             # AGE-46: 死亡"X"标记是死亡地点的首选数据源（系统直接标注，
             # 优先级高于从敌方轨迹反推），与上面的敌方轨迹上下文互补。
+            # AGE-131方案1：必须把counter二分出的窗口一起传下去，标记搜索
+            # 只在这个已确认的死亡窗口内进行（基线帧也据此锚定）。
             try:
-                marker = video_utils.extract_death_location(video_path, e["ts"])
+                marker = video_utils.extract_death_location(
+                    video_path, e["ts"], death_window=e["window"])
             except RuntimeError as err:  # 缺opencv
                 print(f"[死亡标记检测不可用] {err}", file=sys.stderr)
                 marker = None
