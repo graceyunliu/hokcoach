@@ -22,3 +22,4 @@ coach/data/*.json
 .env
 secrets.local.txt
 *.log
+coach/.venv/
