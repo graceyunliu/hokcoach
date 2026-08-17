@@ -675,6 +675,12 @@ def extract_death_location(
        只能排掉它"这一帧"的位置，多帧并集才能覆盖其抖动范围。
        此外与调用方可传入的全局static_zones（见find_static_red_blue_zones）
        合并使用。
+       代价（诚实记录）：排除区是_STATIC_MATCH_RADIUS半径的圆，基线帧越多
+       黑名单覆盖的minimap面积越大（实测每次死亡约20-30个点、约占裁剪区
+       7%）。真实死亡地点恰好落在某个噪点位置10px内时会被连带漏检——
+       这是"宁可漏一个地点也不编一个地点"的取舍（诚实原则，tech spec
+       4.1.3规则6）：漏检时本函数返回None，下游退回死亡前敌方轨迹推断，
+       而误报会直接给出一个错误的死亡地点。
     2. 逐帧闪烁的瞬时噪点（画面纹理/特效碎片，位置逐帧跳变，不像真正
        X标记那样在整个显示期间停留在同一像素位置）——命中后不立即采信，
        改为在+1秒处复核，位置仍在容差范围内才确认为真正的标记；否则视为
@@ -777,7 +783,7 @@ def extract_death_location(
                     except (subprocess.CalledProcessError, ValueError):
                         position_confirmed = False
                 else:
-                    position_confirmed = True  # 已到搜索窗口末尾，无法复核，按命中采信
+                    position_confirmed = True  # 已到视频末尾，无帧可复核，按命中采信
 
                 # 特征3：复活倒计时共现复核。respawn_reader未提供时跳过
                 # （视为通过），保持向后兼容；提供时必须在同一ts读到
