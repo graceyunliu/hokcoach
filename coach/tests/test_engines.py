@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """阶段2/3引擎测试（标准库unittest，LLM全部mock/不接网）。"""
 
+import contextlib
+import io
 import shutil
 import subprocess
 import sys
@@ -333,12 +335,52 @@ class TestDeathLocationAnchorGate(unittest.TestCase):
         self.assertNotIsInstance(ctx.exception, ValueError)
 
 
-    def test_orchestrator_passes_counter_window(self):
-        """生产路径（orchestrator）必须把counter窗口传下来，否则会撞门禁。"""
-        src = Path(video_utils.__file__).parent.parent / "core" / "orchestrator.py"
-        text = src.read_text(encoding="utf-8")
-        self.assertIn("death_window=e[\"window\"]", text)
-        self.assertNotIn("allow_unanchored", text)
+class TestOrchestratorDeathWindowWiring(unittest.TestCase):
+    """生产路径（orchestrator.analyze_video）必须把counter窗口原样传下来。
+
+    这里跑的是真实调用而不是源码文本grep：grep断言在"调用被注释掉/整段
+    被跳过"时同样会通过，等于没测。
+    """
+
+    def test_analyze_video_passes_counter_window(self):
+        from core.orchestrator import Orchestrator
+
+        event = {"ts": 42.0, "window": (40.0, 44.0), "kda_before": (1, 0, 2),
+                 "kda_after": (1, 1, 2), "kill_traded": False}
+        captured = {}
+
+        def fake_locate(video_path, death_ts, **kwargs):
+            captured["video_path"] = video_path
+            captured["death_ts"] = death_ts
+            captured["kwargs"] = kwargs
+            return None
+
+        orch = Orchestrator()
+        orch.llm = None          # 不接网：走降级点评
+        orch.vlm = mock.Mock()   # 非None即可，kda_reader整个被mock掉
+
+        with tempfile.TemporaryDirectory() as tmp:
+            video = Path(tmp) / "clip.mp4"
+            video.write_bytes(b"")
+            with mock.patch.object(video_utils, "make_vlm_kda_reader",
+                                   return_value=lambda p: None), \
+                 mock.patch.object(video_utils, "extract_death_events",
+                                   return_value=[event]), \
+                 mock.patch.object(video_utils, "extract_minimap_positions",
+                                   return_value=[]), \
+                 mock.patch.object(video_utils, "extract_death_location",
+                                   side_effect=fake_locate), \
+                 mock.patch.object(Orchestrator, "review_replay",
+                                   lambda self, replay, **kw: replay), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                rc = orch.analyze_video(str(video), interactive=False)
+
+        self.assertEqual(rc, 0)
+        self.assertIn("kwargs", captured, "extract_death_location 根本没被调用")
+        self.assertEqual(captured["death_ts"], event["ts"])
+        self.assertEqual(captured["kwargs"]["death_window"], (40.0, 44.0))
+        # 生产路径不得走无锚点扫描（AGE-131误报的来源）
+        self.assertNotIn("allow_unanchored", captured["kwargs"])
 
 
 @unittest.skipUnless(_HAS_CV2 and _HAS_FFMPEG, "需要 opencv-python + numpy + ffmpeg")
@@ -438,9 +480,13 @@ class TestDeathLocationWindowedSearch(unittest.TestCase):
         self.assertIsNotNone(result)  # 误报：噪点被当成死亡X标记
         self.assertAlmostEqual(result["cx"], self.NOISE[0], delta=6)
 
-    def test_baseline_anchored_on_window_lo_not_midpoint(self):
-        """基线必须锚在窗口下界之前：真死亡发生在lo、而窗口较宽时，
-        按中点-2秒取基线会落在死亡之后，把真X自己拉黑。"""
+    def test_baseline_anchored_before_window_lo_not_midpoint(self):
+        """基线必须锚在窗口下界lo之前：真死亡最早可能就发生在lo，窗口较宽
+        时按"中点-2秒"取基线会落在死亡之后，把真X自己拉黑。
+
+        搜索则从窗口上界hi开始（见test_search_rejects_pre_death_candidate）：
+        X标记至少持续8秒，所以哪怕死亡发生在窗口最左端，hi时它仍在。
+        """
         video = _build_clip(self.dir / "wide.mp4",
                             [(self.f_noise, 8), (self.f_both, 8)])
         # counter窗口(8,14)，中点11 → 旧的"中点-2秒"基线会落在10秒（已在
@@ -450,7 +496,92 @@ class TestDeathLocationWindowedSearch(unittest.TestCase):
             search_window=1.0, sample_interval=1.0)
         self.assertIsNotNone(result)
         self.assertAlmostEqual(result["cx"], self.REAL[0], delta=6)
+        self.assertAlmostEqual(result["cy"], self.REAL[1], delta=6)
 
+    def test_search_rejects_pre_death_candidate(self):
+        """AGE-131复查blocker的回归测试：搜索起点必须是hi而不是lo。
+
+        window=(lo, hi] 的语义是 read(lo).deaths < 本次死亡数 <= read(hi)，
+        所以**lo是已知的死亡之前**——那一刻画面上任何"像X"的东西按定义都
+        不是本次死亡的标记。素材里那个噪点只在[lo, hi)之间出现（持续到能
+        通过+1秒位置持续性复核），基线偏移2/4/6秒处和hi之后都没有它，也
+        没有任何真实X标记：从lo起搜会把它当成死亡地点采信（修复前的行为），
+        从hi起搜则必须返回None。
+        """
+        blank = self.dir / "blank.png"
+        cv2.imwrite(str(blank), np.zeros((320, 420, 3), dtype=np.uint8))
+        # [0,8) 空白（基线2/4/6秒全干净）→ [8,10) 只有噪点 → [10,14) 空白
+        video = _build_clip(self.dir / "pre_death.mp4",
+                            [(blank, 8), (self.f_noise, 2), (blank, 4)])
+        result = video_utils.extract_death_location(
+            str(video), death_ts=9.25, death_window=(8.0, 10.5),
+            search_window=3.0, sample_interval=1.0)
+        self.assertIsNone(result)
+
+    def test_multi_frame_baseline_union_catches_jittering_noise(self):
+        """基线取_BASELINE_OFFSETS多帧并集（而非单帧）才拦得住抖动噪点。
+
+        素材里的噪点在anchor-2处**不出现**，只出现在anchor-4/anchor-6，且
+        两帧之间位置有抖动——旧的单帧基线（只取anchor-2）完全看不到它，
+        会在窗口内把它当成本次死亡的X标记（它extent更低，排在真X前面）。
+        多帧并集能覆盖到，于是命中的是真X而不是噪点。
+        """
+        def _frame(*marks):
+            img = np.zeros((320, 420, 3), dtype=np.uint8)
+            for (cx, cy), r, th in marks:
+                _x_marker(img, cx, cy, r=r, thickness=th)
+            return img
+
+        noise_a = self.dir / "jit_a.png"    # anchor-6 处的噪点位置
+        noise_b = self.dir / "jit_b.png"    # anchor-4 处（抖动了几个像素）
+        clean = self.dir / "jit_clean.png"  # anchor-2 处：噪点缺席
+        window = self.dir / "jit_window.png"
+        # 噪点画得更大更细（extent≈0.22）→ 比真X（≈0.34）排得更前，
+        # detect_death_marker会优先选它：没被基线拉黑就一定是误报。
+        cv2.imwrite(str(noise_a), _frame(((350, 40), 20, 2)))
+        cv2.imwrite(str(noise_b), _frame(((356, 45), 20, 2)))
+        cv2.imwrite(str(clean), np.zeros((320, 420, 3), dtype=np.uint8))
+        cv2.imwrite(str(window), _frame(((353, 42), 20, 2), (self.REAL, 10, 4)))
+
+        # 时间轴：[0,3) noise_a（含基线2秒？不——见下）……按锚点8秒排布：
+        #   [0,3)=noise_a 覆盖 anchor-6=2秒
+        #   [3,5)=noise_b 覆盖 anchor-4=4秒
+        #   [5,8)=clean   覆盖 anchor-2=6秒（单帧基线就是在这里瞎的）
+        #   [8,14)=window 搜索窗口
+        video = _build_clip(self.dir / "jitter.mp4",
+                            [(noise_a, 3), (noise_b, 2), (clean, 3), (window, 6)])
+
+        # 对照：只用anchor-2那一帧做基线时，命中的是噪点而不是真X
+        with mock.patch.object(video_utils, "_BASELINE_OFFSETS", (2.0,)):
+            single = video_utils.extract_death_location(
+                str(video), death_ts=8.25, death_window=(8.0, 8.5),
+                search_window=3.0, sample_interval=1.0)
+        self.assertIsNotNone(single)
+        self.assertAlmostEqual(single["cx"], 353, delta=6)  # 误报：噪点
+
+        result = video_utils.extract_death_location(
+            str(video), death_ts=8.25, death_window=(8.0, 8.5),
+            search_window=3.0, sample_interval=1.0)
+        self.assertIsNotNone(result)
+        self.assertAlmostEqual(result["cx"], self.REAL[0], delta=6)
+        self.assertAlmostEqual(result["cy"], self.REAL[1], delta=6)
+
+    def test_candidate_at_last_sample_must_still_confirm(self):
+        """搜索窗口最后一个采样点上的候选也必须做+1秒位置持续性复核。
+
+        复核帧允许越过窗口末尾——否则"命中在最后一个采样点"这一格永远
+        无条件采信，正好是噪点最容易漏过去的地方。
+        """
+        blank = self.dir / "blank2.png"
+        cv2.imwrite(str(blank), np.zeros((320, 420, 3), dtype=np.uint8))
+        # 窗口(8,8.5]，search_window=3 → 采样 8.5/9.5/10.5/11.5，末点11.5。
+        # 噪点只在[11,12)出现：末点采到它，+1秒(12.5)已消失 → 必须拒绝。
+        video = _build_clip(self.dir / "last_sample.mp4",
+                            [(blank, 11), (self.f_noise, 1), (blank, 3)])
+        result = video_utils.extract_death_location(
+            str(video), death_ts=8.25, death_window=(8.0, 8.5),
+            search_window=3.0, sample_interval=1.0)
+        self.assertIsNone(result)
 
     def test_excessive_baseline_candidates_rejected(self):
         """基线帧异常杂乱时整体弃用基线黑名单，而不是把minimap全拉黑。
