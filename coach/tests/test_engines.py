@@ -558,18 +558,24 @@ class TestRespawnCoOccurrence(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertTrue(self.calls)
 
-    def test_respawn_frame_grab_failure_does_not_veto(self):
+    def test_respawn_frame_grab_failure_does_not_veto_but_warns(self):
         """取不到复活HUD帧是"取证失败"而非"倒计时没出现"，不能据此否决——
-        否则一个裁剪区越界的配置问题会重新变成召回崩塌。"""
+        否则一个裁剪区越界的配置问题会重新变成召回崩塌。
+
+        但"最强的那层判别特征被静默关掉"必须留痕：只保持不否决而不告警，
+        线上只会看到误报率悄悄回升，查不到根因是裁剪区/丢帧。
+        """
         def boom(*a, **kw):
             raise subprocess.CalledProcessError(1, "ffmpeg")
 
         with _calibrated_flag(True), \
-             mock.patch.object(video_utils, "grab_respawn_frame", boom):
+             mock.patch.object(video_utils, "grab_respawn_frame", boom), \
+             mock.patch.object(video_utils, "logging") as log:
             result = self._locate(respawn_reader=self._reader(None),
                                   respawn_crop=self.CALIBRATED_CROP)
         self.assertIsNotNone(result)
         self.assertEqual(self.calls, [])  # reader没机会被调用
+        log.warning.assert_called()
 
 
 class TestRespawnCropCalibrationGate(unittest.TestCase):

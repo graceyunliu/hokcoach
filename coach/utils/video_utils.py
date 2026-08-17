@@ -825,6 +825,8 @@ def extract_death_location(
         if _baseline_is_usable(baseline_points, crop):
             zones = zones + baseline_points
 
+        respawn_grab_warned = False
+
         while ts <= end + 1e-6:
             frame = Path(tmp) / f"dm_{ts:.3f}.png"
             try:
@@ -880,13 +882,24 @@ def extract_death_location(
                 # "取证失败"而不是"证明了倒计时没出现"，不能据此否决候选：
                 # 那会把同一个配置问题重新变成召回崩塌。按"本特征无结论"
                 # 处理，退回特征1+2的判定。
+                # 取证失败虽然不否决，但它意味着"最强的那层判别特征被静默
+                # 关掉了"——必须留下痕迹，否则线上只会看到误报率悄悄回升，
+                # 却查不到是裁剪区越界/丢帧导致特征3从未真正跑过。每次调用
+                # 只警告一次，避免逐采样点刷屏。
                 respawn_confirmed = True
                 if respawn_reader is not None and respawn_crop_is_calibrated(respawn_crop):
                     respawn_frame = Path(tmp) / f"rs_{ts:.3f}.png"
                     try:
                         grab_respawn_frame(video_path, ts, respawn_frame, respawn_crop)
                     except subprocess.CalledProcessError:
-                        pass  # 取证失败 → 本特征无结论，不否决
+                        if not respawn_grab_warned:
+                            respawn_grab_warned = True
+                            logging.warning(
+                                "复活倒计时HUD帧取证失败（ts=%.2f, crop=%s），"
+                                "本次死亡的复活HUD共现特征无结论、已退回"
+                                "基线+位置持续性两层过滤；请核对"
+                                "config.yaml的video.respawn_crop坐标（AGE-131）。",
+                                ts, respawn_crop)
                     else:
                         respawn_confirmed = respawn_reader(respawn_frame) is not None
 
