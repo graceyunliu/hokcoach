@@ -21,6 +21,8 @@ HUD/minimap裁剪坐标与采样参数从 config.yaml 的 `video:` 节读取（A
 
 from __future__ import annotations
 
+import logging
+import math
 import subprocess
 import tempfile
 from pathlib import Path
@@ -93,8 +95,41 @@ _RESAMPLE_OFFSETS = (1.0, -1.0, 2.0, -2.0, 4.0, -4.0)
 # 且成本只是每次死亡多解码2帧。
 _BASELINE_OFFSETS = (2.0, 4.0, 6.0)
 
+# 基线黑名单的规模上限（AGE-131复查）。基线上的每个候选都会变成一个
+# _STATIC_MATCH_RADIUS半径的排除圆；正常录屏每次死亡约20-30个点、约占
+# 裁剪区7%（见extract_death_location docstring里记录的召回代价）。若某次
+# 基线帧异常杂乱（画面切到放大地图、大范围红色特效等），候选数会暴涨，
+# 黑名单可能覆盖大半个minimap，把真实X标记也一并吃掉、函数静默返回None。
+# 超过下面任一上限就整体放弃这份基线（只用static_zones + 特征2/3），并
+# 打一条warning——"基线不可信"应该退化成少一层过滤，而不是悄悄清零召回。
+_MAX_BASELINE_CANDIDATES = 50
+_MAX_BASELINE_COVERAGE = 0.25  # 排除圆估算覆盖裁剪区面积的比例上限
+
 # config.yaml的video节里显式声明复活倒计时裁剪区是否已标定的开关键名
 _RESPAWN_CALIBRATED_KEY = "respawn_crop_calibrated"
+
+
+def _baseline_is_usable(points: list[tuple[float, float]],
+                        crop: dict[str, int]) -> bool:
+    """基线黑名单是否在合理规模内（超限则本次调用整体弃用基线）。
+
+    覆盖率按"每个点一个半径_STATIC_MATCH_RADIUS的圆、互不重叠"估算，
+    是上界；宁可保守一点提前放弃基线，也不要让黑名单吃掉真实标记。
+    """
+    if not points:
+        return True
+    try:
+        crop_area = max(int(crop["w"]) * int(crop["h"]), 1)
+    except (KeyError, TypeError, ValueError):
+        crop_area = 1
+    coverage = len(points) * math.pi * _STATIC_MATCH_RADIUS ** 2 / crop_area
+    if len(points) > _MAX_BASELINE_CANDIDATES or coverage > _MAX_BASELINE_COVERAGE:
+        logging.warning(
+            "死亡前基线帧候选过多（%d个，估算覆盖裁剪区%.0f%%），本次放弃基线"
+            "黑名单，只用static_zones+位置持续性过滤（AGE-131）。",
+            len(points), coverage * 100)
+        return False
+    return True
 
 
 def respawn_crop_is_calibrated(crop: dict[str, int]) -> bool:
@@ -704,6 +739,10 @@ def extract_death_location(
        这是"宁可漏一个地点也不编一个地点"的取舍（诚实原则，tech spec
        4.1.3规则6）：漏检时本函数返回None，下游退回死亡前敌方轨迹推断，
        而误报会直接给出一个错误的死亡地点。
+       这条取舍只在黑名单规模正常时才划算：基线帧异常杂乱时黑名单会覆盖
+       大半个minimap、把召回直接清零，所以加了规模上限
+       （_MAX_BASELINE_CANDIDATES / _MAX_BASELINE_COVERAGE），超限就整体
+       弃用本次基线并打warning，退回static_zones+特征2/3。
     2. 逐帧闪烁的瞬时噪点（画面纹理/特效碎片，位置逐帧跳变，不像真正
        X标记那样在整个显示期间停留在同一像素位置）——命中后不立即采信，
        改为在+1秒处复核，位置仍在容差范围内才确认为真正的标记；否则视为
@@ -771,6 +810,7 @@ def extract_death_location(
     with tempfile.TemporaryDirectory(prefix="coach_dm_") as tmp:
         # 特征1：死亡前多帧基线，把此刻已存在的候选全部拉黑（死亡尚未发生，
         # 这些不可能是本次死亡的X标记）。取并集而非单帧，见docstring。
+        baseline_points: list[tuple[float, float]] = []
         for i, offset in enumerate(_BASELINE_OFFSETS):
             baseline_ts = anchor - offset
             if baseline_ts < 0:
@@ -778,10 +818,12 @@ def extract_death_location(
             try:
                 baseline_frame = Path(tmp) / f"baseline_{i}.png"
                 grab_minimap_frame(video_path, baseline_ts, baseline_frame, crop)
-                zones = zones + [(c["cx"], c["cy"])
-                                 for c in _death_marker_candidates(baseline_frame, crop)]
+                baseline_points += [(c["cx"], c["cy"])
+                                    for c in _death_marker_candidates(baseline_frame, crop)]
             except (subprocess.CalledProcessError, ValueError):
                 continue  # 单帧基线取不到不影响主流程，其余基线/static_zones照用
+        if _baseline_is_usable(baseline_points, crop):
+            zones = zones + baseline_points
 
         while ts <= end + 1e-6:
             frame = Path(tmp) / f"dm_{ts:.3f}.png"

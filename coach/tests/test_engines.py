@@ -452,6 +452,37 @@ class TestDeathLocationWindowedSearch(unittest.TestCase):
         self.assertAlmostEqual(result["cx"], self.REAL[0], delta=6)
 
 
+    def test_excessive_baseline_candidates_rejected(self):
+        """基线帧异常杂乱时整体弃用基线黑名单，而不是把minimap全拉黑。
+
+        无上限时这份基线会产生上百个排除圆、覆盖大半个裁剪区，真实X标记
+        必然落在某个圈里 → 函数静默返回None（召回清零）。加了上限后基线
+        被整体放弃、退回static_zones+特征2/3，仍能定位到标记，并留warning。
+        """
+        clutter = np.zeros((320, 420, 3), dtype=np.uint8)
+        spots = [(20 + 40 * i, 20 + 40 * j) for i in range(10) for j in range(6)]
+        for cx, cy in spots:
+            _x_marker(clutter, cx, cy, r=8, thickness=3)
+        f_clutter = self.dir / "clutter.png"
+        cv2.imwrite(str(f_clutter), clutter)
+
+        real = np.zeros((320, 420, 3), dtype=np.uint8)
+        _x_marker(real, *spots[13], r=8, thickness=3)  # 真X落在某个杂乱位置上
+        f_real = self.dir / "clutter_real.png"
+        cv2.imwrite(str(f_real), real)
+
+        video = _build_clip(self.dir / "clutter.mp4",
+                            [(f_clutter, 8), (f_real, 4)])
+        with mock.patch.object(video_utils, "logging") as log:
+            result = video_utils.extract_death_location(
+                str(video), death_ts=8.25, death_window=(8.0, 8.5),
+                search_window=3.0, sample_interval=1.0)
+        self.assertIsNotNone(result)
+        self.assertAlmostEqual(result["cx"], spots[13][0], delta=6)
+        self.assertAlmostEqual(result["cy"], spots[13][1], delta=6)
+        log.warning.assert_called()  # 弃用基线必须留痕，不能静默降级
+
+
 def _calibrated_flag(value):
     """把config.yaml的video节替换成只含标定开关的一份（None=键不存在）。"""
     cfg = {} if value is None else {"respawn_crop_calibrated": value}
