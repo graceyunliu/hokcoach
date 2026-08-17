@@ -332,6 +332,7 @@ class TestDeathLocationAnchorGate(unittest.TestCase):
                 "/nonexistent.mp4", death_ts=10.0, allow_unanchored=True)
         self.assertNotIsInstance(ctx.exception, ValueError)
 
+
     def test_orchestrator_passes_counter_window(self):
         """生产路径（orchestrator）必须把counter窗口传下来，否则会撞门禁。"""
         src = Path(video_utils.__file__).parent.parent / "core" / "orchestrator.py"
@@ -451,6 +452,12 @@ class TestDeathLocationWindowedSearch(unittest.TestCase):
         self.assertAlmostEqual(result["cx"], self.REAL[0], delta=6)
 
 
+def _calibrated_flag(value):
+    """把config.yaml的video节替换成只含标定开关的一份（None=键不存在）。"""
+    cfg = {} if value is None else {"respawn_crop_calibrated": value}
+    return mock.patch.object(video_utils, "_load_video_config", lambda: cfg)
+
+
 @unittest.skipUnless(_HAS_CV2 and _HAS_FFMPEG, "需要 opencv-python + numpy + ffmpeg")
 class TestRespawnCoOccurrence(unittest.TestCase):
     """AGE-131方案3（复活HUD共现）的标定门禁回归测试。
@@ -460,7 +467,9 @@ class TestRespawnCoOccurrence(unittest.TestCase):
     召回率归零（而不是注释里原本以为的"等价于禁用"）。
     """
 
-    CALIBRATED_CROP = {"x": 0, "y": 0, "w": 100, "h": 50}  # 与占位值不同即视为已标定
+    # 一个能在合成素材上裁出画面的区域；是否"已标定"由config开关决定
+    # （见_calibrated_flag / respawn_crop_is_calibrated），与坐标无关。
+    CALIBRATED_CROP = {"x": 0, "y": 0, "w": 100, "h": 50}
 
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
@@ -495,10 +504,7 @@ class TestRespawnCoOccurrence(unittest.TestCase):
         self.assertEqual(self.calls, [])
 
     def test_config_default_crop_is_still_uncalibrated(self):
-        """config.yaml里那份respawn_crop目前仍是占位值 → 走跳过分支。
-
-        标定完成后本断言会失败，那正是提醒：该重跑方案3的端到端验证了。
-        """
+        """config.yaml目前声明未标定 → 端到端也确实走跳过分支。"""
         self.assertFalse(
             video_utils.respawn_crop_is_calibrated(video_utils.DEFAULT_RESPAWN_CROP))
         result = self._locate(respawn_reader=self._reader(None))
@@ -507,15 +513,17 @@ class TestRespawnCoOccurrence(unittest.TestCase):
 
     def test_calibrated_crop_enforces_countdown(self):
         """已标定 + 倒计时读不到 → 判为噪点，不采信。"""
-        result = self._locate(respawn_reader=self._reader(None),
-                              respawn_crop=self.CALIBRATED_CROP)
+        with _calibrated_flag(True):
+            result = self._locate(respawn_reader=self._reader(None),
+                                  respawn_crop=self.CALIBRATED_CROP)
         self.assertIsNone(result)
         self.assertTrue(self.calls)  # 特征真的跑了
 
     def test_calibrated_crop_confirms_with_countdown(self):
         """已标定 + 读到倒计时秒数 → 采信。"""
-        result = self._locate(respawn_reader=self._reader(8),
-                              respawn_crop=self.CALIBRATED_CROP)
+        with _calibrated_flag(True):
+            result = self._locate(respawn_reader=self._reader(8),
+                                  respawn_crop=self.CALIBRATED_CROP)
         self.assertIsNotNone(result)
         self.assertTrue(self.calls)
 
@@ -525,7 +533,8 @@ class TestRespawnCoOccurrence(unittest.TestCase):
         def boom(*a, **kw):
             raise subprocess.CalledProcessError(1, "ffmpeg")
 
-        with mock.patch.object(video_utils, "grab_respawn_frame", boom):
+        with _calibrated_flag(True), \
+             mock.patch.object(video_utils, "grab_respawn_frame", boom):
             result = self._locate(respawn_reader=self._reader(None),
                                   respawn_crop=self.CALIBRATED_CROP)
         self.assertIsNotNone(result)
@@ -533,17 +542,46 @@ class TestRespawnCoOccurrence(unittest.TestCase):
 
 
 class TestRespawnCropCalibrationGate(unittest.TestCase):
-    def test_fallback_placeholder_is_not_calibrated(self):
+    """AGE-131复查：标定状态改由config显式开关声明，不再靠坐标比对推断。
+
+    坐标启发式太脆——把占位坐标随手挪一个像素就会被判成"已标定"，静默
+    打开那条把所有真实死亡X标记都拒掉的召回崩塌路径。
+    """
+
+    def test_config_declares_uncalibrated(self):
+        """config.yaml当前显式声明未标定 → 判定为未标定。
+
+        标定完成后（开关改true）本断言会失败，那正是提醒：该重跑方案3的
+        端到端验证了。
+        """
+        cfg = config_utils.load_config()["video"]
+        self.assertFalse(cfg["respawn_crop_calibrated"])
         self.assertFalse(
             video_utils.respawn_crop_is_calibrated(video_utils._FALLBACK_RESPAWN_CROP))
-        # 值相等即算未标定（config.yaml里的占位值就是同一份坐标）
-        self.assertFalse(video_utils.respawn_crop_is_calibrated(
-            dict(video_utils._FALLBACK_RESPAWN_CROP)))
+        self.assertFalse(
+            video_utils.respawn_crop_is_calibrated(video_utils.DEFAULT_RESPAWN_CROP))
 
-    def test_different_crop_is_calibrated(self):
+    def test_flag_true_calibrates_even_with_placeholder_coords(self):
+        """开关是权威状态：置true后坐标仍是占位值也算已标定。"""
+        with _calibrated_flag(True):
+            self.assertTrue(video_utils.respawn_crop_is_calibrated(
+                dict(video_utils._FALLBACK_RESPAWN_CROP)))
+
+    def test_flag_false_overrides_drifted_coords(self):
+        """开关为false时，坐标漂了一个像素也不会被当成"已标定"。"""
+        crop = dict(video_utils._FALLBACK_RESPAWN_CROP)
+        crop["y"] += 1
+        with _calibrated_flag(False):
+            self.assertFalse(video_utils.respawn_crop_is_calibrated(crop))
+
+    def test_missing_flag_falls_back_to_coord_heuristic(self):
+        """老配置（没有这个键）回落到旧的坐标比对行为，向后兼容。"""
         crop = dict(video_utils._FALLBACK_RESPAWN_CROP)
         crop["y"] += 200
-        self.assertTrue(video_utils.respawn_crop_is_calibrated(crop))
+        with _calibrated_flag(None):
+            self.assertTrue(video_utils.respawn_crop_is_calibrated(crop))
+            self.assertFalse(video_utils.respawn_crop_is_calibrated(
+                dict(video_utils._FALLBACK_RESPAWN_CROP)))
 
 
 # ---------------------------------------------------------------------------

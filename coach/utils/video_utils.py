@@ -44,6 +44,8 @@ _FALLBACK_MINIMAP_CROP = {"x": 0, "y": 0, "w": 420, "h": 320}
 # 这里先给一个占位裁剪区（沿用HUD计数器同一竖直条带下方，倒计时通常在
 # 死亡/复活状态下于屏幕中上部弹出）。respawn_reader接入前必须先用真实
 # 素材标定实际坐标，否则该特征会因为裁剪区不对而恒返回None，等价于禁用。
+# 标定 = 改真实坐标 **并且** 把config.yaml的video.respawn_crop_calibrated
+# 置true（见respawn_crop_is_calibrated）。
 _FALLBACK_RESPAWN_CROP = {"x": 1650, "y": 140, "w": 650, "h": 120}
 _FALLBACK_COARSE_INTERVAL = 75.0
 _FALLBACK_PRECISION = 3.0
@@ -91,16 +93,27 @@ _RESAMPLE_OFFSETS = (1.0, -1.0, 2.0, -2.0, 4.0, -4.0)
 # 且成本只是每次死亡多解码2帧。
 _BASELINE_OFFSETS = (2.0, 4.0, 6.0)
 
+# config.yaml的video节里显式声明复活倒计时裁剪区是否已标定的开关键名
+_RESPAWN_CALIBRATED_KEY = "respawn_crop_calibrated"
+
 
 def respawn_crop_is_calibrated(crop: dict[str, int]) -> bool:
     """判断复活倒计时裁剪区是否已用真实素材标定过（AGE-131方案3的开关）。
 
-    未标定时（仍等于_FALLBACK_RESPAWN_CROP占位值，含config.yaml里那份
-    同值占位）返回False，调用方必须整体跳过方案3——否则占位坐标下
+    未标定时返回False，调用方必须整体跳过方案3——否则占位坐标下
     respawn_reader恒返回None，会把所有真实死亡X标记都误判成噪点，
     把召回率打到接近0（见extract_death_location中该特征的说明）。
+
+    标定状态以config.yaml的 ``video.respawn_crop_calibrated`` 显式声明为准
+    （AGE-131复查）：原先靠"坐标是否还等于占位值"推断，太脆——把占位坐标
+    随手挪一个像素就会被当成"已标定"，静默打开那条召回崩塌的路径。现在
+    坐标怎么写都不影响判定，**标定 = 把该开关置true + 同时填上真实坐标**。
+    config里没有这个键时（老配置/单测直接调用）才回落到旧的坐标比对启发式。
     """
-    return dict(crop) != _FALLBACK_RESPAWN_CROP
+    flag = _load_video_config().get(_RESPAWN_CALIBRATED_KEY)
+    if flag is None:
+        return dict(crop) != _FALLBACK_RESPAWN_CROP  # 向后兼容：无开关时看坐标
+    return bool(flag)
 
 
 def video_duration(video_path: str) -> float:
@@ -708,7 +721,9 @@ def extract_death_location(
             （倒计时未显示）。典型实现见make_vlm_respawn_reader。
         respawn_crop: 复活倒计时HUD裁剪区域（默认从config.yaml的
             video.respawn_crop读取；真实坐标需先标定，见该常量定义处
-            的TODO）。未标定（见respawn_crop_is_calibrated）时本函数会
+            的TODO）。是否已标定由config.yaml的
+            video.respawn_crop_calibrated开关显式声明而非坐标推断（见
+            respawn_crop_is_calibrated）。未标定时本函数会
             整体跳过特征3、只用1+2两层过滤——这是复查修复的安全防护：
             占位坐标下respawn_reader读不到倒计时会恒返回None，若不加这层
             防护，"未通过"会被当成"确认噪点"处理，导致所有真实死亡X标记

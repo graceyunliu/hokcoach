@@ -44,11 +44,14 @@ video:
   # TODO(AGE-131跟进)：占位值，尚未在真实录屏上标定复活倒计时HUD的实际
   # 坐标。respawn_reader接入前请先用真实素材核实/修正这四个值。
   # extract_death_location已加安全防护（见video_utils.respawn_crop_is_calibrated）：
-  # 只要这四个值仍等于代码里的_FALLBACK_RESPAWN_CROP占位值，就会整体跳过
-  # "复活HUD共现"特征、只用死亡前基线+位置持续性过滤（不会因为占位坐标
-  # 读不到倒计时而把所有真实死亡X标记都误判为噪点拒绝）。标定出真实坐标
-  # 后该防护自动解除，特征生效。
+  # respawn_crop_calibrated为false时整体跳过"复活HUD共现"特征、只用死亡前
+  # 基线+位置持续性过滤（不会因为占位坐标读不到倒计时而把所有真实死亡X
+  # 标记都误判为噪点拒绝，那等于把召回率打到接近0）。
+  # 标定 = 同时做两件事：把下面四个坐标改成真实值，并把
+  # respawn_crop_calibrated改成true。开关是唯一的判定依据——坐标漂一个
+  # 像素不会被当成"已标定"，也就不会静默打开那条召回崩塌的路径。
   respawn_crop:  {x: 1650, y: 140, w: 650, h: 120}  # 复活倒计时区域（占位，待标定）
+  respawn_crop_calibrated: false                     # 标定完真实坐标后改true
   coarse_interval_sec: 75
   precision_sec: 3
 
