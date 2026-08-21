@@ -314,7 +314,10 @@ class Orchestrator:
         kda_reader = self._make_kda_reader(video_utils)
 
         _tick("检测死亡事件（HUD粗采样+二分定位）")
-        events = video_utils.extract_death_events(video_path, kda_reader)
+        coverage: dict[str, int] = {}
+        events = video_utils.extract_death_events(
+            video_path, kda_reader,
+            coverage_cb=lambda ok, total: coverage.update(ok=ok, total=total))
 
         _tick("提取死亡地点与小地图轨迹")
         contexts: list[str | None] = []
@@ -350,6 +353,20 @@ class Orchestrator:
             video_path, events, contexts, llm=self.llm)
         p = (self.profile or {}).get("player") or {}
         replay["hero_played"] = p.get("target_hero")
+
+        # 2026-08-21修复：KDA读数覆盖率低时（大量HUD粗采样点读不出来，常见
+        # 于VLM读数器不稳定，见AGE-136）不能让"0死亡"看起来跟"真的零死亡"
+        # 一样干净——那会把读数失败伪装成一个可信的好结果。把警告写进replay
+        # 本身（而不只是server端日志），FastAPI/CLI两条路径都能原样透出给
+        # 用户，不需要各自重新判断一遍。
+        total = coverage.get("total", 0)
+        ok = coverage.get("ok", 0)
+        if total and ok / total < 0.5:
+            replay["death_analysis"]["kda_read_warning"] = (
+                f"HUD死亡计数器读数覆盖率过低（{ok}/{total}个采样点可读，"
+                f"{ok/total:.0%}）：本次结果可能不可信，\"零死亡\"或死亡次数"
+                f"偏少很可能是读数失败而非真实战绩。若使用VLM读数器（默认"
+                f"config.yaml的video.kda_reader），建议切换为template。")
         return replay
 
     def analyze_video(self, video_path: str, interactive: bool = True,

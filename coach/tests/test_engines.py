@@ -39,7 +39,9 @@ class TestMiniYaml(unittest.TestCase):
         self.assertEqual(cfg["llm"]["api_key_env"], "COACH_LLM_API_KEY")
         self.assertEqual(cfg["llm"]["vision"]["model"], "qwen3-vl-plus")
         self.assertEqual(cfg["video"]["coarse_interval_sec"], 75)
-        self.assertEqual(cfg["video"]["kda_reader"], "vlm")
+        # 2026-08-21：默认从vlm切到template（真实录屏上VLM对同一帧偶发"读不出来"，
+        # 见config.yaml video段注释和orchestrator.py的kda_read_warning机制）
+        self.assertEqual(cfg["video"]["kda_reader"], "template")
         self.assertFalse(cfg["voice"]["enabled"])
 
     def test_parses_persona_lists(self):

@@ -229,6 +229,7 @@ def extract_death_events(
     coarse_interval: float = DEFAULT_COARSE_INTERVAL,
     precision: float = DEFAULT_PRECISION,
     hud_crop: dict[str, int] = DEFAULT_HUD_CROP,
+    coverage_cb: "Callable[[int, int], None] | None" = None,
 ) -> list[dict[str, Any]]:
     """从回放视频提取死亡事件列表（tech spec 4.1.1 v1.2方案）。
 
@@ -262,16 +263,36 @@ def extract_death_events(
 
         # 1. 粗采样（跳过不可读点，窗口自然拉宽到下一个可读点）
         samples: list[tuple[float, KDA]] = []
+        expected_points = 0
         ts = 0.0
         while ts < duration:
+            expected_points += 1
             kda = read(ts)
             if kda is not None:
                 samples.append((ts, kda))
             ts += coarse_interval
         if not samples or samples[-1][0] < duration - coarse_interval / 2:
+            expected_points += 1
             kda = read(duration - 1.0)
             if kda is not None:
                 samples.append((duration - 1.0, kda))
+
+        # 2026-08-21发现：kda_reader大面积不可读（如VLM对同一帧偶发"看不清"，
+        # 参见AGE-136）会让粗采样点大批被跳过——不是"没有死亡"，是"没读出来"，
+        # 但函数返回的events列表长度为0，跟"这局真的零死亡"完全无法区分，
+        # 调用方（orchestrator/API）会把它当成干净的0死亡结果呈现给用户，
+        # 而实际上是读数失败。这里不改变返回值形状（向后兼容），而是把
+        # 覆盖率暴露给调用方决定要不要警告用户；覆盖率低于50%时无论如何
+        # 都记一条warning日志，即使调用方没传coverage_cb也至少server端可查。
+        coverage = (len(samples) / expected_points) if expected_points else 0.0
+        if coverage < 0.5:
+            logging.warning(
+                "KDA读数覆盖率过低（%d/%d，%.0f%%）：大量粗采样点读不出HUD计数器，"
+                "死亡事件提取结果可能不可信（不等于\"零死亡\"，是\"读不出来\"）。"
+                "若使用VLM读数器，考虑切换config.yaml的video.kda_reader为template。",
+                len(samples), expected_points, coverage * 100)
+        if coverage_cb is not None:
+            coverage_cb(len(samples), expected_points)
 
         # 2+3. 找死亡计数递增的窗口，逐次二分定位
         for (t0, kda0), (t1, kda1) in zip(samples, samples[1:]):

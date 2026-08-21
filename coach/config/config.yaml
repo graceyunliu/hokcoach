@@ -39,7 +39,15 @@ llm:
 # 视频检测区域（AGE-49：基于验证素材1290×2796竖屏录屏标定，
 # 换设备/游戏UI改版后需重新标定）
 video:
-  kda_reader: vlm   # vlm | template；AGE-136模板法可显式开启，经更多对局验证前保留VLM默认
+  # 2026-08-21实测切换：同一帧（01-16-28录屏 ts=300, 肉眼可读K=0,D=0,A=1）
+  # 用真实生产prompt（_KDA_PROMPT）问VLM，模型回答"null"（声称读不出来）；
+  # 换一个措辞不同的prompt问同一张图，又能读对——跟AGE-136记录的VLM不稳定
+  # 问题（同一帧多次调用给出不同答案/偶发拒绝）完全对得上，不是crop/配置
+  # 问题。这正是extract_death_events在Grace真实录屏上报告"0死亡"（她记得
+  # 明明死过）的根因：粗采样12个点大量因VLM"null"回答而被跳过，死亡计数
+  # 递增窗口检测不到。模板法在同一张图上确定性读出(0,0,1)，跟人眼一致。
+  # 默认改为template。
+  kda_reader: template   # vlm | template；AGE-136模板法已验证优于VLM，改为默认
   hud_crop:      {x: 1650, y: 0, w: 650, h: 140}   # KDA计数器区域
   minimap_crop:  {x: 0,    y: 0, w: 420, h: 320}   # 小地图区域
   # AGE-140标定完成（2026-08-17）：在ScreenRecording_08-12-2026 02-03-33_1.MP4

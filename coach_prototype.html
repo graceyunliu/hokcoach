@@ -1133,12 +1133,17 @@
         extractList.innerHTML = `<div class="extractrow"><span class="ed" style="color:var(--red);">读取结果失败：${err.message}</span></div>`;
         return;
       }
+      const warning = replay.death_analysis && replay.death_analysis.kda_read_warning;
+      const warningHtml = warning
+        ? `<div class="note" style="border-color:#5a2a2a;background:#241414;color:#f4b3b3;margin-bottom:10px;"><b style="color:var(--red);">读数不可信：</b>${warning}</div>`
+        : '';
+
       const details = (replay.death_analysis && replay.death_analysis.details) || [];
       if(details.length === 0){
-        extractList.innerHTML = `<div class="extractrow"><span class="ed">这局零死亡，没有死亡事件可看。</span></div>`;
+        extractList.innerHTML = warningHtml + `<div class="extractrow"><span class="ed">这局零死亡，没有死亡事件可看。</span></div>`;
         return;
       }
-      extractList.innerHTML = details.map(d => {
+      extractList.innerHTML = warningHtml + details.map(d => {
         const confPct = Math.round((d.confidence || 0) * 100);
         const comment = d.ai_comment
           ? `<div style="margin-top:6px;color:var(--text-dim);font-size:12px;line-height:1.6;white-space:pre-wrap;">${d.ai_comment}</div>`
