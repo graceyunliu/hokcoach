@@ -163,6 +163,8 @@ def build_replay_from_video(video_path: str,
         cls = classify_death(evidence, llm=llm)
         detail = {
             "timestamp": format_ts(event.get("ts")),
+            "ts_seconds": event.get("ts"),  # 供前端"跟教练一起看回放"功能seek用，
+                                             # 避免反解析"7:05"这种mm:ss字符串
             "type": cls["type"],
             "confidence": cls["confidence"],
             "classify_reason": cls["reason"],

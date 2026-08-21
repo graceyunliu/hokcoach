@@ -423,6 +423,18 @@
   .extractrow .conf{width:70px;flex:0 0 70px;height:5px;background:#2a2f3d;border-radius:99px;overflow:hidden;}
   .extractrow .conf > div{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));}
   .dim-note{color:var(--text-dim);font-size:9.5px;}
+
+  /* 跟教练一起看回放：视频播到某次死亡对应片段时，高亮那一条，
+     模拟教练和球员一起坐着看录像、边看边讲那种"这里，看这个"的感觉 */
+  .extractrow.replay-active{
+    background:rgba(232,179,77,.08);border-left:2px solid var(--gold);
+    padding-left:8px;margin-left:-10px;border-radius:4px;
+  }
+  .extractrow .jumpbtn{
+    flex:0 0 auto;border:1px solid var(--gold-dim);background:transparent;color:var(--gold);
+    font-size:11px;padding:3px 10px;border-radius:99px;cursor:pointer;transition:.15s;
+  }
+  .extractrow .jumpbtn:hover{background:var(--gold-dim);color:#1a1408;}
 </style>
 </head>
 <body>
@@ -504,6 +516,13 @@
       <h3>处理日志</h3>
       <div class="sub" id="termSub">等待上传 · 这里是/replay/{job_id}/status真实轮询结果，不是模拟台词</div>
       <div class="termwrap" id="termwrap"><div class="dim">[待机] 上传录像后开始分析…</div></div>
+    </div>
+
+    <div class="card" id="replayVideoCard" style="display:none;">
+      <h3>跟教练一起看回放</h3>
+      <div class="sub">点下面某次死亡，视频会跳到那一刻附近并播放——像球队看录像分析一样，边看画面边听点评，不是干读文字。</div>
+      <video id="replayVideo" controls style="width:100%;max-height:480px;background:#000;border-radius:8px;margin-top:8px;"></video>
+      <div class="sub" id="replayVideoNote" style="display:none;margin-top:6px;"></div>
     </div>
 
     <div class="card">
@@ -1062,6 +1081,9 @@
     const term = document.getElementById('termwrap');
     const steps = [...document.querySelectorAll('#pipeline .pstep')];
     const extractList = document.getElementById('extractList');
+    const replayVideoCard = document.getElementById('replayVideoCard');
+    const replayVideo = document.getElementById('replayVideo');
+    const replayVideoNote = document.getElementById('replayVideoNote');
     if(!input) return;
 
     function setStage(stageText){
@@ -1125,6 +1147,55 @@
       }
     }
 
+    // 跟教练一起看回放：点某次死亡→视频跳到那一刻附近（提前几秒好看清楚
+    // 死亡前发生了什么，而不是死亡瞬间才切进去）并播放。
+    const REPLAY_LEAD_IN_SEC = 6;
+    let replayRowsByTs = []; // [{ts, row}]，按ts升序，供timeupdate高亮用
+
+    function seekAndPlay(tsSeconds){
+      if(tsSeconds == null || !replayVideo.src) return;
+      replayVideo.currentTime = Math.max(0, tsSeconds - REPLAY_LEAD_IN_SEC);
+      replayVideo.play().catch(() => {}); // 有些浏览器要求用户手势才能自动播放，
+                                           // 这里是点击触发的所以通常没问题，
+                                           // catch只是防止未处理rejection报错
+    }
+
+    function setupReplayVideo(replayId, details){
+      const videoUrl = `${API_BASE}/replay/${replayId}/video`;
+      replayVideoNote.style.display = 'none';
+      replayVideo.onerror = null;
+      replayVideo.removeAttribute('src');
+      replayVideoCard.style.display = 'none';
+
+      const hasAnyTs = details.some(d => d.ts_seconds != null);
+      if(!hasAnyTs){
+        return; // 没有可用时间戳（如手动录入的复盘），没法做seek联动，不显示播放器
+      }
+
+      replayVideoCard.style.display = 'block';
+      replayVideo.onerror = () => {
+        // 最常见原因：临时目录里的原视频已经被系统清理，见/video端点的404说明
+        replayVideoCard.querySelector('video').style.display = 'none';
+        replayVideoNote.style.display = 'block';
+        replayVideoNote.innerHTML = '<span style="color:var(--red);">原视频已不可用（可能是本地临时文件被清理了），只能看下面的文字点评。</span>';
+      };
+      replayVideo.src = videoUrl;
+
+      // timeupdate时高亮当前播放位置对应的那次死亡——模拟"教练指着屏幕说
+      // 这里、这里"的效果，而不是要用户自己对时间轴
+      replayVideo.ontimeupdate = () => {
+        if(replayRowsByTs.length === 0) return;
+        const t = replayVideo.currentTime + REPLAY_LEAD_IN_SEC; // 补偿lead-in，
+                                                                  // 让高亮跟"死亡发生的那一秒"对齐
+        let active = null;
+        for(const entry of replayRowsByTs){
+          if(entry.ts <= t) active = entry; else break;
+        }
+        replayRowsByTs.forEach(entry => entry.row.classList.toggle(
+          'replay-active', entry === active));
+      };
+    }
+
     async function loadResult(replayId){
       let replay;
       try {
@@ -1139,24 +1210,41 @@
         : '';
 
       const details = (replay.death_analysis && replay.death_analysis.details) || [];
+      setupReplayVideo(replayId, details);
+      replayRowsByTs = [];
+
       if(details.length === 0){
         extractList.innerHTML = warningHtml + `<div class="extractrow"><span class="ed">这局零死亡，没有死亡事件可看。</span></div>`;
         return;
       }
-      extractList.innerHTML = warningHtml + details.map(d => {
+      extractList.innerHTML = warningHtml + details.map((d, i) => {
         const confPct = Math.round((d.confidence || 0) * 100);
         const comment = d.ai_comment
           ? `<div style="margin-top:6px;color:var(--text-dim);font-size:12px;line-height:1.6;white-space:pre-wrap;">${d.ai_comment}</div>`
           : '';
-        return `<div class="extractrow" style="flex-direction:column;align-items:flex-start;">
+        const jumpBtn = d.ts_seconds != null
+          ? `<button type="button" class="jumpbtn" data-idx="${i}">▶ 看这段</button>`
+          : '';
+        return `<div class="extractrow" data-idx="${i}" style="flex-direction:column;align-items:flex-start;">
           <div style="display:flex;align-items:center;gap:10px;width:100%;">
             <span class="et">${d.timestamp || '?'}</span>
             <span class="ed">${d.type || '未知归因'}${d.location ? '·' + d.location : ''}</span>
             <span class="conf"><div style="width:${confPct}%"></div></span>
+            ${jumpBtn}
           </div>
           ${comment}
         </div>`;
       }).join('');
+
+      const rows = [...extractList.querySelectorAll('.extractrow[data-idx]')];
+      rows.forEach(row => {
+        const idx = Number(row.dataset.idx);
+        const d = details[idx];
+        if(d.ts_seconds != null) replayRowsByTs.push({ts: d.ts_seconds, row});
+        const btn = row.querySelector('.jumpbtn');
+        if(btn) btn.addEventListener('click', () => seekAndPlay(d.ts_seconds));
+      });
+      replayRowsByTs.sort((a, b) => a.ts - b.ts);
     }
 
     input.addEventListener('change', async () => {

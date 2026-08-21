@@ -12,7 +12,8 @@ import threading
 from pathlib import Path
 from typing import Any
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, UploadFile
+from fastapi.responses import Response, StreamingResponse
 
 from api.jobs import job_store, run_replay_job
 from core.orchestrator import Orchestrator
@@ -77,3 +78,84 @@ async def get_replay(replay_id: str) -> dict[str, Any]:
     if data is None:
         raise HTTPException(status_code=404, detail=f"未找到复盘记录: {replay_id}")
     return data
+
+
+_CHUNK_SIZE = 1024 * 1024  # 1MB
+
+
+@router.get("/replay/{replay_id}/video")
+async def get_replay_video(replay_id: str, request: Request):
+    """回放原视频，支持Range请求（v5页"跟教练一起看回放"功能靠这个seek，
+    浏览器<video>元素默认就会发Range请求，不支持的话拖进度条会失败）。
+
+    源文件路径来自replay.source.path（上传时落到_UPLOAD_DIR，不主动清理，
+    见upload_replay的注释）——但这是本地临时目录，用户重启电脑/系统清理
+    /tmp后文件可能已经不在了，找不到时返回明确的404而不是让前端<video>
+    卡在加载圈。手写Range解析而非依赖FileResponse的内置支持，因为不同
+    starlette版本对Range的支持程度不一致，这个本地工具不想赌用户装的版本。
+    """
+    path = data_utils.REPLAYS_DIR / f"{replay_id}.json"
+    data = data_utils.load_json(path)
+    if data is None:
+        raise HTTPException(status_code=404, detail=f"未找到复盘记录: {replay_id}")
+
+    video_path_str = ((data.get("source") or {}).get("path"))
+    if not video_path_str:
+        raise HTTPException(status_code=404, detail="该复盘记录没有关联的原始视频（可能是手动录入的）")
+
+    video_path = Path(video_path_str)
+    if not video_path.exists():
+        raise HTTPException(
+            status_code=404,
+            detail="原视频文件已不在（临时目录可能已被系统清理），无法回放，只能看文字点评")
+
+    file_size = video_path.stat().st_size
+    range_header = request.headers.get("range")
+
+    media_type = "video/mp4"
+
+    if range_header is None:
+        # 无Range请求：整个文件一次性返回（首次加载/不支持Range的客户端）
+        def _iter_full():
+            with video_path.open("rb") as f:
+                while chunk := f.read(_CHUNK_SIZE):
+                    yield chunk
+
+        return StreamingResponse(
+            _iter_full(), media_type=media_type,
+            headers={"Content-Length": str(file_size), "Accept-Ranges": "bytes"})
+
+    # 解析形如 "bytes=1000-2000" / "bytes=1000-" 的Range头
+    try:
+        units, _, range_spec = range_header.partition("=")
+        if units.strip() != "bytes":
+            raise ValueError
+        start_s, _, end_s = range_spec.partition("-")
+        start = int(start_s) if start_s else 0
+        end = int(end_s) if end_s else file_size - 1
+        end = min(end, file_size - 1)
+        if start > end or start < 0:
+            raise ValueError
+    except ValueError:
+        return Response(status_code=416, headers={"Content-Range": f"bytes */{file_size}"})
+
+    length = end - start + 1
+
+    def _iter_range():
+        with video_path.open("rb") as f:
+            f.seek(start)
+            remaining = length
+            while remaining > 0:
+                chunk = f.read(min(_CHUNK_SIZE, remaining))
+                if not chunk:
+                    break
+                remaining -= len(chunk)
+                yield chunk
+
+    return StreamingResponse(
+        _iter_range(), status_code=206, media_type=media_type,
+        headers={
+            "Content-Range": f"bytes {start}-{end}/{file_size}",
+            "Content-Length": str(length),
+            "Accept-Ranges": "bytes",
+        })

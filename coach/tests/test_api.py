@@ -128,6 +128,58 @@ class TestApiSmoke(unittest.TestCase):
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.json()["hero_played"], "瑶")
 
+    def test_replay_video_404_when_no_source_path(self):
+        """手动录入的复盘没有source.path（不是视频来源），/video端点要给出
+        明确的404，而不是让前端<video>元素卡在加载圈里。"""
+        replay = data_utils.default_replay(hero_played="瑶")
+        data_utils.save_replay(replay)
+        r = self.client.get(f"/replay/{replay['replay_id']}/video")
+        self.assertEqual(r.status_code, 404)
+
+    def test_replay_video_404_when_file_missing_on_disk(self):
+        """source.path存在于replay JSON里，但磁盘上的文件已经不在了（临时
+        目录被系统清理）——这是"跟教练一起看回放"功能最可能踩的坑，必须
+        给明确错误而不是500。"""
+        replay = data_utils.default_replay(hero_played="瑶")
+        replay["source"] = {"type": "video", "path": "/tmp/does-not-exist-xyz.mp4"}
+        data_utils.save_replay(replay)
+        r = self.client.get(f"/replay/{replay['replay_id']}/video")
+        self.assertEqual(r.status_code, 404)
+
+    def test_replay_video_serves_full_file_and_range_requests(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            video_path = Path(tmp) / "clip.mp4"
+            payload = b"0123456789" * 100  # 1000 bytes，够切几个Range测试
+            video_path.write_bytes(payload)
+
+            replay = data_utils.default_replay(hero_played="瑶")
+            replay["source"] = {"type": "video", "path": str(video_path)}
+            data_utils.save_replay(replay)
+            replay_id = replay["replay_id"]
+
+            r = self.client.get(f"/replay/{replay_id}/video")
+            self.assertEqual(r.status_code, 200)
+            self.assertEqual(r.content, payload)
+            self.assertEqual(r.headers.get("accept-ranges"), "bytes")
+
+            r = self.client.get(
+                f"/replay/{replay_id}/video",
+                headers={"Range": "bytes=10-19"})
+            self.assertEqual(r.status_code, 206)
+            self.assertEqual(r.content, payload[10:20])
+            self.assertEqual(r.headers.get("content-range"), f"bytes 10-19/{len(payload)}")
+
+            r = self.client.get(
+                f"/replay/{replay_id}/video",
+                headers={"Range": "bytes=990-"})
+            self.assertEqual(r.status_code, 206)
+            self.assertEqual(r.content, payload[990:])
+
+            r = self.client.get(
+                f"/replay/{replay_id}/video",
+                headers={"Range": "bytes=abc-def"})
+            self.assertEqual(r.status_code, 416)
+
     def test_replay_upload_job_fails_gracefully_on_missing_video(self):
         from core.orchestrator import Orchestrator, OrchestratorError
 
