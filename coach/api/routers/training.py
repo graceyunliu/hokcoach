@@ -7,7 +7,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
@@ -25,6 +25,7 @@ class CheckinRequest(BaseModel):
     rate: int = Field(ge=0, le=100, description="今日执行率0-100")
     note: Optional[str] = None
     when: Optional[str] = Field(default=None, description="YYYY-MM-DD，缺省为今天")
+    lang: Literal["zh", "en"] = "zh"
 
 
 @router.get("/current")
@@ -49,10 +50,14 @@ async def checkin(body: CheckinRequest) -> dict[str, Any]:
                                        when=body.when)
     except ValueError as err:
         raise HTTPException(status_code=400, detail=str(err)) from err
+    # 打卡本身不调用LLM，但把请求语言记进本周记录，后续周报快照可自描述。
+    week["language"] = body.lang
+    data_utils.save_weekly_training(week)
     return {
         "week": week.get("week"),
         "task": week.get("task"),
         "daily_checkins": week.get("daily_checkins", []),
+        "language": body.lang,
     }
 
 

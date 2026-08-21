@@ -286,7 +286,8 @@ def _weeks_on_task(snapshots: list[dict[str, Any]], skill_tag: str | None) -> in
 
 
 def finalize_week(week_data: dict[str, Any], action: str,
-                  ai_note: str | None = None) -> dict[str, Any]:
+                  ai_note: str | None = None,
+                  language: str = "zh") -> dict[str, Any]:
     """把本周结果写入progress快照与weakness_tracker，落盘。"""
     week = week_data["week"]
     progress = week_data["progress"]
@@ -300,6 +301,7 @@ def finalize_week(week_data: dict[str, Any], action: str,
         "execution_rate": round(rate, 3),
         "rank": week_data.get("rank"),
         "action": action,
+        "language": language,
     }
     progress.setdefault("weekly_snapshots", []).append(snapshot)
 

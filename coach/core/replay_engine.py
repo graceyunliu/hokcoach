@@ -19,7 +19,7 @@ from typing import Any, Optional
 from core.llm_client import LLMClient, LLMError, extract_json
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEATH_CLASSIFIER_PROMPT = BASE_DIR / "prompts" / "death_classifier.txt"
+PROMPTS_DIR = BASE_DIR / "prompts"
 
 DEATH_TYPES = ["探草死", "掉点死", "换头死", "贪线死", "机制死"]
 
@@ -41,7 +41,8 @@ def format_ts(seconds: float | None) -> str:
 
 
 def classify_death(evidence: dict[str, Any],
-                   llm: Optional[LLMClient] = None) -> dict[str, Any]:
+                   llm: Optional[LLMClient] = None,
+                   lang: str = "zh") -> dict[str, Any]:
     """死亡归因分类器（4.1.2）。
 
     Args:
@@ -80,7 +81,7 @@ def classify_death(evidence: dict[str, Any],
 
     # --- 3. LLM兜底 ---
     if llm is not None:
-        result = _classify_with_llm(evidence, llm)
+        result = _classify_with_llm(evidence, llm, lang=lang)
         if result is not None:
             return result
 
@@ -110,8 +111,8 @@ def _format_death_location(evidence: dict[str, Any]) -> str:
 
 
 def _classify_with_llm(evidence: dict[str, Any],
-                       llm: LLMClient) -> Optional[dict[str, Any]]:
-    template = DEATH_CLASSIFIER_PROMPT.read_text(encoding="utf-8")
+                       llm: LLMClient, lang: str = "zh") -> Optional[dict[str, Any]]:
+    template = (PROMPTS_DIR / lang / "death_classifier.txt").read_text(encoding="utf-8")
     prompt = template.format(
         death_time=evidence.get("death_time") or "未知",
         death_location=_format_death_location(evidence),
@@ -126,9 +127,10 @@ def _classify_with_llm(evidence: dict[str, Any],
     dtype = data.get("type")
     if dtype not in DEATH_TYPES:
         return None
-    sufficient = "证据不足" not in str(data.get("reason", ""))
+    reason = str(data.get("reason", ""))
+    sufficient = "证据不足" not in reason and "insufficient evidence" not in reason.lower()
     return _result(dtype, float(data.get("confidence", 0.5)),
-                   str(data.get("reason", "LLM判定")), sufficient=sufficient)
+                   reason or "LLM判定", sufficient=sufficient)
 
 
 # ---------------------------------------------------------------------------
@@ -138,7 +140,8 @@ def _classify_with_llm(evidence: dict[str, Any],
 def build_replay_from_video(video_path: str,
                             death_events: list[dict[str, Any]],
                             minimap_contexts: list[str | None],
-                            llm: Optional[LLMClient] = None) -> dict[str, Any]:
+                            llm: Optional[LLMClient] = None,
+                            lang: str = "zh") -> dict[str, Any]:
     """把阶段0管线输出（死亡事件+minimap轨迹摘要）组装成replay记录并逐条归因。
 
     death_events: video_utils.extract_death_events() 输出
@@ -160,7 +163,7 @@ def build_replay_from_video(video_path: str,
             "kill_traded": event.get("kill_traded"),
             "self_attribution": None,
         }
-        cls = classify_death(evidence, llm=llm)
+        cls = classify_death(evidence, llm=llm, lang=lang)
         detail = {
             "timestamp": format_ts(event.get("ts")),
             "ts_seconds": event.get("ts"),  # 供前端"跟教练一起看回放"功能seek用，
@@ -182,7 +185,8 @@ def build_replay_from_video(video_path: str,
 
 
 def classify_manual_replay(replay: dict[str, Any],
-                           llm: Optional[LLMClient] = None) -> dict[str, Any]:
+                           llm: Optional[LLMClient] = None,
+                           lang: str = "zh") -> dict[str, Any]:
     """对手动录入的replay记录补齐缺失的死亡类型判定。"""
     cats = replay["death_analysis"]["categories"]
     for detail in replay["death_analysis"]["details"]:
@@ -199,7 +203,7 @@ def classify_manual_replay(replay: dict[str, Any],
             "death_location": detail.get("location"),
             "minimap_context": detail.get("minimap_context"),
             "self_attribution": detail.get("self_attribution"),
-        }, llm=llm)
+        }, llm=llm, lang=lang)
         detail["type"] = cls["type"]
         detail["confidence"] = cls["confidence"]
         detail["classify_reason"] = cls["reason"]

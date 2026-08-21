@@ -64,6 +64,7 @@ def default_player_profile() -> dict[str, Any]:
     return {
         "player": {
             "id": "player_001",
+            "language": "zh",
             "main_heroes": [],
             "secondary_heroes": [],
             "current_rank": None,

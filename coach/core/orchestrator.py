@@ -24,6 +24,7 @@ from utils import config_utils, data_utils
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROMPTS_DIR = BASE_DIR / "prompts"
+SUPPORTED_LANGS = {"zh", "en"}
 
 
 class OrchestratorError(Exception):
@@ -78,33 +79,44 @@ class Orchestrator:
     # ------------------------------------------------------------------
 
     def comment_death(self, detail: dict[str, Any],
-                      user_intent: str | None = None) -> str:
+                      user_intent: str | None = None,
+                      lang: str = "zh") -> str:
         """对单次死亡生成教练点评：检索→约束检查→组prompt→LLM。"""
+        lang = self._lang(lang)
         death_type = detail.get("type") or "机制死"
         context_parts = []
         if detail.get("location"):
             if detail.get("location_source") == "minimap_x_marker":
-                context_parts.append(f"死亡地点：{detail['location']}（系统死亡X标记直接读取）")
+                context_parts.append((f"Death location: {detail['location']} (read directly from the system death-X marker)"
+                                      if lang == "en" else f"死亡地点：{detail['location']}（系统死亡X标记直接读取）"))
             else:
-                context_parts.append(f"死亡地点：{detail['location']}")
+                context_parts.append((f"Death location: {detail['location']}" if lang == "en"
+                                      else f"死亡地点：{detail['location']}"))
         if detail.get("minimap_context"):
-            context_parts.append(f"小地图：{detail['minimap_context']}")
+            context_parts.append((f"Minimap: {detail['minimap_context']}" if lang == "en"
+                                  else f"小地图：{detail['minimap_context']}"))
         if detail.get("self_attribution"):
-            context_parts.append(f"玩家自述：{detail['self_attribution']}")
+            context_parts.append((f"Player account: {detail['self_attribution']}" if lang == "en"
+                                  else f"玩家自述：{detail['self_attribution']}"))
         if user_intent:
-            context_parts.append(f"玩家当时的意图：{user_intent}")
+            context_parts.append((f"Player's intent: {user_intent}" if lang == "en"
+                                  else f"玩家当时的意图：{user_intent}"))
         if detail.get("classify_reason"):
-            context_parts.append(f"归因依据：{detail['classify_reason']}")
+            context_parts.append((f"Classification evidence: {detail['classify_reason']}" if lang == "en"
+                                  else f"归因依据：{detail['classify_reason']}"))
         if not detail.get("evidence_sufficient", True):
-            context_parts.append("注意：本次死亡的画面证据不足，归因置信度低。")
-        context = "；".join(context_parts) or "（无额外上下文）"
+            context_parts.append("Warning: replay evidence is insufficient; classification confidence is low."
+                                 if lang == "en" else "注意：本次死亡的画面证据不足，归因置信度低。")
+        context = ("; " if lang == "en" else "；").join(context_parts) or (
+            "(no additional context)" if lang == "en" else "（无额外上下文）")
 
+        # TODO(AGE-194): 英文生成仍会检索到中文知识库原文；翻译质量方案待人工决定。
         retrieved = knowledge_engine.retrieve_principles(
             death_type, context, principles=self.principles)
         compat = constraints_engine.check_compatibility(
             retrieved, self._constraints())
 
-        prompt = (PROMPTS_DIR / "replay_analysis.txt").read_text(encoding="utf-8")
+        prompt = (PROMPTS_DIR / lang / "replay_analysis.txt").read_text(encoding="utf-8")
         filled = prompt.format(
             segment=self.segment(),
             death_time=detail.get("timestamp") or "未知",
@@ -116,15 +128,28 @@ class Orchestrator:
         )
 
         if self.llm is None:
-            return self._fallback_comment(detail, retrieved)
+            return self._fallback_comment(detail, retrieved, lang=lang)
         try:
             return self.llm.chat_text(system="", user=filled, temperature=0.7)
         except LLMError as e:
             print(f"[LLM调用失败，降级输出] {e}", file=sys.stderr)
-            return self._fallback_comment(detail, retrieved)
+            return self._fallback_comment(detail, retrieved, lang=lang)
 
     def _fallback_comment(self, detail: dict[str, Any],
-                          retrieved: list[knowledge_engine.Principle]) -> str:
+                          retrieved: list[knowledge_engine.Principle],
+                          lang: str = "zh") -> str:
+        if lang == "en":
+            lines = [
+                f"Classification: {detail.get('type')} (confidence {detail.get('confidence', 0):.0%}; "
+                f"{detail.get('classify_reason', '')})",
+            ]
+            if retrieved:
+                lines.append("Relevant principles (original knowledge-base text; not AI-generated):")
+                lines += [f"  {p.format_for_prompt()}" for p in retrieved]
+            else:
+                lines.append("No matching knowledge-base principle was found.")
+            lines.append("(AI coaching unavailable: no LLM is configured. Showing rule-based results only.)")
+            return "\n".join(lines)
         lines = [
             f"归因：{detail.get('type')}（置信度{detail.get('confidence', 0):.0%}，"
             f"{detail.get('classify_reason', '')}）",
@@ -171,7 +196,8 @@ class Orchestrator:
     def finalize_review(self, replay: dict[str, Any],
                         first_death: dict[str, Any] | None,
                         user_intent: str | None = None,
-                        output: str | None = None) -> dict[str, Any]:
+                        output: str | None = None,
+                        lang: str = "zh") -> dict[str, Any]:
         """对first_death生成AI点评（如果有）、落盘replay、可选导出报告。
 
         Returns: {"replay": dict, "comment": str|None, "saved_path": str,
@@ -179,11 +205,12 @@ class Orchestrator:
         """
         comment = None
         if first_death is not None:
-            comment = self.comment_death(first_death, user_intent=user_intent)
+            comment = self.comment_death(first_death, user_intent=user_intent, lang=lang)
             first_death["ai_comment"] = comment
             if user_intent:
                 first_death["user_intent"] = user_intent
 
+        replay["language"] = self._lang(lang)
         path = data_utils.save_replay(replay)
         report_path = None
         if output:
@@ -197,7 +224,8 @@ class Orchestrator:
         }
 
     def finalize_review_all(self, replay: dict[str, Any],
-                            output: str | None = None) -> dict[str, Any]:
+                            output: str | None = None,
+                            lang: str = "zh") -> dict[str, Any]:
         """对全部死亡（不只是第一次）生成AI点评、落盘replay、可选导出报告。
 
         用于视频复盘页（AGE-178后台job）等"用户一次性看完整分析"的场景——
@@ -214,10 +242,11 @@ class Orchestrator:
         details = replay["death_analysis"]["details"]
         comments: list[str | None] = []
         for detail in details:
-            comment = self.comment_death(detail)
+            comment = self.comment_death(detail, lang=lang)
             detail["ai_comment"] = comment
             comments.append(comment)
 
+        replay["language"] = self._lang(lang)
         path = data_utils.save_replay(replay)
         report_path = None
         if output:
@@ -232,7 +261,8 @@ class Orchestrator:
 
     def review_replay(self, replay: dict[str, Any],
                       interactive: bool = True,
-                      output: str | None = None) -> dict[str, Any]:
+                      output: str | None = None,
+                      lang: str = "zh") -> dict[str, Any]:
         """CLI专用薄封装：保留原来的print+input终端体验，内部调用上面两段
         结构化函数。非终端场景（FastAPI等）请直接调用
         analyze_first_death/finalize_review，不要用这个函数。"""
@@ -241,7 +271,7 @@ class Orchestrator:
         first = analysis["first_death"]
         if first is None:
             print("零死亡——这局我们没什么好挑的，保持。")
-            result = self.finalize_review(replay, None)
+            result = self.finalize_review(replay, None, lang=lang)
             print(f"Coach> [复盘记录已保存: {Path(result['saved_path']).name}]")
             return replay
         print("我们只看第一次。")
@@ -255,7 +285,7 @@ class Orchestrator:
             user_intent = _ask_user("Coach> 你当时是想去干嘛？") or None
 
         result = self.finalize_review(replay, first, user_intent=user_intent,
-                                      output=output)
+                                      output=output, lang=lang)
         print(f"\nCoach> {result['comment']}\n")
 
         if analysis["other_deaths"]:
@@ -325,6 +355,7 @@ class Orchestrator:
     def build_replay_from_video_path(
         self, video_path: str,
         progress_cb: "Callable[[str], None] | None" = None,
+        lang: str = "zh",
     ) -> dict[str, Any]:
         """跑完整视频自动复盘管线（检测事件→定位地点→组装replay），不生成
         AI点评、不落盘、不print——纯数据管线，CLI（analyze_video）和FastAPI
@@ -384,7 +415,8 @@ class Orchestrator:
 
         _tick("生成复盘记录")
         replay = replay_engine.build_replay_from_video(
-            video_path, events, contexts, llm=self.llm)
+            video_path, events, contexts, llm=self.llm, lang=self._lang(lang))
+        replay["language"] = lang
         p = (self.profile or {}).get("player") or {}
         replay["hero_played"] = p.get("target_hero")
 
@@ -404,19 +436,20 @@ class Orchestrator:
         return replay
 
     def analyze_video(self, video_path: str, interactive: bool = True,
-                      output: str | None = None) -> int:
+                      output: str | None = None, lang: str = "zh") -> int:
         """CLI入口（--replay <video>）：跑管线+print进度+走review_replay的
         终端交互。FastAPI层不要用这个，直接调用
         build_replay_from_video_path + analyze_first_death/finalize_review。"""
         print("Coach> 正在分析你的回放...（HUD粗采样+二分定位，会有一会儿）")
         try:
             replay = self.build_replay_from_video_path(
-                video_path, progress_cb=lambda stage: print(f"Coach> {stage}..."))
+                video_path, progress_cb=lambda stage: print(f"Coach> {stage}..."),
+                lang=lang)
         except OrchestratorError as err:
             print(str(err))
             return 1
         print(f"Coach> 检测到{replay['deaths']}次死亡。")
-        self.review_replay(replay, interactive=interactive, output=output)
+        self.review_replay(replay, interactive=interactive, output=output, lang=lang)
         return 0
 
     # ------------------------------------------------------------------
@@ -424,18 +457,20 @@ class Orchestrator:
     # ------------------------------------------------------------------
 
     def analyze_manual(self, replay: dict[str, Any], interactive: bool = True,
-                       output: str | None = None) -> int:
-        replay = replay_engine.classify_manual_replay(replay, llm=self.llm)
-        self.review_replay(replay, interactive=interactive, output=output)
+                       output: str | None = None, lang: str = "zh") -> int:
+        replay = replay_engine.classify_manual_replay(replay, llm=self.llm, lang=lang)
+        replay["language"] = self._lang(lang)
+        self.review_replay(replay, interactive=interactive, output=output, lang=lang)
         return 0
 
     # ------------------------------------------------------------------
     # 入口3：自由对话（--chat）
     # ------------------------------------------------------------------
 
-    def _chat_system_prompt(self) -> str:
+    def _chat_system_prompt(self, lang: str = "zh") -> str:
+        lang = self._lang(lang)
         persona = (self.persona or {}).get("persona") or {}
-        principles = persona.get("principles") or []
+        principles = persona.get("principles_en" if lang == "en" else "principles") or []
         p = (self.profile or {}).get("player") or {}
         recent = [data_utils.load_json(f) for f in data_utils.list_replays()[-3:]]
         recent_lines = []
@@ -448,6 +483,16 @@ class Orchestrator:
                 f"- {r.get('timestamp', '')[:10]} {r.get('hero_played') or '?'} "
                 f"{'胜' if r.get('game_result') == 'victory' else '负'} "
                 f"死亡{r.get('deaths', 0)}次 {dist}")
+        if lang == "en":
+            return (
+                "You are a direct, conversational Honor of Kings decision coach.\n"
+                "Core principles:\n" + "\n".join(f"- {x}" for x in principles) + "\n\n"
+                f"Player profile: mains {('/'.join(p.get('main_heroes') or [])) or 'unknown'}, "
+                f"rank {self.segment()}, current focus {p.get('target_hero') or 'not set'}.\n"
+                "Recent reviews:\n" + ("\n".join(recent_lines) or "(no recent reviews)") + "\n\n"
+                "Use natural English and discuss one decision at a time. Anchor judgments in evidence; "
+                "when evidence is missing, say what must be checked in the replay instead of guessing."
+            )
         return (
             "你是王者荣耀决策思维教练，风格对标抖音复盘博主「老娘」「打萌」。\n"
             "核心原则：\n" + "\n".join(f"- {x}" for x in principles) + "\n\n"
@@ -458,14 +503,14 @@ class Orchestrator:
             "没有依据时明确说需要看回放确认，不编造。"
         )
 
-    def chat(self, topic: str | None = None) -> int:
+    def chat(self, topic: str | None = None, lang: str = "zh") -> int:
         if self.llm is None:
             print(self.llm_status_line())
             print("自由对话需要LLM，请在config.yaml配置后重试。")
             return 1
         print("Coach> 来了。想聊什么？（输入 exit 结束）")
         messages: list[dict[str, Any]] = [
-            {"role": "system", "content": self._chat_system_prompt()}]
+            {"role": "system", "content": self._chat_system_prompt(lang=lang)}]
         if topic:
             messages.append({"role": "user", "content": f"我想聊聊：{topic}"})
             try:
@@ -493,7 +538,8 @@ class Orchestrator:
     # 入口4：周报（--weekly-report，阶段3）
     # ------------------------------------------------------------------
 
-    def weekly_report(self, output: str | None = None) -> int:
+    def weekly_report(self, output: str | None = None, lang: str = "zh") -> int:
+        lang = self._lang(lang)
         wd = training_engine.collect_week_data()
         week = wd["week"]
         task = week.get("task") or {}
@@ -517,7 +563,7 @@ class Orchestrator:
 
         report: str
         if self.llm is not None:
-            template = (PROMPTS_DIR / "weekly_report.txt").read_text(encoding="utf-8")
+            template = (PROMPTS_DIR / lang / "weekly_report.txt").read_text(encoding="utf-8")
             filled = template.format(
                 task_description=task.get("description"),
                 skill_tag=task.get("skill_tag"),
@@ -542,7 +588,9 @@ class Orchestrator:
         print(report)
         print(f"\n[评估结论] {action}: {message}")
 
-        snapshot = training_engine.finalize_week(wd, action, ai_note=report)
+        wd["week"]["language"] = lang
+        snapshot = training_engine.finalize_week(wd, action, ai_note=report,
+                                                 language=lang)
 
         # 按评估结论安排下周任务
         skill = task.get("skill_tag")
@@ -580,3 +628,9 @@ class Orchestrator:
             f"分数：{rank_change}\n"
             f"（AI周报不可用：未配置LLM，以上为数据版摘要。）"
         )
+    @staticmethod
+    def _lang(lang: str) -> str:
+        """内部调用也收口校验，避免路径参数被误用；API层另用Literal返回422。"""
+        if lang not in SUPPORTED_LANGS:
+            raise ValueError(f"不支持的语言: {lang!r}（可选 zh | en）")
+        return lang

@@ -435,6 +435,49 @@
     font-size:11px;padding:3px 10px;border-radius:99px;cursor:pointer;transition:.15s;
   }
   .extractrow .jumpbtn:hover{background:var(--gold-dim);color:#1a1408;}
+
+  /* ===== AGE-197 方案二：时间轴导航 + 单条聚焦面板 ===== */
+  .p2-timeline{
+    display:flex;gap:6px;padding:12px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+    overflow-x:auto;background:var(--panel2);
+  }
+  .p2-tick{
+    flex:0 0 auto;padding:7px 13px;border-radius:9px;border:1px solid var(--border);background:var(--panel);
+    font-size:12px;color:var(--text-dim);cursor:pointer;white-space:nowrap;transition:.15s;
+  }
+  .p2-tick .tm{font-weight:700;color:var(--text);display:block;font-size:12.5px;}
+  .p2-tick:hover{border-color:var(--gold-dim);}
+  .p2-tick.active{border-color:var(--gold);background:#241f10;color:var(--gold);}
+  .p2-tick.active .tm{color:var(--gold);}
+
+  .p2-body{display:grid;grid-template-columns:1.15fr .85fr;min-height:420px;}
+  @media(max-width:860px){.p2-body{grid-template-columns:1fr;}}
+  .p2-left{padding:16px;display:flex;flex-direction:column;border-right:1px solid var(--border);}
+  @media(max-width:860px){.p2-left{border-right:none;border-bottom:1px solid var(--border);}}
+  .video-shell{background:#000;border-radius:10px;overflow:hidden;flex:1;display:flex;}
+  .video-shell video{width:100%;max-height:420px;background:#000;display:block;}
+  .p2-nav{display:flex;align-items:center;gap:10px;padding:10px 2px 0;}
+  .p2-nav button{
+    border:1px solid var(--border);background:var(--panel2);color:var(--text-dim);font-size:11.5px;
+    padding:6px 12px;border-radius:8px;cursor:pointer;font-family:inherit;transition:.15s;
+  }
+  .p2-nav button:hover:not(:disabled){border-color:var(--gold-dim);color:var(--text);}
+  .p2-nav button:disabled{opacity:.35;cursor:default;}
+  .p2-nav .counter{font-size:11.5px;color:var(--text-dim);flex:1;text-align:center;}
+
+  .p2-right{padding:18px 20px;overflow-y:auto;max-height:480px;}
+  .p2-right .k{font-size:10.5px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;}
+  .p2-right .headline{font-size:15px;font-weight:700;margin-bottom:10px;}
+  .p2-right .desc{font-size:12.5px;color:var(--text-dim);line-height:1.85;white-space:pre-wrap;}
+  .p2-right .conf{margin-top:14px;}
+  .p2-right .conf .lbl{font-size:10.5px;color:var(--text-dim);margin-bottom:4px;}
+  .p2-right .conf .bar{height:5px;background:#2a2f3d;border-radius:99px;overflow:hidden;}
+  .p2-right .conf .bar>div{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));}
+  .p2-right .minimap-slot{
+    margin-top:18px;min-height:90px;border-radius:10px;border:1px dashed var(--border);
+    background:#0d1119;display:flex;align-items:center;justify-content:center;
+    font-size:10.5px;color:var(--text-dim);text-align:center;padding:12px;line-height:1.6;
+  }
 </style>
 </head>
 <body>
@@ -468,35 +511,36 @@
         </svg>
       </div>
       <div>
-        <div class="name">Coach · AI决策思维教练</div>
+      <div class="name" data-i18n="appName">Coach · AI决策思维教练</div>
         <div class="tag" id="headerTag">连接中… · 录像处理/训练任务/成长追踪三个tab已接真实API（AGE-176）</div>
       </div>
     </div>
     <div class="profile">
+      <button type="button" id="languageToggle" aria-label="Switch language" style="border:1px solid var(--line);background:var(--panel);color:var(--gold);border-radius:16px;padding:6px 10px;cursor:pointer;">EN</button>
       <div class="avatar" id="profileAvatar">?</div>
       <div class="who" id="profileWho">加载中…</div>
     </div>
   </div>
 
   <div class="tabs">
-    <div class="tab active" data-view="v5">录像处理</div>
-    <div class="tab" data-view="v1">赛后复盘对话</div>
-    <div class="tab" data-view="v2">本周训练任务</div>
-    <div class="tab" data-view="v3">成长追踪</div>
-    <div class="tab" data-view="v4">风格报告</div>
+    <div class="tab active" data-view="v5" data-i18n="tabReplay">录像处理</div>
+    <div class="tab" data-view="v1" data-i18n="tabChat">赛后复盘对话</div>
+    <div class="tab" data-view="v2" data-i18n="tabTraining">本周训练任务</div>
+    <div class="tab" data-view="v3" data-i18n="tabGrowth">成长追踪</div>
+    <div class="tab" data-view="v4" data-i18n="tabStyle">风格报告</div>
   </div>
 
   <!-- VIEW 5: 录像处理 -->
   <div class="view active" id="v5">
     <div class="card">
-      <h3>录像处理流水线</h3>
-      <div class="sub">python coach.py --replay last_game.mp4 · 从原始录像到结构化决策点，全流程可视化</div>
+      <h3 data-i18n="replayPipeline">录像处理流水线</h3>
+      <div class="sub" data-i18n="pipelineHelp">python coach.py --replay last_game.mp4 · 从原始录像到结构化决策点，全流程可视化</div>
 
       <div class="uploadrow" id="uploadrow">
         <div class="fico">▶</div>
         <div style="flex:1;">
-          <div class="fname" id="uploadFname">选择一份录屏开始分析</div>
-          <div class="fmeta" id="uploadFmeta">支持 .mp4/.MP4 · 分析在后台跑，可能需要数分钟（真实VLM调用，非模拟）</div>
+          <div class="fname" id="uploadFname" data-i18n="chooseVideo">选择一份录屏开始分析</div>
+          <div class="fmeta" id="uploadFmeta" data-i18n="videoHelp">支持 .mp4/.MP4 · 分析在后台跑，可能需要数分钟（真实VLM调用，非模拟）</div>
         </div>
         <input type="file" id="videoInput" accept="video/mp4,.mp4,.MP4" style="max-width:180px;font-size:12px;color:var(--text-dim);">
         <div class="fstatus" id="uploadStatus" style="display:none;"><span class="dot"></span><span id="uploadStatusText">已加载，处理中</span></div>
@@ -513,23 +557,40 @@
     </div>
 
     <div class="card">
-      <h3>处理日志</h3>
+      <h3 data-i18n="processingLog">处理日志</h3>
       <div class="sub" id="termSub">等待上传 · 这里是/replay/{job_id}/status真实轮询结果，不是模拟台词</div>
-      <div class="termwrap" id="termwrap"><div class="dim">[待机] 上传录像后开始分析…</div></div>
+      <div class="termwrap" id="termwrap"><div class="dim" data-i18n="waitingUpload">[待机] 上传录像后开始分析…</div></div>
     </div>
 
-    <div class="card" id="replayVideoCard" style="display:none;">
-      <h3>跟教练一起看回放</h3>
-      <div class="sub">点下面某次死亡，视频会跳到那一刻附近并播放——像球队看录像分析一样，边看画面边听点评，不是干读文字。</div>
-      <video id="replayVideo" controls style="width:100%;max-height:480px;background:#000;border-radius:8px;margin-top:8px;"></video>
-      <div class="sub" id="replayVideoNote" style="display:none;margin-top:6px;"></div>
+    <div class="card" id="replayVideoCard" style="display:none;padding:0;overflow:hidden;">
+      <div style="padding:18px 20px 0;">
+        <h3 data-i18n="watchReplay">跟教练一起看回放</h3>
+        <div class="sub" id="resultSub">GET /replay/{replay_id} 的真实数据 · 点时间轴上的某次死亡，视频跳到那一刻并同步聚焦右侧点评</div>
+      </div>
+
+      <div class="p2-timeline" id="deathTimeline"></div>
+
+      <div class="p2-body">
+        <div class="p2-left">
+          <div class="video-shell">
+            <video id="replayVideo" controls></video>
+          </div>
+          <div class="sub" id="replayVideoNote" style="display:none;margin-top:6px;"></div>
+          <div class="p2-nav">
+            <button type="button" id="focusPrev">‹ 上一次死亡</button>
+            <span class="counter" id="focusCounter">第 1 / 1 个</span>
+            <button type="button" id="focusNext">下一次死亡 ›</button>
+          </div>
+        </div>
+        <div class="p2-right" id="focusPanel"></div>
+      </div>
     </div>
 
-    <div class="card">
-      <h3>本次复盘的死亡列表</h3>
-      <div class="sub" id="resultSub">流水线输出 → 来自 GET /replay/{replay_id} 的真实数据</div>
+    <div class="card" id="deathListFallback">
+      <h3 data-i18n="deathList">本次复盘的死亡列表</h3>
+      <div class="sub">流水线输出 → 来自 GET /replay/{replay_id} 的真实数据</div>
       <div id="extractList">
-        <div class="extractrow"><span class="ed" style="color:var(--text-dim);">暂无结果，上传录像后这里会显示真实检测到的死亡事件。</span></div>
+        <div class="extractrow"><span class="ed" style="color:var(--text-dim);" data-i18n="noReplayResults">暂无结果，上传录像后这里会显示真实检测到的死亡事件。</span></div>
       </div>
     </div>
   </div>
@@ -576,15 +637,15 @@
       <div class="calltext" id="calltext">"下次对面打野消失超过15秒，你路过任何草丛前，脑子里应该闪过一句话——他可能就在这个草里。"</div>
 
       <div class="calltoggle">
-        <button class="on" id="btnSpeaking" onclick="setCallState('speaking')">教练说话中</button>
-        <button id="btnListening" onclick="setCallState('listening')">轮到你说</button>
-        <button id="btnIdle" onclick="setCallState('idle')">静音 / 暂停</button>
+        <button class="on" id="btnSpeaking" onclick="setCallState('speaking')" data-i18n="coachSpeaking">教练说话中</button>
+        <button id="btnListening" onclick="setCallState('listening')" data-i18n="yourTurn">轮到你说</button>
+        <button id="btnIdle" onclick="setCallState('idle')" data-i18n="mutePause">静音 / 暂停</button>
       </div>
     </div>
 
     <div class="card">
-      <h3>6分32秒 · 中路转下路决策点</h3>
-      <div class="sub">本局共识别 4 个关键决策点 · 当前查看第 1 个</div>
+      <h3 data-i18n="sampleDecision">6分32秒 · 中路转下路决策点</h3>
+      <div class="sub" data-i18n="sampleDecisionHelp">本局共识别 4 个关键决策点 · 当前查看第 1 个</div>
 
       <div class="timeline">
         <div class="tpoint active"><div class="t">06:32</div>补位下路</div>
@@ -709,24 +770,24 @@
   <!-- VIEW 2 -->
   <div class="view" id="v2">
     <div class="task-hero">
-      <div class="k">本周唯一任务</div>
+      <div class="k" data-i18n="weeklyTask">本周唯一任务</div>
       <div class="title" id="taskTitle">加载中…</div>
       <div class="desc" id="taskDesc"></div>
       <div class="progressbar"><div id="taskProgressBar" style="width:0%"></div></div>
       <div class="progressrow"><span id="taskProgressLabel">— / — 局已完成</span><span id="taskRateLabel">执行率 —</span></div>
       <div class="checkins" id="taskCheckins"></div>
-      <div class="sub" style="margin-top:10px;margin-bottom:0;">点击某天可以补打卡（会调用真实 POST /training/checkin）</div>
+      <div class="sub" style="margin-top:10px;margin-bottom:0;" data-i18n="checkinHelp">点击某天可以补打卡（会调用真实 POST /training/checkin）</div>
     </div>
 
     <div class="grid2">
       <div class="card">
-        <h3>历史任务回顾</h3>
-        <div class="sub">按周追踪，一周只改一个习惯 · GET /training/history</div>
+        <h3 data-i18n="taskHistory">历史任务回顾</h3>
+        <div class="sub" data-i18n="historyHelp">按周追踪，一周只改一个习惯 · GET /training/history</div>
         <div id="taskHistory"><div class="weekitem" style="color:var(--text-dim);">加载中…</div></div>
       </div>
       <div class="card">
-        <h3>AI 每周评估笔记</h3>
-        <div class="sub">来自训练方向自动调整机制 · GET /training/weekly-note</div>
+        <h3 data-i18n="weeklyNote">AI 每周评估笔记</h3>
+        <div class="sub" data-i18n="weeklyNoteHelp">来自训练方向自动调整机制 · GET /training/weekly-note</div>
         <div class="weekitem" style="display:block;" id="weeklyNote">加载中…</div>
       </div>
     </div>
@@ -742,7 +803,7 @@
     </div>
 
     <div class="card">
-      <h3>弱点追踪</h3>
+      <h3 data-i18n="weaknessTracking">弱点追踪</h3>
       <div class="sub">GET /progress 的 weakness_tracker 原始数据</div>
       <div id="weaknessTracker"><div class="weekitem" style="color:var(--text-dim);">加载中…</div></div>
     </div>
@@ -755,7 +816,7 @@
     </div>
 
     <div class="card">
-      <h3>四维成长曲线（近6周）</h3>
+      <h3 data-i18n="growthChart">四维成长曲线（近6周）</h3>
       <div class="sub">不用输赢和评分衡量进步 · 用习惯、决策、复盘、相似度四个维度</div>
       <div class="chartwrap">
         <svg viewBox="0 0 640 220" width="100%" height="220">
@@ -805,7 +866,7 @@
     </div>
 
     <div class="card">
-      <h3>成长历程 · 你是怎么一步步变的</h3>
+      <h3 data-i18n="growthJourney">成长历程 · 你是怎么一步步变的</h3>
       <div class="sub">同一个人，四个时间点 · 教练看着你从"不知道自己哪里有问题"到"能自己归因"</div>
       <div class="journey">
         <div class="jpoint">
@@ -836,7 +897,7 @@
     </div>
 
     <div class="card">
-      <h3>数据飞轮 · 为什么用得越久，教练越准</h3>
+      <h3 data-i18n="dataFlywheel">数据飞轮 · 为什么用得越久，教练越准</h3>
       <div class="sub">价值不只来自模型本身，更来自持续积累的、只属于你的对局数据</div>
       <div class="flywheelwrap">
         <div class="flyring"></div>
@@ -870,7 +931,7 @@
 
     <div class="grid2">
       <div class="card">
-        <h3>训练一致性</h3>
+        <h3 data-i18n="consistency">训练一致性</h3>
         <div class="sub" id="heatgridSub">GET /progress 的 weekly_snapshots 执行率 · 每格=一周，暂无12周数据时按实际周数显示</div>
         <div class="heatgrid" id="heatgrid"></div>
         <div class="heatlegend">
@@ -883,7 +944,7 @@
       </div>
 
       <div class="card">
-        <h3>专属知识库 · 持续变大</h3>
+        <h3 data-i18n="knowledgeBase">专属知识库 · 持续变大</h3>
         <div class="sub">每一局都在给你的模型加数据，不会重置</div>
         <div class="kbstats">
           <div class="kb"><b>187</b>局已复盘</div>
@@ -923,7 +984,7 @@
   <!-- VIEW 4 -->
   <div class="view" id="v4">
     <div class="card">
-      <h3>个人游戏风格白皮书 · 预览</h3>
+      <h3 data-i18n="styleReport">个人游戏风格白皮书 · 预览</h3>
       <div class="sub">基于6000+场历史数据，对比同段位玩家识别出的统计显著优势</div>
 
       <div class="heroquote">
@@ -962,10 +1023,69 @@
     </div>
   </div>
 
-  <div class="footer-note">Coach 原型 v0.1 · 所有数据均为演示用模拟数据，无真实回放解析或语音接入</div>
+  <div class="footer-note" data-i18n="prototypeFooter">Coach 原型 v0.1 · 所有数据均为演示用模拟数据，无真实回放解析或语音接入</div>
 </div>
 
 <script>
+  const STRINGS = {
+    zh: {
+      appName:'Coach · AI决策思维教练', tabReplay:'录像处理', tabChat:'赛后复盘对话',
+      tabTraining:'本周训练任务', tabGrowth:'成长追踪', tabStyle:'风格报告',
+      replayPipeline:'录像处理流水线', chooseVideo:'选择一份录屏开始分析',
+      pipelineHelp:'python coach.py --replay last_game.mp4 · 从原始录像到结构化决策点，全流程可视化',
+      videoHelp:'支持 .mp4/.MP4 · 分析在后台跑，可能需要数分钟（真实VLM调用，非模拟）',
+      processingLog:'处理日志', watchReplay:'跟教练一起看回放', deathList:'本次复盘的死亡列表',
+      coachSpeaking:'教练说话中', yourTurn:'轮到你说', mutePause:'静音 / 暂停',
+      weeklyTask:'本周唯一任务', taskHistory:'历史任务回顾', weeklyNote:'AI 每周评估笔记',
+      weaknessTracking:'弱点追踪', growthChart:'四维成长曲线（近6周）',
+      growthJourney:'成长历程 · 你是怎么一步步变的', dataFlywheel:'数据飞轮 · 为什么用得越久，教练越准',
+      consistency:'训练一致性', knowledgeBase:'专属知识库 · 持续变大', styleReport:'个人游戏风格白皮书 · 预览',
+      unknown:'未知', unknownRank:'未知段位', mainHeroes:'主玩', uploadFailed:'上传失败', loadingFailed:'加载失败',
+      noTask:'本周还没有任务', checkinMethod:'打卡方式', gamesDone:'局已完成', executionRate:'执行率'
+      ,waitingUpload:'[待机] 上传录像后开始分析…', noReplayResults:'暂无结果，上传录像后这里会显示真实检测到的死亡事件。',
+      sampleDecision:'6分32秒 · 中路转下路决策点', sampleDecisionHelp:'本局共识别 4 个关键决策点 · 当前查看第 1 个',
+      checkinHelp:'点击某天可以补打卡（会调用真实 POST /training/checkin）', historyHelp:'按周追踪，一周只改一个习惯 · GET /training/history',
+      weeklyNoteHelp:'来自训练方向自动调整机制 · GET /training/weekly-note', prototypeFooter:'Coach 原型 v0.1 · 部分视图仍使用演示数据'
+    },
+    en: {
+      appName:'Coach · AI Decision Coach', tabReplay:'Replay Processing', tabChat:'Post-game Review',
+      tabTraining:"This Week's Training", tabGrowth:'Growth Tracking', tabStyle:'Playstyle Report',
+      replayPipeline:'Replay Analysis Pipeline', chooseVideo:'Choose a recording to analyze',
+      pipelineHelp:'python coach.py --replay last_game.mp4 · From raw recording to structured decisions',
+      videoHelp:'Supports .mp4/.MP4 · Runs in the background and may take several minutes (real VLM calls)',
+      processingLog:'Processing Log', watchReplay:'Watch the Replay with Coach', deathList:'Deaths in This Review',
+      coachSpeaking:'Coach is speaking', yourTurn:'Your turn', mutePause:'Mute / Pause',
+      weeklyTask:"This Week's One Task", taskHistory:'Training History', weeklyNote:'AI Weekly Review',
+      weaknessTracking:'Weakness Tracking', growthChart:'Four-part Growth (Last 6 Weeks)',
+      growthJourney:'Growth Journey · How Your Game Changed', dataFlywheel:'Data Flywheel · Coaching Gets Sharper Over Time',
+      consistency:'Training Consistency', knowledgeBase:'Your Knowledge Base · Always Growing', styleReport:'Personal Playstyle Report · Preview',
+      unknown:'Unknown', unknownRank:'Rank unknown', mainHeroes:'Mains', uploadFailed:'Upload failed', loadingFailed:'Load failed',
+      noTask:'No task has been assigned this week', checkinMethod:'Check-in method', gamesDone:'games complete', executionRate:'Execution'
+      ,waitingUpload:'[idle] Upload a recording to begin…', noReplayResults:'No results yet. Detected deaths will appear here after analysis.',
+      sampleDecision:'6:32 · Mid-to-bot Rotation Decision', sampleDecisionHelp:'4 key decisions detected · Viewing decision 1',
+      checkinHelp:'Click a day to add a check-in (calls POST /training/checkin)', historyHelp:'Tracked weekly, one habit at a time · GET /training/history',
+      weeklyNoteHelp:'Generated by automatic training adjustment · GET /training/weekly-note', prototypeFooter:'Coach prototype v0.1 · Some views still use demonstration data'
+    }
+  };
+  let activeLang = ['zh','en'].includes(localStorage.getItem('coach_lang')) ? localStorage.getItem('coach_lang') : 'zh';
+  function tr(key){ return STRINGS[activeLang][key] || STRINGS.zh[key] || key; }
+  function applyLanguage(lang){
+    activeLang = ['zh','en'].includes(lang) ? lang : 'zh';
+    document.documentElement.lang = activeLang === 'zh' ? 'zh-CN' : 'en';
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const value = STRINGS[activeLang][el.dataset.i18n];
+      if(value != null) el.textContent = value;
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      const attr = el.dataset.i18nAttr;
+      const value = STRINGS[activeLang][el.dataset.i18n];
+      if(attr && value != null) el.setAttribute(attr, value);
+    });
+    document.getElementById('languageToggle').textContent = activeLang === 'zh' ? 'EN' : '中文';
+    localStorage.setItem('coach_lang', activeLang);
+  }
+  applyLanguage(activeLang);
+
   document.querySelectorAll('.tab').forEach(tab=>{
     tab.addEventListener('click',()=>{
       document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -1003,7 +1123,7 @@
     listening: document.getElementById('btnListening'),
     idle: document.getElementById('btnIdle'),
   };
-  const copy = {
+  const copy = { zh: {
     speaking: {
       who: '教练正在说话',
       text: '"下次对面打野消失超过15秒，你路过任何草丛前，脑子里应该闪过一句话——他可能就在这个草里。"'
@@ -1016,7 +1136,11 @@
       who: '已暂停',
       text: '通话已静音。点击上方按钮继续复盘对话。'
     }
-  };
+  }, en: {
+    speaking: {who:'Coach is speaking', text:'"If the enemy jungler has been missing for 15 seconds, assume every unscouted bush could be occupied."'},
+    listening: {who:'Your turn', text:'Tell me what you saw and what you were trying to do. The coach will work through the alternative next.'},
+    idle: {who:'Paused', text:'The call is muted. Use a button above to continue the review.'}
+  }};
   function setCallState(state){
     callStage.classList.remove('speaking','listening','idle');
     callStage.classList.add(state);
@@ -1025,8 +1149,8 @@
     if(state==='listening'){ btns.listening.classList.add('on','blue'); }
     if(state==='idle'){ btns.idle.classList.add('on'); btns.idle.style.background='#3a4256'; btns.idle.style.color='#fff'; }
     else { btns.idle.style.background=''; btns.idle.style.color=''; }
-    callWho.textContent = copy[state].who;
-    callText.textContent = copy[state].text;
+    callWho.textContent = copy[activeLang][state].who;
+    callText.textContent = copy[activeLang][state].text;
   }
 
   // ===========================================================================
@@ -1054,15 +1178,23 @@
   }
 
   // ---- 页头：真实玩家档案 ----
+  document.getElementById('languageToggle').addEventListener('click', async () => {
+    applyLanguage(activeLang === 'zh' ? 'en' : 'zh');
+    setCallState(callStage.classList.contains('listening') ? 'listening' : callStage.classList.contains('idle') ? 'idle' : 'speaking');
+    try { await api('/player/profile', {method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify({language:activeLang})}); } catch(e){}
+  });
+
   (function(){
+    const hadLocalLanguage = ['zh','en'].includes(localStorage.getItem('coach_lang'));
     api('/player/profile').then(profile => {
       const p = (profile && profile.player) || {};
-      const heroes = (p.main_heroes || []).join(' / ') || '未知';
+      if(!hadLocalLanguage) applyLanguage(p.language || 'zh');
+      const heroes = (p.main_heroes || []).join(' / ') || tr('unknown');
       const rankLabel = p.current_rank != null
-        ? `${p.rank_type || ''} ${p.current_rank}分` : '未知段位';
+        ? `${p.rank_type || ''} ${p.current_rank}${activeLang === 'zh' ? '分' : ''}` : tr('unknownRank');
       document.getElementById('profileAvatar').textContent = (p.main_heroes || ['?'])[0][0] || '?';
       document.getElementById('profileWho').innerHTML =
-        `主玩：${heroes}<br><span class="r">${rankLabel}</span>`;
+        `${tr('mainHeroes')}：${heroes}<br><span class="r">${rankLabel}</span>`;
       document.getElementById('headerTag').textContent =
         'v5/v2/v3已接真实API · v1(赛后复盘对话)/v4(风格报告)仍是原型演示（见AGE-185/AGE-186）';
     }).catch(err => {
@@ -1147,10 +1279,20 @@
       }
     }
 
-    // 跟教练一起看回放：点某次死亡→视频跳到那一刻附近（提前几秒好看清楚
-    // 死亡前发生了什么，而不是死亡瞬间才切进去）并播放。
+    // 跟教练一起看回放（AGE-197 方案二）：顶部时间轴列出全部死亡事件，
+    // 点某个时间点/上一次/下一次 → 视频跳到那一刻附近播放，右侧聚焦面板
+    // 换成那一条的完整点评。同一时间只展示一条，不用列表滚动。
     const REPLAY_LEAD_IN_SEC = 6;
-    let replayRowsByTs = []; // [{ts, row}]，按ts升序，供timeupdate高亮用
+    const timelineEl = document.getElementById('deathTimeline');
+    const focusPanel = document.getElementById('focusPanel');
+    const focusPrevBtn = document.getElementById('focusPrev');
+    const focusNextBtn = document.getElementById('focusNext');
+    const focusCounter = document.getElementById('focusCounter');
+    const deathListFallback = document.getElementById('deathListFallback');
+
+    let focusDetails = [];   // 当前这局的死亡事件详情（带ts_seconds的和不带的都在内）
+    let focusIdx = 0;
+    let suppressSeek = false; // ontimeupdate驱动的聚焦切换不应该反过来再seek一次视频
 
     function seekAndPlay(tsSeconds){
       if(tsSeconds == null || !replayVideo.src) return;
@@ -1160,40 +1302,90 @@
                                            // catch只是防止未处理rejection报错
     }
 
+    function renderFocusPanel(d){
+      const confPct = Math.round((d.confidence || 0) * 100);
+      const hasConf = d.confidence != null;
+      focusPanel.innerHTML = `
+        <div class="k">决策点 · ${d.timestamp || '?'}</div>
+        <div class="headline">${d.type || '未知归因'}${d.location ? ' · ' + d.location : ''}</div>
+        <div class="desc">${d.ai_comment || '暂无点评文字。'}</div>
+        ${hasConf ? `<div class="conf"><div class="lbl">归因置信度 ${confPct}%</div><div class="bar"><div style="width:${confPct}%"></div></div></div>` : ''}
+        <div class="minimap-slot">小地图轨迹回放（占位 · 数据源与调研见 AGE-200，未接入）</div>
+      `;
+    }
+
+    function renderFocus(idx, {seek} = {seek: true}){
+      if(focusDetails.length === 0) return;
+      focusIdx = Math.max(0, Math.min(idx, focusDetails.length - 1));
+      const d = focusDetails[focusIdx];
+
+      [...timelineEl.children].forEach((tick, i) => tick.classList.toggle('active', i === focusIdx));
+      focusCounter.textContent = `第 ${focusIdx + 1} / ${focusDetails.length} 个`;
+      focusPrevBtn.disabled = focusIdx === 0;
+      focusNextBtn.disabled = focusIdx === focusDetails.length - 1;
+      renderFocusPanel(d);
+
+      if(seek && d.ts_seconds != null){
+        suppressSeek = true;
+        seekAndPlay(d.ts_seconds);
+        setTimeout(() => { suppressSeek = false; }, 300);
+      }
+    }
+
+    focusPrevBtn.addEventListener('click', () => renderFocus(focusIdx - 1));
+    focusNextBtn.addEventListener('click', () => renderFocus(focusIdx + 1));
+
     function setupReplayVideo(replayId, details){
       const videoUrl = `${API_BASE}/replay/${replayId}/video`;
       replayVideoNote.style.display = 'none';
       replayVideo.onerror = null;
       replayVideo.removeAttribute('src');
       replayVideoCard.style.display = 'none';
+      deathListFallback.style.display = 'block';
+
+      focusDetails = details;
+      timelineEl.innerHTML = details.map((d, i) =>
+        `<div class="p2-tick" data-idx="${i}"><span class="tm">${d.timestamp || '?'}</span>${d.type || '未知归因'}</div>`
+      ).join('');
+      [...timelineEl.children].forEach((tick, i) => {
+        tick.addEventListener('click', () => renderFocus(i));
+      });
+
+      if(details.length === 0) return;
 
       const hasAnyTs = details.some(d => d.ts_seconds != null);
+      replayVideoCard.style.display = 'block';
+      deathListFallback.style.display = 'none';
+      deathListFallback.querySelector('h3').style.display = '';
+      deathListFallback.querySelector('.sub').style.display = '';
+
       if(!hasAnyTs){
-        return; // 没有可用时间戳（如手动录入的复盘），没法做seek联动，不显示播放器
+        // 没有可用时间戳（如手动录入的复盘），没法做seek/联动，视频区隐藏，
+        // 但时间轴+聚焦面板照常展示文字点评。
+        replayVideo.style.display = 'none';
+      } else {
+        replayVideo.style.display = 'block';
+        replayVideo.onerror = () => {
+          // 最常见原因：临时目录里的原视频已经被系统清理，见/video端点的404说明
+          replayVideo.style.display = 'none';
+          replayVideoNote.style.display = 'block';
+          replayVideoNote.innerHTML = '<span style="color:var(--red);">原视频已不可用（可能是本地临时文件被清理了），只能看右侧文字点评。</span>';
+        };
+        replayVideo.src = videoUrl;
+
+        // timeupdate时把聚焦面板切到当前播放位置对应的那次死亡——模拟
+        // "教练指着屏幕说这里、这里"的效果，而不是要用户自己对时间轴。
+        replayVideo.ontimeupdate = () => {
+          if(suppressSeek || focusDetails.length === 0) return;
+          const t = replayVideo.currentTime + REPLAY_LEAD_IN_SEC; // 补偿lead-in，
+                                                                    // 让高亮跟"死亡发生的那一秒"对齐
+          let activeIdx = -1;
+          focusDetails.forEach((d, i) => { if(d.ts_seconds != null && d.ts_seconds <= t) activeIdx = i; });
+          if(activeIdx !== -1 && activeIdx !== focusIdx) renderFocus(activeIdx, {seek: false});
+        };
       }
 
-      replayVideoCard.style.display = 'block';
-      replayVideo.onerror = () => {
-        // 最常见原因：临时目录里的原视频已经被系统清理，见/video端点的404说明
-        replayVideoCard.querySelector('video').style.display = 'none';
-        replayVideoNote.style.display = 'block';
-        replayVideoNote.innerHTML = '<span style="color:var(--red);">原视频已不可用（可能是本地临时文件被清理了），只能看下面的文字点评。</span>';
-      };
-      replayVideo.src = videoUrl;
-
-      // timeupdate时高亮当前播放位置对应的那次死亡——模拟"教练指着屏幕说
-      // 这里、这里"的效果，而不是要用户自己对时间轴
-      replayVideo.ontimeupdate = () => {
-        if(replayRowsByTs.length === 0) return;
-        const t = replayVideo.currentTime + REPLAY_LEAD_IN_SEC; // 补偿lead-in，
-                                                                  // 让高亮跟"死亡发生的那一秒"对齐
-        let active = null;
-        for(const entry of replayRowsByTs){
-          if(entry.ts <= t) active = entry; else break;
-        }
-        replayRowsByTs.forEach(entry => entry.row.classList.toggle(
-          'replay-active', entry === active));
-      };
+      renderFocus(0, {seek: false});
     }
 
     async function loadResult(replayId){
@@ -1211,40 +1403,20 @@
 
       const details = (replay.death_analysis && replay.death_analysis.details) || [];
       setupReplayVideo(replayId, details);
-      replayRowsByTs = [];
 
       if(details.length === 0){
         extractList.innerHTML = warningHtml + `<div class="extractrow"><span class="ed">这局零死亡，没有死亡事件可看。</span></div>`;
+        deathListFallback.style.display = 'block';
         return;
       }
-      extractList.innerHTML = warningHtml + details.map((d, i) => {
-        const confPct = Math.round((d.confidence || 0) * 100);
-        const comment = d.ai_comment
-          ? `<div style="margin-top:6px;color:var(--text-dim);font-size:12px;line-height:1.6;white-space:pre-wrap;">${d.ai_comment}</div>`
-          : '';
-        const jumpBtn = d.ts_seconds != null
-          ? `<button type="button" class="jumpbtn" data-idx="${i}">▶ 看这段</button>`
-          : '';
-        return `<div class="extractrow" data-idx="${i}" style="flex-direction:column;align-items:flex-start;">
-          <div style="display:flex;align-items:center;gap:10px;width:100%;">
-            <span class="et">${d.timestamp || '?'}</span>
-            <span class="ed">${d.type || '未知归因'}${d.location ? '·' + d.location : ''}</span>
-            <span class="conf"><div style="width:${confPct}%"></div></span>
-            ${jumpBtn}
-          </div>
-          ${comment}
-        </div>`;
-      }).join('');
-
-      const rows = [...extractList.querySelectorAll('.extractrow[data-idx]')];
-      rows.forEach(row => {
-        const idx = Number(row.dataset.idx);
-        const d = details[idx];
-        if(d.ts_seconds != null) replayRowsByTs.push({ts: d.ts_seconds, row});
-        const btn = row.querySelector('.jumpbtn');
-        if(btn) btn.addEventListener('click', () => seekAndPlay(d.ts_seconds));
-      });
-      replayRowsByTs.sort((a, b) => a.ts - b.ts);
+      if(warningHtml){
+        // kda读数警告优先级高，即便走时间轴布局也要露出来——插在死亡列表的
+        // fallback卡片位置，不然用户看不到这条重要提示。
+        extractList.innerHTML = warningHtml;
+        deathListFallback.style.display = 'block';
+        deathListFallback.querySelector('h3').style.display = 'none';
+        deathListFallback.querySelector('.sub').style.display = 'none';
+      }
     }
 
     input.addEventListener('change', async () => {
@@ -1261,6 +1433,7 @@
 
       const form = new FormData();
       form.append('file', file);
+      form.append('lang', activeLang);
       let jobId;
       try {
         const res = await api('/replay', {method: 'POST', body: form});
@@ -1335,7 +1508,7 @@
         await api('/training/checkin', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({rate, when: dateStr}),
+          body: JSON.stringify({rate, when: dateStr, lang: activeLang}),
         });
         await refreshCurrent();
       } catch(err){

@@ -65,6 +65,7 @@ class TestApiSmoke(unittest.TestCase):
 
         r = self.client.get("/player/profile")
         self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.json()["player"]["language"], "zh")
 
     def test_training_current_auto_assigns_task(self):
         r = self.client.get("/training/current")
@@ -100,9 +101,10 @@ class TestApiSmoke(unittest.TestCase):
 
         fake_replay = data_utils.default_replay(hero_played="瑶")
 
-        def fake_build(self, video_path, progress_cb=None):
+        def fake_build(self, video_path, progress_cb=None, lang="zh"):
             if progress_cb:
                 progress_cb("检测死亡事件")
+            fake_replay["language"] = lang
             return fake_replay
 
         with mock.patch.object(Orchestrator, "build_replay_from_video_path",
@@ -127,6 +129,39 @@ class TestApiSmoke(unittest.TestCase):
             r = self.client.get(f"/replay/{body['replay_id']}")
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.json()["hero_played"], "瑶")
+            self.assertEqual(r.json()["language"], "zh")
+
+    def test_language_validation_and_english_replay_persistence(self):
+        """API边界拒绝未知语言，合法英文值必须一路进入job并写入replay。"""
+        from core.orchestrator import Orchestrator
+
+        bad = self.client.post(
+            "/replay", files={"file": ("clip.mp4", b"x", "video/mp4")},
+            data={"lang": "fr"})
+        self.assertEqual(bad.status_code, 422)
+
+        fake_replay = data_utils.default_replay(hero_played="瑶")
+
+        def fake_build(self, video_path, progress_cb=None, lang="zh"):
+            fake_replay["language"] = lang
+            return fake_replay
+
+        with mock.patch.object(Orchestrator, "build_replay_from_video_path", fake_build):
+            response = self.client.post(
+                "/replay", files={"file": ("clip.mp4", b"x", "video/mp4")},
+                data={"lang": "en"})
+        status = self.client.get(f"/replay/{response.json()['job_id']}/status").json()
+        saved = self.client.get(f"/replay/{status['replay_id']}").json()
+        self.assertEqual(saved["language"], "en")
+
+        invalid_checkin = self.client.post("/training/checkin", json={"rate": 80, "lang": "fr"})
+        self.assertEqual(invalid_checkin.status_code, 422)
+
+    def test_profile_language_can_be_persisted(self):
+        response = self.client.patch("/player/profile", json={"language": "en"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["player"]["language"], "en")
+        self.assertEqual(self.client.get("/player/profile").json()["player"]["language"], "en")
 
     def test_replay_video_404_when_no_source_path(self):
         """手动录入的复盘没有source.path（不是视频来源），/video端点要给出

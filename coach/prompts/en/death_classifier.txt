@@ -1,0 +1,17 @@
+Classify this death into one of the existing internal category keys and give a confidence score from 0 to 1.
+
+Input:
+- Death time: {death_time}
+- Death location: {death_location} (the note includes source reliability; a system minimap death-X marker outranks a location inferred from movement)
+- Minimap state during the previous 15 seconds: {minimap_context}
+- Player's own explanation, if any: {self_attribution}
+
+Rules, in priority order:
+1. The player walked into an unscouted bush and was engaged at point-blank range → "探草死" (died face-checking an unscouted bush)
+2. Teammates had left or died and the player was alone in enemy territory → "掉点死" (got caught isolated/overextended)
+3. The player traded one-for-one while their team's wave state was unfavorable → "换头死" (traded one-for-one)
+4. The player exposed themselves to collect or push one more wave → "贪线死" (died greeding a wave)
+5. No supported attribution → "机制死" (unclear—insufficient evidence)
+
+If the evidence cannot support categories 1–4, return "机制死" and include the phrase "insufficient evidence" in the reason. Keep the Chinese strings as internal data-model keys for backward compatibility.
+Output JSON only: {{"type": "...", "confidence": 0.x, "reason": "..."}}

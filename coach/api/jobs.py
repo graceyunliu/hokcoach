@@ -18,9 +18,10 @@ JobStatus = Literal["queued", "running", "done", "failed"]
 
 
 class Job:
-    def __init__(self, job_id: str, video_path: str) -> None:
+    def __init__(self, job_id: str, video_path: str, language: str = "zh") -> None:
         self.id = job_id
         self.video_path = video_path
+        self.language = language
         self.status: JobStatus = "queued"
         self.stage: str | None = None
         self.error: str | None = None
@@ -37,6 +38,7 @@ class Job:
                 "stage": self.stage,
                 "error": self.error,
                 "replay_id": self.replay_id,
+                "language": self.language,
                 "created_at": self.created_at,
                 "updated_at": self.updated_at,
             }
@@ -68,8 +70,8 @@ class JobStore:
         self._jobs: dict[str, Job] = {}
         self._lock = threading.Lock()
 
-    def create(self, video_path: str) -> Job:
-        job = Job(job_id=str(uuid.uuid4()), video_path=video_path)
+    def create(self, video_path: str, language: str = "zh") -> Job:
+        job = Job(job_id=str(uuid.uuid4()), video_path=video_path, language=language)
         with self._lock:
             self._jobs[job.id] = job
         return job
@@ -97,12 +99,12 @@ def run_replay_job(job: Job, orchestrator_factory) -> None:
     try:
         orch = orchestrator_factory()
         replay = orch.build_replay_from_video_path(
-            job.video_path, progress_cb=job.set_stage)
+            job.video_path, progress_cb=job.set_stage, lang=job.language)
         job.set_stage("生成AI点评")
         # 复盘页是一次性看完整分析的场景（不是对话），全部死亡都要有点评，
         # 不能像CLI/--chat那样只讲第一条——见orchestrator.finalize_review_all
         # 的说明。
-        result = orch.finalize_review_all(replay)
+        result = orch.finalize_review_all(replay, lang=job.language)
         job.set_done(replay_id=result["replay"]["replay_id"])
     except OrchestratorError as err:
         job.set_failed(str(err))

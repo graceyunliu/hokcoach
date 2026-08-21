@@ -500,6 +500,27 @@ class TestOrchestratorStructuredReview(unittest.TestCase):
         self.assertEqual(
             replay["death_analysis"]["details"][0]["user_intent"], "去支援")
         self.assertIsNone(result["report_path"])
+        self.assertEqual(replay["language"], "zh")
+
+    def test_english_comment_uses_native_english_prompt(self):
+        """用mock LLM跑真实死亡详情，确认加载en目录且语气指令不是中译英。"""
+        from core.orchestrator import Orchestrator
+
+        class FakeLLM:
+            def __init__(self):
+                self.user = ""
+
+            def chat_text(self, system, user, temperature=0.7):
+                self.user = user
+                return "The thought in your head should've been: bush first, rotation second."
+
+        orch = Orchestrator()
+        orch.llm = FakeLLM()
+        detail = self._replay_with_deaths(1)["death_analysis"]["details"][0]
+        result = orch.comment_death(detail, user_intent="rotate bot", lang="en")
+        self.assertIn("sharp English-speaking MOBA review streamer", orch.llm.user)
+        self.assertIn("The thought in your head should've been", result)
+        self.assertNotIn("你脑子里应该闪过", orch.llm.user)
 
     def test_finalize_review_zero_deaths_does_not_crash(self):
         from core.orchestrator import Orchestrator

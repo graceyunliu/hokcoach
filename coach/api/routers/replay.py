@@ -10,9 +10,9 @@ import shutil
 import tempfile
 import threading
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Form, HTTPException, Request, UploadFile
 from fastapi.responses import Response, StreamingResponse
 
 from api.jobs import job_store, run_replay_job
@@ -30,7 +30,8 @@ _UPLOAD_DIR.mkdir(exist_ok=True)
 
 
 @router.post("/replay")
-async def upload_replay(file: UploadFile, background_tasks: BackgroundTasks) -> dict[str, Any]:
+async def upload_replay(file: UploadFile, background_tasks: BackgroundTasks,
+                        lang: Literal["zh", "en"] = Form("zh")) -> dict[str, Any]:
     """接收视频上传，起后台任务跑完整自动复盘管线，立即返回job_id。
 
     不同步跑：一份15-20分钟录屏的自动复盘要跑数十次真实VLM调用、数分钟
@@ -40,7 +41,7 @@ async def upload_replay(file: UploadFile, background_tasks: BackgroundTasks) -> 
     with dest.open("wb") as out:
         shutil.copyfileobj(file.file, out)
 
-    job = job_store.create(video_path=str(dest))
+    job = job_store.create(video_path=str(dest), language=lang)
     background_tasks.add_task(run_replay_job, job, Orchestrator)
     return {"job_id": job.id}
 
@@ -67,6 +68,7 @@ async def list_replays() -> dict[str, Any]:
             "hero_played": data.get("hero_played"),
             "game_result": data.get("game_result"),
             "deaths": data.get("deaths"),
+            "language": data.get("language", "zh"),
         })
     return {"replays": items}
 
