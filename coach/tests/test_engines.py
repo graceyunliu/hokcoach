@@ -449,6 +449,35 @@ class TestOrchestratorVideoPipelineExtraction(unittest.TestCase):
         self.assertTrue(stages, "progress_cb从没被调用")
         self.assertEqual(buf.getvalue(), "", "纯数据管线不应该自己print")
 
+    def test_low_kda_read_coverage_adds_replay_warning(self):
+        """AGE-187：少于一半HUD采样可读时，结果必须显式标为不可信。"""
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None
+        orch.vlm = None
+
+        def low_coverage_events(video_path, reader, coverage_cb=None):
+            self.assertIsNotNone(coverage_cb)
+            coverage_cb(2, 5)
+            return []
+
+        with tempfile.TemporaryDirectory() as tmp:
+            video = Path(tmp) / "clip.mp4"
+            video.write_bytes(b"")
+            with mock.patch.object(video_utils, "_load_video_config",
+                                   return_value={"kda_reader": "template"}), \
+                 mock.patch.object(video_utils, "make_template_kda_reader",
+                                   return_value=lambda p: None), \
+                 mock.patch.object(video_utils, "extract_death_events",
+                                   side_effect=low_coverage_events):
+                replay = orch.build_replay_from_video_path(str(video))
+
+        warning = replay["death_analysis"].get("kda_read_warning", "")
+        self.assertIn("2/5", warning)
+        self.assertIn("40%", warning)
+        self.assertIn("可能不可信", warning)
+
 
 class TestOrchestratorStructuredReview(unittest.TestCase):
     """AGE-177：review_replay拆成的两段函数必须在无stdin/无终端环境下可直接
