@@ -4,7 +4,11 @@
 启动：
     cd coach && uvicorn api.main:app --reload
 
-本地开发用，默认允许localhost跨源请求（前端另起端口跑，如Vite默认5173）。
+本地开发用。CORS放行所有来源——这是单用户本地工具，且
+coach_prototype.html是直接用file://双击打开的（不是跑在localhost:xxxx的
+dev server上），file://页面发起fetch时浏览器带的Origin是"null"，白名单式
+配置（只允许localhost:5173/3000）根本挡不住"null"，反而会把这个最常见的
+用法直接拒了——所以干脆放开，不搞白名单。
 """
 
 from __future__ import annotations
@@ -28,8 +32,7 @@ app = FastAPI(title="Coach API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173",
-                   "http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
