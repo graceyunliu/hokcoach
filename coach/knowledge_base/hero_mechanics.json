@@ -1,4 +1,113 @@
 {
-  "_comment": "Tier 1机制事实（官方数据）。冷启动时参考 qing762/honor-of-kings-api 思路从pvp.qq.com抓取。schema见tech spec 3.1知识库条目。",
-  "entries": []
+  "_comment": "Tier 1机制事实（官方数据）。冷启动时参考 qing762/honor-of-kings-api 思路从pvp.qq.com抓取。schema见tech spec 3.1知识库条目。首批9条条目于2026-08-21由DeepSeek+GLM交叉核实后人工合并（AGE-201/AGE-204），schema字段（id/hero/text/tier/tags/applies_when/requires_capability/source/valid_as_of_patch/last_reviewed）为本批新定，后续如需调整以此为准。",
+  "entries": [
+    {
+      "id": "HM_FLASH_BASE_CD",
+      "hero": null,
+      "text": "召唤师技能「闪现」基础冷却120秒，向指定方向位移一段距离，可穿薄墙，LV.19解锁；开局前15秒内置冷却，无法使用。",
+      "tier": "1_mechanical_fact",
+      "tags": ["机制死", "换头死"],
+      "applies_when": null,
+      "requires_capability": null,
+      "source": "王者荣耀官方网站召唤师技能页 pvp.qq.com/web201706/newsdetail.shtml?tid=235222；百度百科「召唤师技能」词条援引官网资料",
+      "valid_as_of_patch": "长期稳定数值，DeepSeek/GLM独立核实一致",
+      "last_reviewed": "2026-08-21"
+    },
+    {
+      "id": "HM_COOLDOWN_BOOTS_SUMMONER_CD",
+      "hero": null,
+      "text": "冷静之靴被动「静谧」自S34赛季（2023-12-27）起改为「加速召唤师技能冷却速度」（此前只对英雄技能生效）。当前游戏内装备页显示加速幅度为10%~20%（随等级成长），而S34官方公告原文写的是固定15%——两个数值有出入，穿装备后闪现实际冷却大致在96~110秒区间，具体以游戏内当前装备描述为准，建议标注版本号并定期复核。",
+      "tier": "1_mechanical_fact",
+      "tags": ["机制死", "换头死"],
+      "applies_when": null,
+      "requires_capability": null,
+      "source": "王者荣耀官方网站装备页「冷静之靴」pvp.qq.com/ingame/entrance/equip/index.html?equipid=1423；官方「12月28日抢先服版本更新公告」tid=613117（2023-12-27）",
+      "valid_as_of_patch": "S34起，2026-08-21复核时装备页仍显示10%~20%区间",
+      "last_reviewed": "2026-08-21"
+    },
+    {
+      "id": "HM_HOUYI_ULT_STUN",
+      "hero": "后羿",
+      "text": "大招「灼日之矢」命中眩晕时长随飞行距离在0.75~3.5秒之间递增，飞行道具无施法前摇。",
+      "tier": "1_mechanical_fact",
+      "tags": ["机制死", "换头死"],
+      "applies_when": null,
+      "requires_capability": null,
+      "source": "王者荣耀官方网站英雄页 herodetail/houyi.shtml",
+      "valid_as_of_patch": "2026-08-21复核",
+      "last_reviewed": "2026-08-21"
+    },
+    {
+      "id": "HM_XIAOQIAO_SKILL2_KNOCKUP",
+      "hero": "小乔",
+      "text": "二技能「甜蜜恋风」击飞时长1.5秒，有短暂施法前摇（官方未给出精确毫秒数）。",
+      "tier": "1_mechanical_fact",
+      "tags": ["机制死", "换头死"],
+      "applies_when": null,
+      "requires_capability": null,
+      "source": "王者荣耀官方网站英雄页 herodetail/106.shtml",
+      "valid_as_of_patch": "2026-08-21复核",
+      "last_reviewed": "2026-08-21"
+    },
+    {
+      "id": "HM_WANGZHAOJUN_SKILL2_FREEZE",
+      "hero": "王昭君",
+      "text": "二技能「禁锢寒霜」冰冻时长2.5秒，施法前摇约0.8秒（这是极少数官方攻略明确给出精确前摇数值的技能，多数英雄的前摇毫秒数官方从未系统公布）。",
+      "tier": "1_mechanical_fact",
+      "tags": ["机制死", "换头死"],
+      "applies_when": null,
+      "requires_capability": null,
+      "source": "王者荣耀官方网站英雄页 herodetail/152.shtml；官方攻略「王昭君必须掌握的五大技巧」tid=596913（2023-04-09）",
+      "valid_as_of_patch": "2026-08-21复核",
+      "last_reviewed": "2026-08-21"
+    },
+    {
+      "id": "HM_PURIFY_MECHANIC",
+      "hero": null,
+      "text": "召唤师技能「净化」冷却120秒，解除自身所有负面和控制效果（减速/眩晕/击飞/击退/沉默/石化/冰冻等），并获得1.5秒免疫控制；释放瞬间约0.2~0.3秒无敌。无法解除压制/支配类效果（如东皇太一大招「堕神契约」、张良大招「言灵·操纵」、老夫子大招「圣人之威」）。",
+      "tier": "1_mechanical_fact",
+      "tags": ["机制死", "换头死"],
+      "applies_when": null,
+      "requires_capability": null,
+      "source": "王者荣耀官方网站攻略「净化除了解控还能保命」tid=568990（2022-06-20）",
+      "valid_as_of_patch": "2026-08-21复核",
+      "last_reviewed": "2026-08-21"
+    },
+    {
+      "id": "HM_ZHUANGZHOU_PASSIVE_CLEANSE",
+      "hero": "庄周",
+      "text": "被动「自然意志」每6秒自动进入梦境，解除并免疫所有控制效果（压制类除外），持续2秒，无需手动触发。",
+      "tier": "1_mechanical_fact",
+      "tags": ["机制死", "换头死"],
+      "applies_when": null,
+      "requires_capability": null,
+      "source": "王者荣耀官方网站英雄页 herodetail/113.shtml",
+      "valid_as_of_patch": "2026-08-21复核",
+      "last_reviewed": "2026-08-21"
+    },
+    {
+      "id": "HM_ZHUANGZHOU_ULT_CLEANSE",
+      "hero": "庄周",
+      "text": "大招「天人合一」解除范围内队友所受控制效果（压制类除外）并使其免控、获得500/900/1300护盾，持续2秒，冷却60/55/50秒（随等级）；生效有约0.3秒前摇（玩家实测，非官方公布）。无法解除的特定情况包括：兰陵王二技能标记后续伤害、孙膑一技能爆炸、金蝉紧箍咒、弈星大招地形，以及与老夫子大招的先后顺序判定（谁先开大谁有效）。",
+      "tier": "1_mechanical_fact",
+      "tags": ["机制死", "换头死"],
+      "applies_when": null,
+      "requires_capability": null,
+      "source": "王者荣耀官方网站英雄页 herodetail/113.shtml；官方攻略「庄周解控无解？不，这7种控制状态庄周也无能为力」tid=568125（2022-06-12，作者「秋豆」）",
+      "valid_as_of_patch": "2026-08-21复核",
+      "last_reviewed": "2026-08-21"
+    },
+    {
+      "id": "HM_DIANWEI_ALL_SKILLS_CLEANSE",
+      "hero": "典韦",
+      "text": "所有技能均可解控，每次成功解控获得「激怒」效果，提升自身物理攻击和攻击距离，持续6秒，最多叠加6层；解除硬控叠加2层，解除软控叠加1层。",
+      "tier": "1_mechanical_fact",
+      "tags": ["机制死", "换头死"],
+      "applies_when": null,
+      "requires_capability": null,
+      "source": "王者荣耀官方网站英雄页 herodetail/129.shtml",
+      "valid_as_of_patch": "2026-08-21复核",
+      "last_reviewed": "2026-08-21"
+    }
+  ]
 }

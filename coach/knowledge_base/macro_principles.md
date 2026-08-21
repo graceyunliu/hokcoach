@@ -109,6 +109,80 @@
   - valid_as_of_patch: 2021-08（未复核S43是否有变动）
   - last_reviewed: 2026-08-15
 
+## 已核实条目（2026-08-21批次 · AGE-201定向补空，DeepSeek+GLM交叉核实后人工合并）
+
+- **[MP_NO_TRADE_THREE_RULES]** 三个"绝对不换血"信号：①技能不全（缺核心控制/位移/保命技能）；②兵线劣势（敌方兵线多时小兵伤害前期远超英雄伤害）；③视野缺失（河道/关键区域黑屏，大概率有敌方打野埋伏）。三者任一命中都应该放弃这波换血机会，猥琐发育。
+  - tier: 2_converged_consensus
+  - tags: 换头死
+  - applies_when: 对线期判断该不该主动换血
+  - requires_capability: null
+  - source: 王者荣耀官方攻略《对抗路必修课思路》pvp.qq.com tid=587102（2022-11-27，作者"肥猫"，四要素：对面队友在不在/我方兵线多不多/双方血蓝技能CD谁占优/回复能力强不强）；搜狐游戏《对线换血完整教学》game.sohu.com/a/1045199940_122739691（2026-07-03）
+  - valid_as_of_patch: 非版本敏感
+  - last_reviewed: 2026-08-21
+
+- **[MP_SKILL_VACUUM_TRADE_WINDOW]** 对抗路战士类英雄核心技能CD普遍在10秒上下，打满一套技能后会有至少3秒的"真空期"（核心技能不在手）。应该专挑对手处于真空期的时间窗口主动换血/上前施压，而不是对方技能满配时贸然对拼。
+  - tier: 2_converged_consensus
+  - tags: 换头死
+  - applies_when: 对抗路对线期判断换血时机
+  - requires_capability: null
+  - source: 今日头条《战士边路对线换血实用核心技巧》（2026-06-23）
+  - valid_as_of_patch: 非版本敏感
+  - last_reviewed: 2026-08-21
+
+- **[MP_EXECUTE_LINE_RETREAT]** "斩杀线"：对手一套操作能把自己秒掉的最高血量阈值。一旦自身血量进入对方斩杀线、且没有反打/逃生机会，即使这波要亏一些兵线经济，也应该主动回城补给，而不是硬留在线上继续对拼——这个阈值没有统一数值公式，需要玩家对具体对位英雄的伤害有实战体感积累。
+  - tier: 2_converged_consensus
+  - tags: 换头死, 掉点死
+  - applies_when: 判断"这波该不该继续对线/该不该先回城"
+  - requires_capability: null
+  - source: 多篇署名攻略独立提及此概念（属广泛共识术语）
+  - valid_as_of_patch: 非版本敏感
+  - last_reviewed: 2026-08-21
+
+- **[MP_FLASH_VACUUM_PUNISH]** 敌方刚交出闪现或位移类技能后，会有一段明显的"虚弱期"（接下来一段时间只能靠平砍/普通移动）。应在对手交完闪现/位移的瞬间主动施压或用范围技能封锁其落脚点，而不是等对方状态恢复后再动手。
+  - tier: 2_converged_consensus
+  - tags: 换头死
+  - applies_when: 敌方刚使用闪现或位移类技能
+  - requires_capability: null
+  - source: 多篇署名攻略独立提及（王者荣耀官方及第三方攻略均有类似表述）
+  - valid_as_of_patch: 非版本敏感
+  - last_reviewed: 2026-08-21
+
+- **[MP_COUNTER_FLASH]** 被敌方闪现欺近、判断对方是想"一套秒掉自己"时，可以在对方闪现的瞬间反向闪现——对手往往是判断能秒杀才会交闪现，这个时间点反闪比直线逃跑存活率更高。
+  - tier: 2_converged_consensus
+  - tags: 换头死
+  - applies_when: 被敌方闪现欺近、判断对方有斩杀意图
+  - requires_capability: 自身闪现可用
+  - source: 多篇署名攻略独立提及
+  - valid_as_of_patch: 非版本敏感
+  - last_reviewed: 2026-08-21
+
+- **[MP_PURIFY_PREEMPTIVE]** 看到敌方控制英雄出现明显的技能前摇动作（起手动画/技能音效）时，应提前按下净化或自带解控技能，而不是等被控制命中之后才反应——按下净化后仍有极短反应窗口能规避伤害型持续施法技能被打断。
+  - tier: 2_converged_consensus
+  - tags: 机制死, 换头死
+  - applies_when: 判断敌方即将释放控制技能
+  - requires_capability: 净化或自带解控技能
+  - source: 王者荣耀官方攻略《召唤师技能净化六大作用》pvp.qq.com tid=560584（作者"预谋"）
+  - valid_as_of_patch: 非版本敏感
+  - last_reviewed: 2026-08-21
+
+- **[MP_CONTROL_CHAIN_TIMING]** 己方多个控制技能衔接时，不要在队友已经控住敌人的窗口期再叠加自己的控制（会造成"无效控制浪费"）；应该等队友的控制快结束、或者已经骗出敌方净化之后，再补上自己的控制技能延长控制链。
+  - tier: 2_converged_consensus
+  - tags: 换头死, 机制死
+  - applies_when: 团战/遭遇战中己方多人有控制技能可用
+  - requires_capability: 团队沟通/控制链意识
+  - source: 王者荣耀官方攻略《怎么避免无效控制浪费技能》pvp.qq.com tid=580525（2022-09-14）
+  - valid_as_of_patch: 非版本敏感
+  - last_reviewed: 2026-08-21
+
+- **[MP_DONT_DIVE_WITHOUT_ESCAPE]** 自己没有净化/位移/保命装备时，不要强行冲进去救被压制类控制（东皇大招/张良大招等）命中的队友——压制类控制无法被净化解除，强行去救大概率只是把自己也搭进去，变成送双杀。没有保命手段时优先保命撤退，而不是本能地去救人。
+  - tier: 2_converged_consensus
+  - tags: 换头死, 掉点死
+  - applies_when: 队友被压制类控制命中，自己没有解控/位移/保命装备
+  - requires_capability: null
+  - source: 王者荣耀官方攻略《最稀缺的3种属性》pvp.qq.com tid=598060
+  - valid_as_of_patch: 非版本敏感
+  - last_reviewed: 2026-08-21
+
 ## 待核实（AI研究报告提及但未独立核实来源，暂不计入检索）
 
 以下宏观原则来自DeepSeek/GLM研究报告，因来源为个人博主（如"北斗"小红书账号）、
