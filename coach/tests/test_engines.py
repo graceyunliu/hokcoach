@@ -407,6 +407,47 @@ class TestOrchestratorDeathWindowWiring(unittest.TestCase):
         factory.assert_called_once_with()
 
 
+class TestOrchestratorVideoPipelineExtraction(unittest.TestCase):
+    """AGE-178准备工作：build_replay_from_video_path必须是纯数据管线（不print、
+    不生成AI点评、不落盘），CLI和未来的FastAPI后台任务才能共用同一份实现。"""
+
+    def test_missing_video_raises_orchestrator_error(self):
+        from core.orchestrator import Orchestrator, OrchestratorError
+
+        orch = Orchestrator()
+        with self.assertRaises(OrchestratorError):
+            orch.build_replay_from_video_path("/nonexistent/clip.mp4")
+
+    def test_progress_cb_called_without_printing(self):
+        from core.orchestrator import Orchestrator
+
+        event = {"ts": 10.0, "window": (8.0, 12.0), "kda_before": (0, 0, 0),
+                 "kda_after": (0, 1, 0), "kill_traded": False}
+        orch = Orchestrator()
+        orch.llm = None
+        orch.vlm = mock.Mock()
+        stages: list[str] = []
+
+        with tempfile.TemporaryDirectory() as tmp:
+            video = Path(tmp) / "clip.mp4"
+            video.write_bytes(b"")
+            with mock.patch.object(video_utils, "make_vlm_kda_reader",
+                                   return_value=lambda p: None), \
+                 mock.patch.object(video_utils, "extract_death_events",
+                                   return_value=[event]), \
+                 mock.patch.object(video_utils, "extract_minimap_positions",
+                                   return_value=[]), \
+                 mock.patch.object(video_utils, "extract_death_location",
+                                   return_value=None), \
+                 contextlib.redirect_stdout(io.StringIO()) as buf:
+                replay = orch.build_replay_from_video_path(
+                    str(video), progress_cb=stages.append)
+
+        self.assertEqual(replay["deaths"], 1)
+        self.assertTrue(stages, "progress_cb从没被调用")
+        self.assertEqual(buf.getvalue(), "", "纯数据管线不应该自己print")
+
+
 class TestOrchestratorStructuredReview(unittest.TestCase):
     """AGE-177：review_replay拆成的两段函数必须在无stdin/无终端环境下可直接
     调用并返回结构化结果——这是FastAPI层能接进来的前提，不能是CLI专属。"""

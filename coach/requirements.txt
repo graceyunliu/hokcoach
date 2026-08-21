@@ -11,3 +11,10 @@ numpy
 
 # 知识库冷启动：YouTube字幕拉取（python -m utils.transcript_utils）
 youtube-transcript-api
+
+# Web UI scaffold（AGE-176 epic）：FastAPI后端，接v5/v2/v3三个视图
+# 启动：cd coach && uvicorn api.main:app --reload
+fastapi
+uvicorn
+python-multipart
+httpx  # 测试用（tests/test_api.py的TestClient依赖）

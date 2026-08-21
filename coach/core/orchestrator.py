@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 from core import constraints_engine, knowledge_engine, replay_engine, training_engine
 from core.llm_client import LLMClient, LLMError, VisionClient
@@ -24,6 +24,11 @@ from utils import config_utils, data_utils
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROMPTS_DIR = BASE_DIR / "prompts"
+
+
+class OrchestratorError(Exception):
+    """面向用户的错误消息（配置缺失/文件不存在等），CLI直接print(str(e))，
+    FastAPI层catch后转成4xx响应体——消息文案本身就是给最终用户看的。"""
 
 
 def _interactive_possible() -> bool:
@@ -259,37 +264,59 @@ class Orchestrator:
     # 入口1：视频全自动复盘
     # ------------------------------------------------------------------
 
-    def analyze_video(self, video_path: str, interactive: bool = True,
-                      output: str | None = None) -> int:
-        from utils import video_utils
+    def _make_kda_reader(self, video_utils: Any):
+        """按config.yaml的video.kda_reader选择KDA读数器。
 
-        if not Path(video_path).exists():
-            print(f"找不到视频文件: {video_path}")
-            return 1
+        Returns: kda_reader callable
+        Raises: OrchestratorError（不可用/未配置时，附带面向用户的说明）
+        """
         reader_kind = str(
             video_utils._load_video_config().get("kda_reader", "vlm")
         ).strip().lower()
         if reader_kind == "template":
             try:
-                kda_reader = video_utils.make_template_kda_reader()
+                return video_utils.make_template_kda_reader()
             except RuntimeError as err:
-                print(f"模板KDA读数器不可用: {err}")
-                return 1
-        elif reader_kind == "vlm":
+                raise OrchestratorError(f"模板KDA读数器不可用: {err}") from err
+        if reader_kind == "vlm":
             if self.vlm is None:
-                print("视频自动复盘需要视觉模型读取HUD计数器（config.yaml "
-                      "llm.vision段 + API key）。也可把video.kda_reader设为template"
-                      "使用本地确定性读数，或用 --replay --manual 手动录入。")
-                return 1
-            kda_reader = video_utils.make_vlm_kda_reader(self.vlm)
-        else:
-            print(f"不支持的video.kda_reader: {reader_kind!r}（可选 vlm | template）")
-            return 1
+                raise OrchestratorError(
+                    "视频自动复盘需要视觉模型读取HUD计数器（config.yaml "
+                    "llm.vision段 + API key）。也可把video.kda_reader设为template"
+                    "使用本地确定性读数，或用 --replay --manual 手动录入。")
+            return video_utils.make_vlm_kda_reader(self.vlm)
+        raise OrchestratorError(
+            f"不支持的video.kda_reader: {reader_kind!r}（可选 vlm | template）")
 
-        print("Coach> 正在分析你的回放...（HUD粗采样+二分定位，会有一会儿）")
+    def build_replay_from_video_path(
+        self, video_path: str,
+        progress_cb: "Callable[[str], None] | None" = None,
+    ) -> dict[str, Any]:
+        """跑完整视频自动复盘管线（检测事件→定位地点→组装replay），不生成
+        AI点评、不落盘、不print——纯数据管线，CLI（analyze_video）和FastAPI
+        （AGE-178/179）共用这一个实现，谁都不重新实现检测逻辑。
+
+        progress_cb: 可选回调，在每个阶段开始时调用一次（如"检测死亡事件"/
+        "定位死亡地点"/"提取小地图轨迹"），供CLI print或FastAPI任务状态复用，
+        本函数自己不print、不管上层怎么消费这个回调。
+
+        Raises: OrchestratorError（视频不存在/reader不可用等面向用户的错误）
+        """
+        from utils import video_utils
+
+        def _tick(stage: str) -> None:
+            if progress_cb is not None:
+                progress_cb(stage)
+
+        if not Path(video_path).exists():
+            raise OrchestratorError(f"找不到视频文件: {video_path}")
+
+        kda_reader = self._make_kda_reader(video_utils)
+
+        _tick("检测死亡事件（HUD粗采样+二分定位）")
         events = video_utils.extract_death_events(video_path, kda_reader)
-        print(f"Coach> 检测到{len(events)}次死亡。提取死亡前小地图轨迹...")
 
+        _tick("提取死亡地点与小地图轨迹")
         contexts: list[str | None] = []
         for e in events:
             try:
@@ -318,10 +345,26 @@ class Orchestrator:
                 e["location"] = None
                 e["location_source"] = None
 
+        _tick("生成复盘记录")
         replay = replay_engine.build_replay_from_video(
             video_path, events, contexts, llm=self.llm)
         p = (self.profile or {}).get("player") or {}
         replay["hero_played"] = p.get("target_hero")
+        return replay
+
+    def analyze_video(self, video_path: str, interactive: bool = True,
+                      output: str | None = None) -> int:
+        """CLI入口（--replay <video>）：跑管线+print进度+走review_replay的
+        终端交互。FastAPI层不要用这个，直接调用
+        build_replay_from_video_path + analyze_first_death/finalize_review。"""
+        print("Coach> 正在分析你的回放...（HUD粗采样+二分定位，会有一会儿）")
+        try:
+            replay = self.build_replay_from_video_path(
+                video_path, progress_cb=lambda stage: print(f"Coach> {stage}..."))
+        except OrchestratorError as err:
+            print(str(err))
+            return 1
+        print(f"Coach> 检测到{replay['deaths']}次死亡。")
         self.review_replay(replay, interactive=interactive, output=output)
         return 0
 
