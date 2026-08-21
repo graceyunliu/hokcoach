@@ -457,12 +457,12 @@
       </div>
       <div>
         <div class="name">Coach · AI决策思维教练</div>
-        <div class="tag">原型演示 · 纯视觉，无真实数据接入</div>
+        <div class="tag" id="headerTag">连接中… · 录像处理/训练任务/成长追踪三个tab已接真实API（AGE-176）</div>
       </div>
     </div>
     <div class="profile">
-      <div class="avatar">瑶</div>
-      <div class="who">主玩：瑶 / 朵莉亚 / 蔡文姬<br><span class="r">巅峰分 1362 · 辅助位</span></div>
+      <div class="avatar" id="profileAvatar">?</div>
+      <div class="who" id="profileWho">加载中…</div>
     </div>
   </div>
 
@@ -480,60 +480,38 @@
       <h3>录像处理流水线</h3>
       <div class="sub">python coach.py --replay last_game.mp4 · 从原始录像到结构化决策点，全流程可视化</div>
 
-      <div class="uploadrow">
+      <div class="uploadrow" id="uploadrow">
         <div class="fico">▶</div>
-        <div>
-          <div class="fname">last_game.mp4</div>
-          <div class="fmeta">18:42 时长 · 1080p · 236 MB · 王者峡谷 · 蔡文姬视角</div>
+        <div style="flex:1;">
+          <div class="fname" id="uploadFname">选择一份录屏开始分析</div>
+          <div class="fmeta" id="uploadFmeta">支持 .mp4/.MP4 · 分析在后台跑，可能需要数分钟（真实VLM调用，非模拟）</div>
         </div>
-        <div class="fstatus"><span class="dot"></span>已加载，处理中</div>
+        <input type="file" id="videoInput" accept="video/mp4,.mp4,.MP4" style="max-width:180px;font-size:12px;color:var(--text-dim);">
+        <div class="fstatus" id="uploadStatus" style="display:none;"><span class="dot"></span><span id="uploadStatusText">已加载，处理中</span></div>
       </div>
 
       <div class="pipeline" id="pipeline">
-        <div class="pstep done"><div class="line"></div><div class="circ">✓</div><div class="lbl">读取录像</div></div>
-        <div class="pstep done"><div class="line"></div><div class="circ">✓</div><div class="lbl">关键帧抽取<br><span class="dim-note">2fps 采样</span></div></div>
-        <div class="pstep active"><div class="line"></div><div class="circ">3</div><div class="lbl">小地图 &amp; UI<br>目标检测</div></div>
-        <div class="pstep"><div class="line"></div><div class="circ">4</div><div class="lbl">事件识别<br>（击杀/入侵/团战）</div></div>
-        <div class="pstep"><div class="line"></div><div class="circ">5</div><div class="lbl">决策点<br>候选提取</div></div>
-        <div class="pstep"><div class="line"></div><div class="circ">6</div><div class="lbl">生成复盘<br>时间轴</div></div>
-      </div>
-    </div>
-
-    <div class="grid2">
-      <div class="card">
-        <h3>逐帧目标检测预览</h3>
-        <div class="sub">06:32 · 检测英雄位置、草丛、打野动向</div>
-        <div class="framewrap">
-          <div class="mapbg"></div>
-          <div class="river"></div>
-          <div class="scanline"></div>
-
-          <div class="unit ally" style="left:30%;top:62%;"></div>
-          <div class="unit ally" style="left:38%;top:70%;"></div>
-          <div class="unit enemy" style="left:66%;top:28%;"></div>
-
-          <div class="bbox" style="left:22%;top:52%;width:22%;height:22%;"><span class="tag">河道草丛</span></div>
-          <div class="bbox blue" style="left:58%;top:18%;width:16%;height:14%;"><span class="tag">兰陵王 · 已消失15s</span></div>
-
-          <div class="repbadge"><span class="rd"></span>目标检测</div>
-          <div class="tstamp">06:32 / 18:42</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>处理日志</h3>
-        <div class="sub">模拟后台处理输出</div>
-        <div class="termwrap" id="termwrap"></div>
+        <div class="pstep" data-stage="上传"><div class="line"></div><div class="circ">1</div><div class="lbl">上传录像</div></div>
+        <div class="pstep" data-stage="检测死亡事件（HUD粗采样+二分定位）"><div class="line"></div><div class="circ">2</div><div class="lbl">检测死亡事件<br><span class="dim-note">HUD计数器粗采样+二分定位</span></div></div>
+        <div class="pstep" data-stage="提取死亡地点与小地图轨迹"><div class="line"></div><div class="circ">3</div><div class="lbl">定位死亡地点<br>+小地图轨迹</div></div>
+        <div class="pstep" data-stage="生成复盘记录"><div class="line"></div><div class="circ">4</div><div class="lbl">生成复盘记录</div></div>
+        <div class="pstep" data-stage="生成AI点评"><div class="line"></div><div class="circ">5</div><div class="lbl">生成AI点评</div></div>
+        <div class="pstep" data-stage="完成"><div class="line"></div><div class="circ">6</div><div class="lbl">完成</div></div>
       </div>
     </div>
 
     <div class="card">
-      <h3>提取出的关键决策点</h3>
-      <div class="sub">流水线输出 → 自动进入「赛后复盘对话」逐一讨论</div>
-      <div class="extractrow"><span class="et">06:32</span><span class="ed">补位下路，路过河道草丛未探草</span><span class="conf"><div style="width:88%"></div></span></div>
-      <div class="extractrow"><span class="et">11:05</span><span class="ed">越塔强杀，忽视敌方防御塔状态</span><span class="conf"><div style="width:74%"></div></span></div>
-      <div class="extractrow"><span class="et">14:47</span><span class="ed">大龙团战站位偏前，先手承伤过多</span><span class="conf"><div style="width:91%"></div></span></div>
-      <div class="extractrow"><span class="et">19:20</span><span class="ed">推塔时机过早，视野未清空</span><span class="conf"><div style="width:65%"></div></span></div>
+      <h3>处理日志</h3>
+      <div class="sub" id="termSub">等待上传 · 这里是/replay/{job_id}/status真实轮询结果，不是模拟台词</div>
+      <div class="termwrap" id="termwrap"><div class="dim">[待机] 上传录像后开始分析…</div></div>
+    </div>
+
+    <div class="card">
+      <h3>本次复盘的死亡列表</h3>
+      <div class="sub" id="resultSub">流水线输出 → 来自 GET /replay/{replay_id} 的真实数据</div>
+      <div id="extractList">
+        <div class="extractrow"><span class="ed" style="color:var(--text-dim);">暂无结果，上传录像后这里会显示真实检测到的死亡事件。</span></div>
+      </div>
     </div>
   </div>
 
@@ -713,39 +691,43 @@
   <div class="view" id="v2">
     <div class="task-hero">
       <div class="k">本周唯一任务</div>
-      <div class="title">进草前必放技能探草</div>
-      <div class="desc">连续 5 局，进入任何草丛前先用技能探视。每局统计探草次数，目标零遗漏。一次只练一个习惯，练透再换下一个。</div>
-      <div class="progressbar"><div style="width:60%"></div></div>
-      <div class="progressrow"><span>3 / 5 局已完成</span><span>执行率 72%</span></div>
-      <div class="checkins">
-        <div class="checkin done"><span class="n">✓</span>周一</div>
-        <div class="checkin done"><span class="n">✓</span>周二</div>
-        <div class="checkin done"><span class="n">✓</span>周三</div>
-        <div class="checkin"><span class="n">—</span>周四</div>
-        <div class="checkin"><span class="n">—</span>周五</div>
-      </div>
+      <div class="title" id="taskTitle">加载中…</div>
+      <div class="desc" id="taskDesc"></div>
+      <div class="progressbar"><div id="taskProgressBar" style="width:0%"></div></div>
+      <div class="progressrow"><span id="taskProgressLabel">— / — 局已完成</span><span id="taskRateLabel">执行率 —</span></div>
+      <div class="checkins" id="taskCheckins"></div>
+      <div class="sub" style="margin-top:10px;margin-bottom:0;">点击某天可以补打卡（会调用真实 POST /training/checkin）</div>
     </div>
 
     <div class="grid2">
       <div class="card">
         <h3>历史任务回顾</h3>
-        <div class="sub">按周追踪，一周只改一个习惯</div>
-        <div class="weekitem">第3周 · 团战前先看小地图 <span class="badge up">已达标</span></div>
-        <div class="weekitem">第2周 · 撤退时保留位移技能 <span class="badge up">已达标</span></div>
-        <div class="weekitem">第1周 · 进草前探草 <span class="badge mid">进行中 72%</span></div>
+        <div class="sub">按周追踪，一周只改一个习惯 · GET /training/history</div>
+        <div id="taskHistory"><div class="weekitem" style="color:var(--text-dim);">加载中…</div></div>
       </div>
       <div class="card">
         <h3>AI 每周评估笔记</h3>
-        <div class="sub">来自训练方向自动调整机制</div>
-        <div class="weekitem" style="display:block;">
-          习惯执行率从 40% 涨到 72%，决策 B 级占比提升。分数短期回落是正常的<b style="color:var(--gold)">适应期阵痛</b>，不是真退步。坚持住，下周继续。
-        </div>
+        <div class="sub">来自训练方向自动调整机制 · GET /training/weekly-note</div>
+        <div class="weekitem" style="display:block;" id="weeklyNote">加载中…</div>
       </div>
     </div>
   </div>
 
   <!-- VIEW 3 -->
   <div class="view" id="v3">
+    <div class="note" style="border-color:#4d3a2a;background:#201a12;color:#e8d3b0;margin-bottom:16px;margin-top:0;">
+      <b style="color:#e8b34d;">接线说明（AGE-184）：</b>下面「弱点追踪」卡片和训练一致性热力图绑定的是
+      <code>GET /progress</code> 的真实数据。四维成长曲线、决策质量分/复盘质量分/偶像相似度、
+      成长历程叙事、数据飞轮、专属知识库统计——这些目前后端完全没有对应的计算逻辑（不是接口没写，
+      是这些指标本身还没被设计出来），仍然是原型演示数据，没有接线，保留只是为了看设计意图。
+    </div>
+
+    <div class="card">
+      <h3>弱点追踪</h3>
+      <div class="sub">GET /progress 的 weakness_tracker 原始数据</div>
+      <div id="weaknessTracker"><div class="weekitem" style="color:var(--text-dim);">加载中…</div></div>
+    </div>
+
     <div class="stat4">
       <div class="stat"><div class="v">72%</div><div class="l">习惯执行度</div><div class="d">↑ 32pt</div></div>
       <div class="stat"><div class="v">B+</div><div class="l">决策质量分</div><div class="d">↑ 1档</div></div>
@@ -870,7 +852,7 @@
     <div class="grid2">
       <div class="card">
         <h3>训练一致性</h3>
-        <div class="sub">近12周复盘 & 打卡热力图 · 习惯是这样攒起来的</div>
+        <div class="sub" id="heatgridSub">GET /progress 的 weekly_snapshots 执行率 · 每格=一周，暂无12周数据时按实际周数显示</div>
         <div class="heatgrid" id="heatgrid"></div>
         <div class="heatlegend">
           少 <span class="heatcell" style="background:#1c2230"></span>
@@ -1028,76 +1010,326 @@
     callText.textContent = copy[state].text;
   }
 
-  // simulated video-processing terminal log
-  (function(){
-    const term = document.getElementById('termwrap');
-    const lines = [
-      {t:'[00:00:01]', c:'dim', m:'读取录像 last_game.mp4（18:42，1080p，蔡文姬视角）'},
-      {t:'[00:00:03]', c:'ok',  m:'关键帧抽取完成：2,254 帧 @ 2fps 采样'},
-      {t:'[00:00:06]', c:'dim', m:'加载目标检测模型 minimap-yolo-v3 ...'},
-      {t:'[00:00:07]', c:'ok',  m:'小地图 & UI 目标检测中：英雄位置 / 血条 / 装备栏'},
-      {t:'[00:00:09]', c:'warn',m:'检测到目标：兰陵王 06:15 上路露头后消失'},
-      {t:'[00:00:11]', c:'warn',m:'检测到目标：己方英雄 06:32 经过河道草丛，未使用探测技能'},
-      {t:'[00:00:13]', c:'ok',  m:'事件识别：击杀 x3 / 防御塔损毁 x2 / 团战 x2'},
-      {t:'[00:00:15]', c:'ok',  m:'决策点候选生成：4 个关键节点，置信度均 &gt;60%'},
-      {t:'[00:00:16]', c:'ok',  m:'生成复盘时间轴 → 已同步至「赛后复盘对话」'},
-      {t:'[00:00:17]', c:'dim', m:'处理完成 ✓ 等待发起语音复盘'},
-    ];
-    let i=0;
-    function printNext(){
-      if(i>=lines.length){
-        const cur=document.createElement('div');
-        cur.innerHTML='<span class="cursor"></span>';
-        term.appendChild(cur);
-        term.scrollTop=term.scrollHeight;
-        return;
-      }
-      const l=lines[i];
-      const row=document.createElement('div');
-      row.innerHTML=`<span class="dim">${l.t}</span> <span class="${l.c}">${l.m}</span>`;
-      term.appendChild(row);
-      term.scrollTop=term.scrollHeight;
-      i++;
-      setTimeout(printNext, 420+Math.random()*380);
+  // ===========================================================================
+  // 真实API接线（AGE-182/183/184）。API_BASE指向本地FastAPI（coach/api，
+  // 见AGE-178~181），默认假设 `uvicorn api.main:app --reload` 跑在8000端口。
+  // ===========================================================================
+  const API_BASE = 'http://127.0.0.1:8000';
+
+  async function api(path, opts){
+    const res = await fetch(API_BASE + path, opts);
+    if(!res.ok){
+      let detail = res.statusText;
+      try { detail = (await res.json()).detail || detail; } catch(e){}
+      throw new Error(`${res.status} ${detail}`);
     }
-    printNext();
+    return res.status === 204 ? null : res.json();
+  }
+
+  function termLine(term, cls, msg){
+    const row = document.createElement('div');
+    const ts = new Date().toLocaleTimeString('zh-CN', {hour12:false});
+    row.innerHTML = `<span class="dim">[${ts}]</span> <span class="${cls}">${msg}</span>`;
+    term.appendChild(row);
+    term.scrollTop = term.scrollHeight;
+  }
+
+  // ---- 页头：真实玩家档案 ----
+  (function(){
+    api('/player/profile').then(profile => {
+      const p = (profile && profile.player) || {};
+      const heroes = (p.main_heroes || []).join(' / ') || '未知';
+      const rankLabel = p.current_rank != null
+        ? `${p.rank_type || ''} ${p.current_rank}分` : '未知段位';
+      document.getElementById('profileAvatar').textContent = (p.main_heroes || ['?'])[0][0] || '?';
+      document.getElementById('profileWho').innerHTML =
+        `主玩：${heroes}<br><span class="r">${rankLabel}</span>`;
+      document.getElementById('headerTag').textContent =
+        'v5/v2/v3已接真实API · v1(赛后复盘对话)/v4(风格报告)仍是原型演示（见AGE-185/AGE-186）';
+    }).catch(err => {
+      document.getElementById('headerTag').textContent =
+        `无法连接API（${err.message}）· 请确认 uvicorn api.main:app --reload 已在8000端口跑起来`;
+    });
   })();
 
-  // contribution heatmap: 12 weeks x 7 days, density trends up over time to show habit compounding
+  // ---- VIEW 5: 真实上传+轮询+结果 ----
+  (function(){
+    const input = document.getElementById('videoInput');
+    const fname = document.getElementById('uploadFname');
+    const fmeta = document.getElementById('uploadFmeta');
+    const statusWrap = document.getElementById('uploadStatus');
+    const statusText = document.getElementById('uploadStatusText');
+    const term = document.getElementById('termwrap');
+    const steps = [...document.querySelectorAll('#pipeline .pstep')];
+    const extractList = document.getElementById('extractList');
+    if(!input) return;
+
+    function setStage(stageText){
+      // 后端progress_cb给的stage文案跟pipeline卡片上data-stage属性做前缀匹配
+      // （比如"检测死亡事件（HUD粗采样+二分定位）"匹配data-stage同名的卡片），
+      // 匹配不到就只落日志，不强行对应某个圆圈——避免后端文案一变前端就断。
+      let matchedIdx = -1;
+      steps.forEach((s, idx) => {
+        const key = s.dataset.stage;
+        if(key && stageText && (stageText === key || stageText.startsWith(key.split('（')[0]))){
+          matchedIdx = idx;
+        }
+      });
+      if(matchedIdx === -1) return;
+      steps.forEach((s, idx) => {
+        s.classList.remove('active');
+        if(idx < matchedIdx){
+          s.classList.add('done');
+          s.querySelector('.circ').textContent = '✓';
+        } else if(idx === matchedIdx){
+          s.classList.add('active');
+        }
+      });
+    }
+
+    function markStepDone(idx){
+      const s = steps[idx];
+      if(!s) return;
+      s.classList.remove('active');
+      s.classList.add('done');
+      s.querySelector('.circ').textContent = '✓';
+    }
+
+    async function pollStatus(jobId){
+      while(true){
+        let status;
+        try {
+          status = await api(`/replay/${jobId}/status`);
+        } catch(err){
+          termLine(term, 'warn', `轮询失败：${err.message}`);
+          statusText.textContent = '轮询失败';
+          return;
+        }
+        if(status.stage){
+          termLine(term, 'dim', status.stage + ' ...');
+          setStage(status.stage);
+        }
+        if(status.status === 'done'){
+          steps.forEach((s) => { s.classList.remove('active'); s.classList.add('done'); s.querySelector('.circ').textContent='✓'; });
+          termLine(term, 'ok', `处理完成 ✓ replay_id=${status.replay_id}`);
+          statusText.textContent = '已完成';
+          await loadResult(status.replay_id);
+          return;
+        }
+        if(status.status === 'failed'){
+          termLine(term, 'warn', `处理失败：${status.error}`);
+          statusText.textContent = '失败';
+          return;
+        }
+        await new Promise(r => setTimeout(r, 2000));
+      }
+    }
+
+    async function loadResult(replayId){
+      let replay;
+      try {
+        replay = await api(`/replay/${replayId}`);
+      } catch(err){
+        extractList.innerHTML = `<div class="extractrow"><span class="ed" style="color:var(--red);">读取结果失败：${err.message}</span></div>`;
+        return;
+      }
+      const details = (replay.death_analysis && replay.death_analysis.details) || [];
+      if(details.length === 0){
+        extractList.innerHTML = `<div class="extractrow"><span class="ed">这局零死亡，没有死亡事件可看。</span></div>`;
+        return;
+      }
+      extractList.innerHTML = details.map(d => {
+        const confPct = Math.round((d.confidence || 0) * 100);
+        const comment = d.ai_comment
+          ? `<div style="margin-top:6px;color:var(--text-dim);font-size:12px;line-height:1.6;white-space:pre-wrap;">${d.ai_comment}</div>`
+          : '';
+        return `<div class="extractrow" style="flex-direction:column;align-items:flex-start;">
+          <div style="display:flex;align-items:center;gap:10px;width:100%;">
+            <span class="et">${d.timestamp || '?'}</span>
+            <span class="ed">${d.type || '未知归因'}${d.location ? '·' + d.location : ''}</span>
+            <span class="conf"><div style="width:${confPct}%"></div></span>
+          </div>
+          ${comment}
+        </div>`;
+      }).join('');
+    }
+
+    input.addEventListener('change', async () => {
+      const file = input.files[0];
+      if(!file) return;
+      fname.textContent = file.name;
+      fmeta.textContent = `${(file.size / 1024 / 1024).toFixed(1)} MB · 上传中…`;
+      statusWrap.style.display = 'flex';
+      statusText.textContent = '上传中';
+      term.innerHTML = '';
+      termLine(term, 'dim', `准备上传 ${file.name}（${(file.size/1024/1024).toFixed(1)} MB）`);
+      extractList.innerHTML = `<div class="extractrow"><span class="ed" style="color:var(--text-dim);">分析中，完成后这里会显示真实结果…</span></div>`;
+      markStepDone(0);
+
+      const form = new FormData();
+      form.append('file', file);
+      let jobId;
+      try {
+        const res = await api('/replay', {method: 'POST', body: form});
+        jobId = res.job_id;
+      } catch(err){
+        termLine(term, 'warn', `上传失败：${err.message}`);
+        fmeta.textContent = `上传失败：${err.message}`;
+        statusText.textContent = '失败';
+        return;
+      }
+      fmeta.textContent = `上传完成 · job_id=${jobId}`;
+      statusText.textContent = '处理中';
+      termLine(term, 'ok', `上传完成，job_id=${jobId}，开始轮询进度…`);
+      await pollStatus(jobId);
+    });
+  })();
+
+  // ---- VIEW 2: 真实训练任务/打卡/历史/周评估 ----
+  (function(){
+    const titleEl = document.getElementById('taskTitle');
+    if(!titleEl) return;
+    const descEl = document.getElementById('taskDesc');
+    const barEl = document.getElementById('taskProgressBar');
+    const progLabelEl = document.getElementById('taskProgressLabel');
+    const rateLabelEl = document.getElementById('taskRateLabel');
+    const checkinsEl = document.getElementById('taskCheckins');
+    const historyEl = document.getElementById('taskHistory');
+    const noteEl = document.getElementById('weeklyNote');
+    const dayNames = ['周一','周二','周三','周四','周五','周六','周日'];
+
+    function renderCurrent(data){
+      const task = data.task || {};
+      titleEl.textContent = task.description || '本周还没有任务';
+      descEl.textContent = task.checkin_method
+        ? `打卡方式：${task.checkin_method}` : '';
+      const streak = task.current_streak || 0;
+      const target = task.target_streak || 5;
+      const pct = Math.min(100, Math.round((streak/target)*100));
+      barEl.style.width = pct + '%';
+      progLabelEl.textContent = `${streak} / ${target} 局已完成`;
+      rateLabelEl.textContent = `执行率 ${Math.round((data.execution_rate || 0) * 100)}%`;
+
+      // 本周日历：从task.start_date起最多5天，每天对应daily_checkins里的记录
+      const checkins = data.daily_checkins || [];
+      checkinsEl.innerHTML = '';
+      const start = task.start_date ? new Date(task.start_date) : new Date();
+      for(let i=0;i<5;i++){
+        const d = new Date(start);
+        d.setDate(d.getDate()+i);
+        const iso = d.toISOString().slice(0,10);
+        const hit = checkins.find(c => c.date === iso);
+        const done = hit && (hit.rate || 0) >= 80;
+        const cell = document.createElement('div');
+        cell.className = 'checkin' + (done ? ' done' : '');
+        cell.style.cursor = 'pointer';
+        cell.innerHTML = `<span class="n">${done ? '✓' : (hit ? hit.rate+'%' : '—')}</span>${dayNames[i]}`;
+        cell.title = '点击补打卡';
+        cell.addEventListener('click', () => submitCheckin(iso));
+        checkinsEl.appendChild(cell);
+      }
+    }
+
+    async function submitCheckin(dateStr){
+      const rateStr = prompt(`${dateStr} 的执行率（0-100）：`, '80');
+      if(rateStr === null) return;
+      const rate = parseInt(rateStr, 10);
+      if(Number.isNaN(rate) || rate < 0 || rate > 100){
+        alert('请输入0-100之间的整数');
+        return;
+      }
+      try {
+        await api('/training/checkin', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({rate, when: dateStr}),
+        });
+        await refreshCurrent();
+      } catch(err){
+        alert('打卡失败：' + err.message);
+      }
+    }
+
+    async function refreshCurrent(){
+      try {
+        renderCurrent(await api('/training/current'));
+      } catch(err){
+        titleEl.textContent = `加载失败：${err.message}`;
+      }
+    }
+
+    async function loadHistory(){
+      try {
+        const {snapshots} = await api('/training/history');
+        if(!snapshots.length){
+          historyEl.innerHTML = '<div class="weekitem" style="color:var(--text-dim);">暂无历史周快照</div>';
+          return;
+        }
+        historyEl.innerHTML = snapshots.slice().reverse().map(s => {
+          const badge = s.action === 'advance'
+            ? '<span class="badge up">已达标</span>'
+            : `<span class="badge mid">${s.action || ''} ${Math.round((s.execution_rate||0)*100)}%</span>`;
+          return `<div class="weekitem">${s.week || '?'} · ${s.skill_tag || '未知任务'} ${badge}</div>`;
+        }).join('');
+      } catch(err){
+        historyEl.innerHTML = `<div class="weekitem" style="color:var(--red);">加载失败：${err.message}</div>`;
+      }
+    }
+
+    async function loadWeeklyNote(){
+      try {
+        const {available, note} = await api('/training/weekly-note');
+        noteEl.textContent = available ? note
+          : '本周还没有生成AI周评估（跑一次 python coach.py --weekly-report 后会有）。';
+      } catch(err){
+        noteEl.textContent = `加载失败：${err.message}`;
+      }
+    }
+
+    refreshCurrent();
+    loadHistory();
+    loadWeeklyNote();
+  })();
+
+  // ---- VIEW 3: 真实成长追踪（弱点追踪 + 热力图，其余见页内说明） ----
   (function(){
     const grid = document.getElementById('heatgrid');
     if(!grid) return;
-    const weeks = 12, days = 7;
-    const levelColors = ['#1c2230','#2a2f10','#7a6a1c','#c9a032','#e8b34d'];
-    for(let w=0; w<weeks; w++){
-      for(let d=0; d<days; d++){
-        const progress = w/(weeks-1); // 0 -> 1 across the weeks
-        const bias = progress*0.72 + Math.random()*0.4;
-        let level = Math.min(4, Math.floor(bias*4.2));
-        if(Math.random() < 0.06*(1-progress)) level = 0; // early weeks: occasional gaps
+    const weaknessEl = document.getElementById('weaknessTracker');
+    const statusNames = {pending:'待训练', in_progress:'训练中', done:'已养成', compensate:'转补偿策略'};
+
+    api('/progress').then(data => {
+      const tracker = data.weakness_tracker || {};
+      const entries = Object.entries(tracker);
+      weaknessEl.innerHTML = entries.length ? entries.map(([name, e]) => `
+        <div class="weekitem">
+          ${name} · ${statusNames[e.status] || e.status}
+          <span class="badge ${e.status === 'done' ? 'up' : 'mid'}">
+            已训练${e.weeks_trained || 0}周 · 养成度${Math.round((e.current_level||0)*100)}%
+          </span>
+        </div>`).join('') : '<div class="weekitem" style="color:var(--text-dim);">暂无弱点追踪数据</div>';
+
+      // 热力图：每格=一周快照的执行率，没有12周数据就按实际周数显示（不
+      // 用假数据凑够12周，宁可图短一点也不编数据）。
+      const snapshots = data.weekly_snapshots || [];
+      grid.innerHTML = '';
+      const levelColors = ['#1c2230','#2a2f10','#7a6a1c','#c9a032','#e8b34d'];
+      if(snapshots.length === 0){
+        document.getElementById('heatgridSub').textContent =
+          '暂无weekly_snapshots数据（还没跑完过一整周训练闭环）';
+      }
+      snapshots.forEach(s => {
+        const rate = s.execution_rate || 0;
+        const level = Math.min(4, Math.floor(rate * 5));
         const cell = document.createElement('div');
         cell.className = 'heatcell';
         cell.style.background = levelColors[level];
-        cell.title = `第${w+1}周`;
+        cell.title = `${s.week || '?'}：执行率${Math.round(rate*100)}%`;
         grid.appendChild(cell);
-      }
-    }
-  })();
-
-  // animate pipeline steps cycling through "active" stage
-  (function(){
-    const steps=[...document.querySelectorAll('#pipeline .pstep')];
-    let activeIdx=2; // starts at step 3 (index 2), matching initial markup
-    setInterval(()=>{
-      if(activeIdx>=steps.length) return;
-      steps[activeIdx].classList.remove('active');
-      steps[activeIdx].classList.add('done');
-      steps[activeIdx].querySelector('.circ').textContent='✓';
-      activeIdx++;
-      if(activeIdx<steps.length){
-        steps[activeIdx].classList.add('active');
-      }
-    }, 2600);
+      });
+    }).catch(err => {
+      weaknessEl.innerHTML = `<div class="weekitem" style="color:var(--red);">加载失败：${err.message}（确认FastAPI已启动：uvicorn api.main:app --reload）</div>`;
+    });
   })();
 </script>
 </body>
