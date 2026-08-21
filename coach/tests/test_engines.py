@@ -517,6 +517,42 @@ class TestOrchestratorStructuredReview(unittest.TestCase):
 
         self.assertIsNone(result["comment"])
 
+    def test_finalize_review_all_comments_every_death(self):
+        """视频复盘页（AGE-178后台job）场景：不是对话，用户一次性看完整
+        分析，所以全部死亡都要有点评，不能像CLI/--chat那样只讲第一条。"""
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None  # 降级模式：走_fallback_comment，不接网
+        replay = self._replay_with_deaths(3)
+
+        with tempfile.TemporaryDirectory() as tmp, \
+             mock.patch.object(data_utils, "REPLAYS_DIR", Path(tmp)):
+            result = orch.finalize_review_all(replay)
+            self.assertTrue(Path(result["saved_path"]).exists())
+
+        self.assertEqual(len(result["comments"]), 3)
+        for comment in result["comments"]:
+            self.assertIsInstance(comment, str)
+            self.assertTrue(comment)
+        for detail in replay["death_analysis"]["details"]:
+            self.assertIsInstance(detail.get("ai_comment"), str)
+            self.assertTrue(detail["ai_comment"])
+
+    def test_finalize_review_all_zero_deaths_does_not_crash(self):
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None
+        replay = self._replay_with_deaths(0)
+
+        with tempfile.TemporaryDirectory() as tmp, \
+             mock.patch.object(data_utils, "REPLAYS_DIR", Path(tmp)):
+            result = orch.finalize_review_all(replay)
+            self.assertTrue(Path(result["saved_path"]).exists())
+
+        self.assertEqual(result["comments"], [])
+
     def test_review_replay_cli_wrapper_still_prints(self):
         """CLI薄封装向后兼容：终端体验（print输出）不变。"""
         from core.orchestrator import Orchestrator

@@ -196,6 +196,40 @@ class Orchestrator:
             "report_path": report_path,
         }
 
+    def finalize_review_all(self, replay: dict[str, Any],
+                            output: str | None = None) -> dict[str, Any]:
+        """对全部死亡（不只是第一次）生成AI点评、落盘replay、可选导出报告。
+
+        用于视频复盘页（AGE-178后台job）等"用户一次性看完整分析"的场景——
+        跟review_replay/finalize_review的"一次只说一个问题、留出user_intent
+        输入空间"的对话式设计不同：这里没有对话轮次，用户是把整局的死亡
+        列表当成一份报告来看，所以每条死亡都应该有点评，不能只有第一条。
+        --chat/未来的实时语音教练页应继续用finalize_review（单条+user_intent），
+        因为那是真正的来回对话，一次抛全部点评反而打断"一次只谈一个问题"的
+        persona设计。
+
+        Returns: {"replay": dict, "comments": list[str|None]（跟details同序）,
+                   "saved_path": str, "report_path": str|None}
+        """
+        details = replay["death_analysis"]["details"]
+        comments: list[str | None] = []
+        for detail in details:
+            comment = self.comment_death(detail)
+            detail["ai_comment"] = comment
+            comments.append(comment)
+
+        path = data_utils.save_replay(replay)
+        report_path = None
+        if output:
+            self._write_report(replay, output)
+            report_path = output
+        return {
+            "replay": replay,
+            "comments": comments,
+            "saved_path": str(path),
+            "report_path": report_path,
+        }
+
     def review_replay(self, replay: dict[str, Any],
                       interactive: bool = True,
                       output: str | None = None) -> dict[str, Any]:

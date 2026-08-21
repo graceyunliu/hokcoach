@@ -99,8 +99,10 @@ def run_replay_job(job: Job, orchestrator_factory) -> None:
         replay = orch.build_replay_from_video_path(
             job.video_path, progress_cb=job.set_stage)
         job.set_stage("生成AI点评")
-        analysis = orch.analyze_first_death(replay)
-        result = orch.finalize_review(replay, analysis["first_death"])
+        # 复盘页是一次性看完整分析的场景（不是对话），全部死亡都要有点评，
+        # 不能像CLI/--chat那样只讲第一条——见orchestrator.finalize_review_all
+        # 的说明。
+        result = orch.finalize_review_all(replay)
         job.set_done(replay_id=result["replay"]["replay_id"])
     except OrchestratorError as err:
         job.set_failed(str(err))
