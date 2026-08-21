@@ -39,10 +39,16 @@ llm:
 # 视频检测区域（AGE-49：基于验证素材1290×2796竖屏录屏标定，
 # 换设备/游戏UI改版后需重新标定）
 video:
+  kda_reader: vlm   # vlm | template；AGE-136模板法可显式开启，经更多对局验证前保留VLM默认
   hud_crop:      {x: 1650, y: 0, w: 650, h: 140}   # KDA计数器区域
   minimap_crop:  {x: 0,    y: 0, w: 420, h: 320}   # 小地图区域
-  # TODO(AGE-131跟进)：占位值，尚未在真实录屏上标定复活倒计时HUD的实际
-  # 坐标。respawn_reader接入前请先用真实素材核实/修正这四个值。
+  # AGE-140标定完成（2026-08-17）：在ScreenRecording_08-12-2026 02-03-33_1.MP4
+  # 三个独立死亡事件（ts=308/316/712）上核实"查看死亡回放"横幅+倒计时数字
+  # 的真实像素位置，坐标系为ffmpeg按rotate元数据归一化后的2796x1290画面
+  # （grab_respawn_frame/detect_death_marker均在此坐标系下工作）。三次读数
+  # 位置完全一致，裁剪框留有余量以覆盖1-2位数倒计时。另两份录屏
+  # （08-11 15-57、08-12 01-16，同设备同分辨率）HUD版式核对一致，未在其中
+  # 逐一验证独立死亡帧——AGE-141的端到端检测结果是真正的跨录屏验证。
   # extract_death_location已加安全防护（见video_utils.respawn_crop_is_calibrated）：
   # respawn_crop_calibrated为false时整体跳过"复活HUD共现"特征、只用死亡前
   # 基线+位置持续性过滤（不会因为占位坐标读不到倒计时而把所有真实死亡X
@@ -50,8 +56,8 @@ video:
   # 标定 = 同时做两件事：把下面四个坐标改成真实值，并把
   # respawn_crop_calibrated改成true。开关是唯一的判定依据——坐标漂一个
   # 像素不会被当成"已标定"，也就不会静默打开那条召回崩塌的路径。
-  respawn_crop:  {x: 1650, y: 140, w: 650, h: 120}  # 复活倒计时区域（占位，待标定）
-  respawn_crop_calibrated: false                     # 标定完真实坐标后改true
+  respawn_crop:  {x: 1280, y: 0, w: 300, h: 140}    # 复活倒计时区域（AGE-140已标定，2026-08-17）
+  respawn_crop_calibrated: true                       # 标定完真实坐标后改true
   coarse_interval_sec: 75
   precision_sec: 3
 

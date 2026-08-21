@@ -86,6 +86,16 @@ DEFAULT_RESPAWN_CROP = _crop_from_config("respawn_crop", _FALLBACK_RESPAWN_CROP)
 DEFAULT_COARSE_INTERVAL = _number_from_config("coarse_interval_sec", _FALLBACK_COARSE_INTERVAL)
 DEFAULT_PRECISION = _number_from_config("precision_sec", _FALLBACK_PRECISION)
 
+# AGE-136：KDA HUD裁剪图（650x140）中三个右对齐数值槽。每个框向左
+# 留出了第二位数的空间；分割会忽略贴着左边界的图标残片。
+DEFAULT_KDA_SLOTS = (
+    (405, 50, 454, 90),  # kill
+    (477, 50, 527, 90),  # death
+    (554, 50, 611, 90),  # assist
+)
+_DEFAULT_KDA_TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "assets" / "kda_templates"
+_FALLBACK_KDA_CONFIDENCE = 0.72
+
 # HUD不可见时在邻近时刻重采的偏移序列（秒）
 _RESAMPLE_OFFSETS = (1.0, -1.0, 2.0, -2.0, 4.0, -4.0)
 
@@ -917,6 +927,128 @@ def extract_death_location(
 
 
 # ---------------------------------------------------------------------------
+# 确定性KDA读数器（AGE-136：模板匹配）
+# ---------------------------------------------------------------------------
+
+
+def _normalize_kda_glyph(mask: Any, size: int = 32) -> Any:
+    """把单个二值字形等比缩放、居中填充到size×size。"""
+    import cv2  # type: ignore
+    import numpy as np  # type: ignore
+
+    ys, xs = np.where(mask > 0)
+    if not len(xs):
+        return np.zeros((size, size), dtype=np.uint8)
+    glyph = mask[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+    h, w = glyph.shape
+    scale = min((size - 4) / max(w, 1), (size - 4) / max(h, 1))
+    nw, nh = max(1, round(w * scale)), max(1, round(h * scale))
+    resized = cv2.resize(glyph, (nw, nh), interpolation=cv2.INTER_NEAREST)
+    canvas = np.zeros((size, size), dtype=np.uint8)
+    x, y = (size - nw) // 2, (size - nh) // 2
+    canvas[y:y + nh, x:x + nw] = resized
+    return canvas
+
+
+def _extract_slot_glyphs(slot_image: Any) -> list[Any]:
+    """Otsu二值化+连通域分割，按从左到右返回1个或多个字形。"""
+    import cv2  # type: ignore
+
+    if slot_image is None or getattr(slot_image, "size", 0) == 0:
+        return []
+    gray = (cv2.cvtColor(slot_image, cv2.COLOR_BGR2GRAY)
+            if len(slot_image.shape) == 3 else slot_image)
+    _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    count, labels, stats, _ = cv2.connectedComponentsWithStats(binary, 8)
+    height, width = gray.shape
+    candidates: list[tuple[int, int, Any]] = []
+    for idx in range(1, count):
+        x, y, w, h, area = (int(v) for v in stats[idx])
+        # KDA字形高度约占槽高一半；小光点和大块游戏背景都不参与。
+        if h < height * 0.35 or h > height * 0.9:
+            continue
+        if w < 2 or w > height * 0.65 or area < 18:
+            continue
+        # 固定图标只会从槽左边漏入；数值是右对齐的。
+        if x == 0 and x + w < width * 0.45:
+            continue
+        component = (labels[y:y + h, x:x + w] == idx).astype("uint8") * 255
+        candidates.append((x, x + w, _normalize_kda_glyph(component)))
+
+    candidates.sort(key=lambda item: item[0])
+    if not candidates:
+        return []
+    # 从最右位开始取同一数值的连续字形，避免把左侧图标当成高位数。
+    group = [candidates[-1]]
+    for item in reversed(candidates[:-1]):
+        gap = group[0][0] - item[1]
+        if gap > max(8, round(height * 0.18)):
+            break
+        group.insert(0, item)
+    return [item[2] for item in group]
+
+
+def _load_kda_templates(template_dir: Path) -> dict[int, list[Any]]:
+    import cv2  # type: ignore
+
+    templates: dict[int, list[Any]] = {digit: [] for digit in range(10)}
+    for digit in range(10):
+        for path in sorted(template_dir.glob(f"{digit}_*.png")):
+            image = cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
+            if image is not None:
+                templates[digit].append(_normalize_kda_glyph(image))
+    missing = [str(d) for d, values in templates.items() if not values]
+    if missing:
+        raise RuntimeError(
+            f"KDA模板库不完整（缺少数字 {', '.join(missing)}）: {template_dir}")
+    return templates
+
+
+def make_template_kda_reader(
+    template_dir: Path | str = _DEFAULT_KDA_TEMPLATE_DIR,
+    confidence_threshold: float = _FALLBACK_KDA_CONFIDENCE,
+    slots: tuple[tuple[int, int, int, int], ...] = DEFAULT_KDA_SLOTS,
+) -> KdaReader:
+    """用真实HUD字形模板构造确定性KDA读数器（AGE-136）。
+
+    任一位的最佳TM_CCOEFF_NORMED分数低于阈值时返回None，
+    让上层重采，而不是猜一个数。每个槽可分割多个连通字形，因此支持10+。
+    """
+    try:
+        import cv2  # type: ignore
+    except ImportError as exc:
+        raise RuntimeError(
+            "KDA模板读数需要 opencv-python：pip install opencv-python") from exc
+
+    library = _load_kda_templates(Path(template_dir))
+
+    def reader(image_path: Path) -> Optional[KDA]:
+        image = cv2.imread(str(image_path))
+        if image is None:
+            return None
+        values: list[int] = []
+        for x0, y0, x1, y1 in slots:
+            glyphs = _extract_slot_glyphs(image[y0:y1, x0:x1])
+            if not glyphs:
+                return None
+            digits: list[int] = []
+            for glyph in glyphs:
+                best_digit, best_score = -1, -1.0
+                for digit, exemplars in library.items():
+                    for exemplar in exemplars:
+                        score = float(cv2.matchTemplate(
+                            glyph, exemplar, cv2.TM_CCOEFF_NORMED)[0, 0])
+                        if score > best_score:
+                            best_digit, best_score = digit, score
+                if best_score < confidence_threshold:
+                    return None
+                digits.append(best_digit)
+            values.append(int("".join(str(digit) for digit in digits)))
+        return (values[0], values[1], values[2])
+
+    return reader
+
+
 # 默认KDA读数器（VLM实现，阶段2接入LLM配置后可用）
 # ---------------------------------------------------------------------------
 

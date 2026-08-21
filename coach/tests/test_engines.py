@@ -39,6 +39,7 @@ class TestMiniYaml(unittest.TestCase):
         self.assertEqual(cfg["llm"]["api_key_env"], "COACH_LLM_API_KEY")
         self.assertEqual(cfg["llm"]["vision"]["model"], "qwen3-vl-plus")
         self.assertEqual(cfg["video"]["coarse_interval_sec"], 75)
+        self.assertEqual(cfg["video"]["kda_reader"], "vlm")
         self.assertFalse(cfg["voice"]["enabled"])
 
     def test_parses_persona_lists(self):
@@ -382,6 +383,29 @@ class TestOrchestratorDeathWindowWiring(unittest.TestCase):
         # 生产路径不得走无锚点扫描（AGE-131误报的来源）
         self.assertNotIn("allow_unanchored", captured["kwargs"])
 
+    def test_template_reader_does_not_require_vlm(self):
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None
+        orch.vlm = None
+        with tempfile.TemporaryDirectory() as tmp:
+            video = Path(tmp) / "clip.mp4"
+            video.write_bytes(b"")
+            with mock.patch.object(video_utils, "_load_video_config",
+                                   return_value={"kda_reader": "template"}), \
+                 mock.patch.object(video_utils, "make_template_kda_reader",
+                                   return_value=lambda p: None) as factory, \
+                 mock.patch.object(video_utils, "extract_death_events",
+                                   return_value=[]), \
+                 mock.patch.object(Orchestrator, "review_replay",
+                                   lambda self, replay, **kw: replay), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                rc = orch.analyze_video(str(video), interactive=False)
+
+        self.assertEqual(rc, 0)
+        factory.assert_called_once_with()
+
 
 @unittest.skipUnless(_HAS_CV2 and _HAS_FFMPEG, "需要 opencv-python + numpy + ffmpeg")
 class TestExtractDeathLocation(unittest.TestCase):
@@ -665,13 +689,20 @@ class TestRespawnCoOccurrence(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertEqual(self.calls, [])
 
-    def test_config_default_crop_is_still_uncalibrated(self):
-        """config.yaml目前声明未标定 → 端到端也确实走跳过分支。"""
-        self.assertFalse(
+    def test_config_default_crop_is_now_calibrated(self):
+        """AGE-140标定完成：config.yaml声明已标定 → 端到端不再走跳过分支。
+
+        合成测试素材帧远小于真实录屏（2796x1290），标定后的裁剪区在合成帧
+        上落不到任何真实倒计时数字，reader读不到值也在预期内——已标定后
+        该特征会真的执行并把"读不到倒计时"当噪点拒绝（与
+        test_calibrated_crop_enforces_countdown同一行为，这里只是确认
+        默认配置本身现在确实被判定为已标定、reader确实被调用了）。
+        """
+        self.assertTrue(
             video_utils.respawn_crop_is_calibrated(video_utils.DEFAULT_RESPAWN_CROP))
         result = self._locate(respawn_reader=self._reader(None))
-        self.assertIsNotNone(result)
-        self.assertEqual(self.calls, [])
+        self.assertIsNone(result)
+        self.assertTrue(self.calls)
 
     def test_calibrated_crop_enforces_countdown(self):
         """已标定 + 倒计时读不到 → 判为噪点，不采信。"""
@@ -716,18 +747,19 @@ class TestRespawnCropCalibrationGate(unittest.TestCase):
     打开那条把所有真实死亡X标记都拒掉的召回崩塌路径。
     """
 
-    def test_config_declares_uncalibrated(self):
-        """config.yaml当前显式声明未标定 → 判定为未标定。
+    def test_config_declares_calibrated(self):
+        """AGE-140标定完成后：config.yaml显式声明已标定 → 判定为已标定。
 
-        标定完成后（开关改true）本断言会失败，那正是提醒：该重跑方案3的
-        端到端验证了。
+        占位坐标（_FALLBACK_RESPAWN_CROP）本身依然不能被判定为已标定——
+        开关是唯一权威依据，不是"坐标不再是占位值"这件事本身。
         """
         cfg = config_utils.load_config()["video"]
-        self.assertFalse(cfg["respawn_crop_calibrated"])
-        self.assertFalse(
-            video_utils.respawn_crop_is_calibrated(video_utils._FALLBACK_RESPAWN_CROP))
-        self.assertFalse(
+        self.assertTrue(cfg["respawn_crop_calibrated"])
+        self.assertTrue(
             video_utils.respawn_crop_is_calibrated(video_utils.DEFAULT_RESPAWN_CROP))
+        with _calibrated_flag(False):
+            self.assertFalse(
+                video_utils.respawn_crop_is_calibrated(video_utils._FALLBACK_RESPAWN_CROP))
 
     def test_flag_true_calibrates_even_with_placeholder_coords(self):
         """开关是权威状态：置true后坐标仍是占位值也算已标定。"""
