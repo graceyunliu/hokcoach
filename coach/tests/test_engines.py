@@ -39,6 +39,7 @@ class TestMiniYaml(unittest.TestCase):
         self.assertEqual(cfg["llm"]["api_key_env"], "COACH_LLM_API_KEY")
         self.assertEqual(cfg["llm"]["vision"]["model"], "qwen3-vl-plus")
         self.assertEqual(cfg["video"]["coarse_interval_sec"], 75)
+        self.assertEqual(cfg["video"]["kda_reader"], "vlm")
         self.assertFalse(cfg["voice"]["enabled"])
 
     def test_parses_persona_lists(self):
@@ -381,6 +382,29 @@ class TestOrchestratorDeathWindowWiring(unittest.TestCase):
         self.assertEqual(captured["kwargs"]["death_window"], (40.0, 44.0))
         # 生产路径不得走无锚点扫描（AGE-131误报的来源）
         self.assertNotIn("allow_unanchored", captured["kwargs"])
+
+    def test_template_reader_does_not_require_vlm(self):
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None
+        orch.vlm = None
+        with tempfile.TemporaryDirectory() as tmp:
+            video = Path(tmp) / "clip.mp4"
+            video.write_bytes(b"")
+            with mock.patch.object(video_utils, "_load_video_config",
+                                   return_value={"kda_reader": "template"}), \
+                 mock.patch.object(video_utils, "make_template_kda_reader",
+                                   return_value=lambda p: None) as factory, \
+                 mock.patch.object(video_utils, "extract_death_events",
+                                   return_value=[]), \
+                 mock.patch.object(Orchestrator, "review_replay",
+                                   lambda self, replay, **kw: replay), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                rc = orch.analyze_video(str(video), interactive=False)
+
+        self.assertEqual(rc, 0)
+        factory.assert_called_once_with()
 
 
 @unittest.skipUnless(_HAS_CV2 and _HAS_FFMPEG, "需要 opencv-python + numpy + ffmpeg")

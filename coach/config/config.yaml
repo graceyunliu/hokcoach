@@ -39,6 +39,7 @@ llm:
 # 视频检测区域（AGE-49：基于验证素材1290×2796竖屏录屏标定，
 # 换设备/游戏UI改版后需重新标定）
 video:
+  kda_reader: vlm   # vlm | template；AGE-136模板法可显式开启，经更多对局验证前保留VLM默认
   hud_crop:      {x: 1650, y: 0, w: 650, h: 140}   # KDA计数器区域
   minimap_crop:  {x: 0,    y: 0, w: 420, h: 320}   # 小地图区域
   # AGE-140标定完成（2026-08-17）：在ScreenRecording_08-12-2026 02-03-33_1.MP4

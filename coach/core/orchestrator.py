@@ -215,13 +215,27 @@ class Orchestrator:
         if not Path(video_path).exists():
             print(f"找不到视频文件: {video_path}")
             return 1
-        if self.vlm is None:
-            print("视频自动复盘需要视觉模型读取HUD计数器（config.yaml llm.vision段"
-                  "+ API key）。当前未配置，请先用 --replay --manual 手动录入。")
+        reader_kind = str(
+            video_utils._load_video_config().get("kda_reader", "vlm")
+        ).strip().lower()
+        if reader_kind == "template":
+            try:
+                kda_reader = video_utils.make_template_kda_reader()
+            except RuntimeError as err:
+                print(f"模板KDA读数器不可用: {err}")
+                return 1
+        elif reader_kind == "vlm":
+            if self.vlm is None:
+                print("视频自动复盘需要视觉模型读取HUD计数器（config.yaml "
+                      "llm.vision段 + API key）。也可把video.kda_reader设为template"
+                      "使用本地确定性读数，或用 --replay --manual 手动录入。")
+                return 1
+            kda_reader = video_utils.make_vlm_kda_reader(self.vlm)
+        else:
+            print(f"不支持的video.kda_reader: {reader_kind!r}（可选 vlm | template）")
             return 1
 
         print("Coach> 正在分析你的回放...（HUD粗采样+二分定位，会有一会儿）")
-        kda_reader = video_utils.make_vlm_kda_reader(self.vlm)
         events = video_utils.extract_death_events(video_path, kda_reader)
         print(f"Coach> 检测到{len(events)}次死亡。提取死亡前小地图轨迹...")
 
