@@ -407,6 +407,92 @@ class TestOrchestratorDeathWindowWiring(unittest.TestCase):
         factory.assert_called_once_with()
 
 
+class TestOrchestratorStructuredReview(unittest.TestCase):
+    """AGE-177：review_replay拆成的两段函数必须在无stdin/无终端环境下可直接
+    调用并返回结构化结果——这是FastAPI层能接进来的前提，不能是CLI专属。"""
+
+    def _replay_with_deaths(self, n: int) -> dict:
+        replay = data_utils.default_replay(hero_played="瑶")
+        replay["deaths"] = n
+        replay["death_analysis"]["details"] = [
+            {"timestamp": f"{i}:00", "type": "探草死", "location": "中路草",
+             "location_source": None, "classify_reason": "test",
+             "evidence_sufficient": True, "confidence": 0.6}
+            for i in range(n)
+        ]
+        return replay
+
+    def test_analyze_first_death_no_llm_call_and_no_stdin(self):
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None
+        replay = self._replay_with_deaths(2)
+
+        # 不依赖stdin（EOFError场景下input()会炸，这里的函数干脆不调用input）
+        with mock.patch("builtins.input", side_effect=EOFError):
+            analysis = orch.analyze_first_death(replay)
+
+        self.assertEqual(analysis["deaths"], 2)
+        self.assertIsNotNone(analysis["first_death"])
+        self.assertIsNone(analysis["first_death"].get("ai_comment"))
+        self.assertEqual(len(analysis["other_deaths"]), 1)
+
+    def test_finalize_review_returns_structured_result_and_saves(self):
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None  # 降级模式：走_fallback_comment，不接网
+        replay = self._replay_with_deaths(1)
+        analysis = orch.analyze_first_death(replay)
+
+        with tempfile.TemporaryDirectory() as tmp, \
+             mock.patch.object(data_utils, "REPLAYS_DIR", Path(tmp)):
+            result = orch.finalize_review(
+                replay, analysis["first_death"], user_intent="去支援")
+            self.assertTrue(Path(result["saved_path"]).exists())
+
+        self.assertIsInstance(result["comment"], str)
+        self.assertTrue(result["comment"])
+        self.assertEqual(
+            replay["death_analysis"]["details"][0]["user_intent"], "去支援")
+        self.assertIsNone(result["report_path"])
+
+    def test_finalize_review_zero_deaths_does_not_crash(self):
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None
+        replay = self._replay_with_deaths(0)
+        analysis = orch.analyze_first_death(replay)
+        self.assertIsNone(analysis["first_death"])
+
+        with tempfile.TemporaryDirectory() as tmp, \
+             mock.patch.object(data_utils, "REPLAYS_DIR", Path(tmp)):
+            result = orch.finalize_review(replay, analysis["first_death"])
+            self.assertTrue(Path(result["saved_path"]).exists())
+
+        self.assertIsNone(result["comment"])
+
+    def test_review_replay_cli_wrapper_still_prints(self):
+        """CLI薄封装向后兼容：终端体验（print输出）不变。"""
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None
+        replay = self._replay_with_deaths(1)
+
+        buf = io.StringIO()
+        with tempfile.TemporaryDirectory() as tmp, \
+             mock.patch.object(data_utils, "REPLAYS_DIR", Path(tmp)), \
+             contextlib.redirect_stdout(buf):
+            orch.review_replay(replay, interactive=False)
+
+        out = buf.getvalue()
+        self.assertIn("这局你死了1次", out)
+        self.assertIn("复盘记录已保存", out)
+
+
 @unittest.skipUnless(_HAS_CV2 and _HAS_FFMPEG, "需要 opencv-python + numpy + ffmpeg")
 class TestExtractDeathLocation(unittest.TestCase):
     """端到端：合成一个短视频（前2秒无标记，之后出现X），验证向后搜索定位。"""

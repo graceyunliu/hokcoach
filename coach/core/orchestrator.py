@@ -133,24 +133,80 @@ class Orchestrator:
         return "\n".join(lines)
 
     # ------------------------------------------------------------------
-    # 复盘对话流程（5.2交互示例的文本版）
+    # 复盘对话流程（5.2交互示例）—— 结构化版本（AGE-177）
     # ------------------------------------------------------------------
+    #
+    # 拆成两段，供CLI和FastAPI共用，谁都不在这层做print/input：
+    #   1. analyze_first_death(replay) —— 只看第一次死亡（persona原则：一次
+    #      只说一个问题），返回归因+其余死亡列表，不调LLM生成点评（还没问
+    #      user_intent，太早生成点评等于没给用户补充上下文的机会）。
+    #   2. finalize_review(replay, first, user_intent, output) —— 传入可选的
+    #      user_intent，调用comment_death生成最终点评，落盘replay，可选导出
+    #      报告文件，返回结构化结果。
+    # 两段都不落盘/不生成点评时，调用方（CLI/API）可以先展示归因、拿到用户
+    # 输入后再调第二段——这正是原review_replay里input()卡住的那一步，现在
+    # 拆开后两段都不阻塞。
+
+    def analyze_first_death(self, replay: dict[str, Any]) -> dict[str, Any]:
+        """只分析（不生成AI点评）：返回第一次死亡的归因信息+其余死亡列表。
+
+        Returns: {
+          "deaths": int,
+          "first_death": dict|None,   # details[0]，未附加ai_comment
+          "other_deaths": list[dict], # details[1:]，仅归因，不深入点评
+        }
+        """
+        details = replay["death_analysis"]["details"]
+        return {
+            "deaths": replay.get("deaths", 0),
+            "first_death": details[0] if details else None,
+            "other_deaths": details[1:] if len(details) > 1 else [],
+        }
+
+    def finalize_review(self, replay: dict[str, Any],
+                        first_death: dict[str, Any] | None,
+                        user_intent: str | None = None,
+                        output: str | None = None) -> dict[str, Any]:
+        """对first_death生成AI点评（如果有）、落盘replay、可选导出报告。
+
+        Returns: {"replay": dict, "comment": str|None, "saved_path": str,
+                   "report_path": str|None}
+        """
+        comment = None
+        if first_death is not None:
+            comment = self.comment_death(first_death, user_intent=user_intent)
+            first_death["ai_comment"] = comment
+            if user_intent:
+                first_death["user_intent"] = user_intent
+
+        path = data_utils.save_replay(replay)
+        report_path = None
+        if output:
+            self._write_report(replay, output)
+            report_path = output
+        return {
+            "replay": replay,
+            "comment": comment,
+            "saved_path": str(path),
+            "report_path": report_path,
+        }
 
     def review_replay(self, replay: dict[str, Any],
                       interactive: bool = True,
                       output: str | None = None) -> dict[str, Any]:
-        """对一份replay记录跑复盘对话：只深入点评第一次死亡（persona原则：
-        一次只说一个问题），其余死亡列出归因。落盘并可选导出报告。"""
-        details = replay["death_analysis"]["details"]
-        print(f"\nCoach> 这局你死了{replay['deaths']}次。", end="")
-        if not details:
+        """CLI专用薄封装：保留原来的print+input终端体验，内部调用上面两段
+        结构化函数。非终端场景（FastAPI等）请直接调用
+        analyze_first_death/finalize_review，不要用这个函数。"""
+        analysis = self.analyze_first_death(replay)
+        print(f"\nCoach> 这局你死了{analysis['deaths']}次。", end="")
+        first = analysis["first_death"]
+        if first is None:
             print("零死亡——这局我们没什么好挑的，保持。")
-            path = data_utils.save_replay(replay)
-            print(f"Coach> [复盘记录已保存: {path.name}]")
+            result = self.finalize_review(replay, None)
+            print(f"Coach> [复盘记录已保存: {Path(result['saved_path']).name}]")
             return replay
         print("我们只看第一次。")
 
-        first = details[0]
         where = f"，地点{first['location']}" if first.get("location") else ""
         print(f"Coach> {first.get('timestamp', '?')}{where}，"
               f"初步归因是「{first.get('type')}」。")
@@ -159,24 +215,19 @@ class Orchestrator:
         if interactive and _interactive_possible():
             user_intent = _ask_user("Coach> 你当时是想去干嘛？") or None
 
-        comment = self.comment_death(first, user_intent=user_intent)
-        first["ai_comment"] = comment
-        if user_intent:
-            first["user_intent"] = user_intent
-        print(f"\nCoach> {comment}\n")
+        result = self.finalize_review(replay, first, user_intent=user_intent,
+                                      output=output)
+        print(f"\nCoach> {result['comment']}\n")
 
-        if len(details) > 1:
+        if analysis["other_deaths"]:
             print("Coach> 其余死亡的归因（本次不展开）：")
-            for d in details[1:]:
+            for d in analysis["other_deaths"]:
                 print(f"  - {d.get('timestamp', '?')} {d.get('type')}"
                       f"（{d.get('classify_reason', '')}）")
 
-        path = data_utils.save_replay(replay)
-        print(f"\nCoach> [复盘记录已保存: {path.name}]")
-
-        if output:
-            self._write_report(replay, output)
-            print(f"Coach> [复盘报告已导出: {output}]")
+        print(f"\nCoach> [复盘记录已保存: {Path(result['saved_path']).name}]")
+        if result["report_path"]:
+            print(f"Coach> [复盘报告已导出: {result['report_path']}]")
         return replay
 
     def _write_report(self, replay: dict[str, Any], output: str) -> None:
