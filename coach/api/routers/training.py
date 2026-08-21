@@ -7,7 +7,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
@@ -19,9 +19,12 @@ router = APIRouter(prefix="/training", tags=["training"])
 
 
 class CheckinRequest(BaseModel):
+    # 注意：pydantic在运行时要实际求值这些类型注解（不受from __future__
+    # import annotations影响），所以这里必须用Optional[X]而不是`X | None`——
+    # 后者是PEP 604语法，Python 3.10+才支持，Grace本机是3.9会直接炸。
     rate: int = Field(ge=0, le=100, description="今日执行率0-100")
-    note: str | None = None
-    when: str | None = Field(default=None, description="YYYY-MM-DD，缺省为今天")
+    note: Optional[str] = None
+    when: Optional[str] = Field(default=None, description="YYYY-MM-DD，缺省为今天")
 
 
 @router.get("/current")
