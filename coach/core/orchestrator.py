@@ -114,9 +114,18 @@ class Orchestrator:
             audio_lines = []
             for event in detail["audio_context"]:
                 relation = event.get("relationship", "context")
-                identity_note = (
-                    "; identity unconfirmed" if lang == "en" else "；身份未确认"
-                ) if event.get("identity_confirmation_required") else ""
+                identity_status = event.get("identity_status")
+                if identity_status == "confirmed_player_victim":
+                    identity_note = ("; player was victim" if lang == "en"
+                                     else "；已确认玩家为受害者")
+                elif identity_status == "confirmed_teammate_victim":
+                    identity_note = ("; teammate was victim" if lang == "en"
+                                     else "；已确认队友为受害者")
+                elif event.get("identity_confirmation_required"):
+                    identity_note = ("; identity unconfirmed" if lang == "en"
+                                     else "；身份未确认")
+                else:
+                    identity_note = ""
                 audio_lines.append(
                     f"{float(event.get('offset_from_death_sec', 0)):+.1f}s "
                     f"{event.get('event')} [{relation}{identity_note}]")

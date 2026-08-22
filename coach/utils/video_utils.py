@@ -1263,6 +1263,46 @@ def relate_audio_events_to_death(
         float(event["ts"]), event["event"], event["perspective"]))
 
 
+def corroborate_audio_combat_identity(
+    audio_context: list[dict[str, Any]],
+    kill_feed_events: list[dict[str, Any]],
+    *,
+    match_window_sec: float = 2.0,
+) -> list[dict[str, Any]]:
+    """Resolve combat-announcement identity only from explicit kill-feed evidence.
+
+    ``victim_is_player=False`` is meaningful: it distinguishes a teammate dying
+    shortly after the player from the player's death completing an enemy multikill.
+    Missing or ambiguous visual evidence stays explicitly unresolved (AGE-250).
+    """
+    if match_window_sec < 0:
+        raise ValueError("kill-feed match window must be non-negative")
+    resolved: list[dict[str, Any]] = []
+    for raw in audio_context:
+        event = dict(raw)
+        if not event.get("identity_confirmation_required"):
+            event.setdefault("identity_status", "not_required")
+            resolved.append(event)
+            continue
+        nearby = [feed for feed in kill_feed_events
+                  if abs(float(feed.get("ts", -1e9)) - float(event["ts"]))
+                  <= match_window_sec]
+        unambiguous = nearby[0] if len(nearby) == 1 else None
+        if unambiguous is None or unambiguous.get("victim_is_player") is None:
+            event["identity_status"] = "unresolved"
+            event["identity_reason"] = "missing_or_ambiguous_kill_feed"
+        elif bool(unambiguous["victim_is_player"]):
+            event["identity_status"] = "confirmed_player_victim"
+            event["identity_reason"] = "kill_feed_player_victim"
+        else:
+            event["identity_status"] = "confirmed_teammate_victim"
+            event["identity_reason"] = "kill_feed_nonplayer_victim"
+        if unambiguous and unambiguous.get("killer_hero"):
+            event["killer_hero"] = unambiguous["killer_hero"]
+        resolved.append(event)
+    return resolved
+
+
 def fuse_visual_audio_confidence(
     visual_confidence: float,
     visual_ts: float,

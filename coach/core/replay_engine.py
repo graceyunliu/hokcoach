@@ -161,6 +161,8 @@ def build_replay_from_video(video_path: str,
             replay["audio_timeline"], float(event.get("ts", 0.0)),
             timestamp_uncertainty_sec=float(
                 event.get("timestamp_uncertainty_sec", 0.0)))
+        audio_context = video_utils.corroborate_audio_combat_identity(
+            audio_context, list(event.get("kill_feed_events") or []))
         evidence = {
             "death_time": format_ts(event.get("ts")),
             "death_location": event.get("location"),

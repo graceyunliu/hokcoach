@@ -302,6 +302,22 @@ class TestAudioFusion(unittest.TestCase):
         self.assertTrue(related[1]["identity_confirmation_required"])
         self.assertEqual(related[2]["relationship"], "team_intent")
 
+    def test_kill_feed_distinguishes_player_from_teammate_multikill_victim(self):
+        audio = [{
+            "ts": 101.1, "event": "multi_kill_2", "category": "combat",
+            "perspective": "enemy", "identity_confirmation_required": True,
+        }]
+        player = video_utils.corroborate_audio_combat_identity(
+            audio, [{"ts": 101.0, "victim_is_player": True,
+                     "killer_hero": "妲己"}])
+        teammate = video_utils.corroborate_audio_combat_identity(
+            audio, [{"ts": 101.0, "victim_is_player": False}])
+        unresolved = video_utils.corroborate_audio_combat_identity(audio, [])
+        self.assertEqual(player[0]["identity_status"], "confirmed_player_victim")
+        self.assertEqual(player[0]["killer_hero"], "妲己")
+        self.assertEqual(teammate[0]["identity_status"], "confirmed_teammate_victim")
+        self.assertEqual(unresolved[0]["identity_status"], "unresolved")
+
 
 if __name__ == "__main__":
     unittest.main()
