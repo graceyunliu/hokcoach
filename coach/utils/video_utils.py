@@ -21,6 +21,7 @@ HUD/minimap裁剪坐标与采样参数从 config.yaml 的 `video:` 节读取（A
 
 from __future__ import annotations
 
+import json
 import logging
 import math
 import subprocess
@@ -840,6 +841,69 @@ def detect_anomalous_displacements(
 # ---------------------------------------------------------------------------
 # AGE-243: audio template matching + confidence fusion
 # ---------------------------------------------------------------------------
+
+_DEFAULT_AUDIO_CATALOG = (
+    Path(__file__).resolve().parent.parent / "assets" / "audio_templates" /
+    "game_voice_catalog.json"
+)
+_DEFAULT_LOCAL_GAME_VOICES = Path(__file__).resolve().parents[2] / "Game Voices"
+_AUDIO_CATALOG_USAGES = {"evidence", "intent", "context", "exclude"}
+
+
+def load_audio_template_catalog(
+    catalog_path: Path = _DEFAULT_AUDIO_CATALOG,
+    *,
+    usages: Optional[set[str]] = None,
+) -> list[dict[str, Any]]:
+    """Load and validate semantic metadata for local game-voice templates.
+
+    The catalog is safe to ship because it contains labels only. The referenced
+    game audio remains local and ignored by Git. ``usage=evidence`` entries may
+    corroborate observed gameplay; pings are ``intent`` and draft audio is
+    ``exclude`` so neither is mistaken for an event that actually occurred.
+    """
+    payload = json.loads(Path(catalog_path).read_text(encoding="utf-8"))
+    if payload.get("schema_version") != 1 or not isinstance(payload.get("entries"), list):
+        raise ValueError("unsupported audio template catalog schema")
+    if usages is not None and not usages <= _AUDIO_CATALOG_USAGES:
+        raise ValueError("unknown audio catalog usage filter")
+    entries: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    required = {"file", "event", "category", "perspective", "usage"}
+    for raw in payload["entries"]:
+        if not isinstance(raw, dict) or not required <= raw.keys():
+            raise ValueError("invalid audio catalog entry")
+        filename = raw["file"]
+        if (not isinstance(filename, str) or not filename.endswith(".wav") or
+                Path(filename).name != filename):
+            raise ValueError("audio catalog filenames must be local WAV basenames")
+        if filename in seen:
+            raise ValueError(f"duplicate audio catalog filename: {filename}")
+        if raw["usage"] not in _AUDIO_CATALOG_USAGES:
+            raise ValueError(f"unknown audio catalog usage: {raw['usage']}")
+        seen.add(filename)
+        if usages is None or raw["usage"] in usages:
+            entries.append(dict(raw))
+    return entries
+
+
+def resolve_audio_template_catalog(
+    template_dir: Path = _DEFAULT_LOCAL_GAME_VOICES,
+    catalog_path: Path = _DEFAULT_AUDIO_CATALOG,
+    *,
+    usages: Optional[set[str]] = None,
+    require_files: bool = True,
+) -> list[dict[str, Any]]:
+    """Resolve catalog records to local paths without executing downloaded data."""
+    resolved: list[dict[str, Any]] = []
+    for entry in load_audio_template_catalog(catalog_path, usages=usages):
+        path = Path(template_dir) / entry["file"]
+        if require_files and not path.is_file():
+            continue
+        item = dict(entry)
+        item["path"] = path
+        resolved.append(item)
+    return resolved
 
 def extract_audio_track(video_path: str, output_wav: Path,
                         sample_rate: int = 16000) -> Path:

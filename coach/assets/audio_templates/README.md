@@ -30,16 +30,45 @@ best common 0.8-second motif had only 0.741 worst-case similarity and a template
 from one event did not reproduce at the other two at threshold 0.82. It was
 rejected rather than mislabeled as a reliable kill announcement.
 
-No `first_blood`, `double_kill`, or `tower_destroyed` template is shipped yet.
-The available candidate segments are mixed with combat/voice/UI sounds or lack
-independent ground-truth occurrences. Add these only from a clean capture or a
-manually verified quiet segment, with source/license and confusion checks.
+No redistributed `first_blood`, `double_kill`, or `tower_destroyed` WAV is
+shipped. A local collection can now supply these voices through
+`game_voice_catalog.json`; only its semantic metadata is committed.
 
 Candidate labels to capture and validate:
 
 - `first_blood.wav`
 - `double_kill.wav` (and other multi-kill callouts only if pairwise confusion is low)
 - `tower_destroyed.wav`
+
+## Local 65-voice semantic catalog
+
+`game_voice_catalog.json` maps the 65 files in the repository-root
+`Game Voices/` directory to stable semantic event IDs. Alternate announcer
+wording, including the Jinchan (`金蝉`) nonviolent callouts, maps to the same
+underlying event. Each record also carries perspective and one usage policy:
+
+- `evidence`: may positively corroborate a gameplay event;
+- `intent`: a player-issued tactical ping, not proof the action happened;
+- `context`: match-phase context rather than a coaching event;
+- `exclude`: draft/ban audio, excluded from gameplay detection.
+
+Load metadata with `load_audio_template_catalog()` or resolve locally available
+files with `resolve_audio_template_catalog()`. Consumers should normally select
+`usages={"evidence"}`. The raw directory is deliberately ignored by Git: the
+downloads are Tencent game audio and VoiceWiki does not establish a clear right
+to redistribute third-party works.
+
+The local collection was inspected before use: all 65 files are ordinary
+RIFF/WAVE PCM, every declared RIFF size equals the physical file size, only
+`fmt ` and `data` chunks are present, and every file decodes with FFmpeg. This
+rules out the common disguised-file/appended-payload risks; it is not a claim
+that a general-purpose malware scanner was run.
+
+Pairwise log-spectrum confusion was also checked across the collection. The
+largest observed aligned similarity was 0.667, below the matcher default of
+0.78. This indicates useful separation on this dataset but is not a production
+accuracy guarantee; recording mixes and future announcer variants still need
+false-positive validation.
 
 The utilities in `coach/utils/video_utils.py` extract PCM audio, perform
 normalized log-spectrum template matching, and fuse a matching event into an

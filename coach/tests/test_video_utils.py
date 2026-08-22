@@ -185,6 +185,23 @@ class TestAudioFusion(unittest.TestCase):
         self.assertEqual(len(samples), 12800)
         self.assertGreater(float(np.max(np.abs(samples))), 0.9)
 
+    def test_game_voice_catalog_maps_all_65_local_templates(self):
+        entries = video_utils.load_audio_template_catalog()
+        self.assertEqual(len(entries), 65)
+        self.assertEqual(len({entry["file"] for entry in entries}), 65)
+        self.assertTrue(all(entry["usage"] == "exclude"
+                            for entry in entries if entry["category"] == "draft"))
+        jinchan_death = [entry for entry in entries
+                         if entry["file"].endswith("金蝉播报 被击杀1.wav")]
+        self.assertEqual(jinchan_death[0]["event"], "player_death")
+
+    def test_game_voice_catalog_usage_filter(self):
+        evidence = video_utils.load_audio_template_catalog(usages={"evidence"})
+        self.assertTrue(evidence)
+        self.assertTrue(all(entry["usage"] == "evidence" for entry in evidence))
+        self.assertFalse(any(entry["category"] in {"draft", "communication"}
+                             for entry in evidence))
+
 
 if __name__ == "__main__":
     unittest.main()
