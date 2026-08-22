@@ -478,6 +478,53 @@ def identify_player_icon(ally_icons: list[dict[str, Any]]) -> Optional[dict[str,
     return candidates[0] if len(candidates) == 1 else None
 
 
+def detect_solo_in_enemy_half(
+    samples: list[dict[str, Any]],
+    *,
+    isolation_distance_px: float,
+    crop: dict[str, int] = DEFAULT_MINIMAP_CROP,
+) -> Optional[bool]:
+    """Use the latest reliable minimap sample to detect an isolated overextension.
+
+    ``True`` requires both conditions from AGE-236: the uniquely identified player
+    is in the calibrated enemy half, and no visible teammate is within the configured
+    isolation radius.  ``False`` means a reliable sample disproves at least one of
+    those conditions.  ``None`` means the player or territory cannot be determined;
+    callers must preserve that abstention instead of selecting an arbitrary ally.
+
+    Missing teammate icons are treated as "no visible support", which is deliberately
+    only a proxy for actual support availability (a teammate may be useful while not
+    visible to this detector).  Equality is not isolated: distance must be strictly
+    greater than the configured boundary.
+    """
+    boundary = float(isolation_distance_px)
+    if boundary <= 0:
+        raise ValueError("isolation_distance_px must be positive")
+
+    reliable = [sample for sample in samples if sample.get("player")]
+    if not reliable:
+        return None
+    sample = max(reliable, key=lambda item: float(item.get("ts", 0.0)))
+    player = sample["player"]
+    side = river_side((float(player["cx"]), float(player["cy"])), crop=crop)
+    if side == "not_determinable":
+        return None
+    if side != "enemy":
+        return False
+
+    teammates = [
+        icon for icon in (sample.get("allies") or [])
+        if icon.get("player_marker") is not True
+    ]
+    if not teammates:
+        return True
+    nearest = min(math.hypot(
+        float(icon["cx"]) - float(player["cx"]),
+        float(icon["cy"]) - float(player["cy"]),
+    ) for icon in teammates)
+    return nearest > boundary
+
+
 def grab_minimap_frame(video_path: str, ts: float, out_path: Path,
                        crop: dict[str, int] = DEFAULT_MINIMAP_CROP) -> Path:
     """在时刻ts解码单帧并裁剪minimap区域。"""

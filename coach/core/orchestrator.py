@@ -406,6 +406,15 @@ class Orchestrator:
                 positions = video_utils.extract_minimap_positions(
                     video_path, around_ts=e["ts"])
                 context = video_utils.summarize_minimap_context(positions, e["ts"])
+                isolation_distance = movement_cfg.get("ally_isolation_distance_px")
+                if isolation_distance is not None:
+                    e["solo_in_enemy_half"] = video_utils.detect_solo_in_enemy_half(
+                        positions,
+                        isolation_distance_px=float(isolation_distance),
+                    )
+                else:
+                    # A missing distance calibration is evidence absence, not False.
+                    e["solo_in_enemy_half"] = None
                 scale = movement_cfg.get("minimap_pixels_per_world_unit")
                 max_speed = movement_cfg.get("hero_max_move_speed_world_units_sec")
                 if scale is not None and max_speed is not None:

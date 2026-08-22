@@ -530,6 +530,42 @@ class TestOrchestratorVideoPipelineExtraction(unittest.TestCase):
         self.assertTrue(stages, "progress_cb从没被调用")
         self.assertEqual(buf.getvalue(), "", "纯数据管线不应该自己print")
 
+    def test_real_solo_signal_is_wired_into_replay(self):
+        """AGE-236: production extraction must calculate, not merely preserve, it."""
+        from core.orchestrator import Orchestrator
+
+        event = {"ts": 10.0, "window": (8.0, 12.0), "kda_before": (0, 0, 0),
+                 "kda_after": (0, 1, 0), "kill_traded": False}
+        player = {"cx": 300.0, "cy": 20.0, "player_marker": True}
+        positions = [{"ts": 9.0, "player": player, "allies": [player],
+                      "enemies": [], "enemy_visible_count": 0,
+                      "ally_visible_count": 1}]
+        orch = Orchestrator()
+        orch.llm = None
+        orch.vlm = None
+
+        with tempfile.TemporaryDirectory() as tmp:
+            video = Path(tmp) / "clip.mp4"
+            video.write_bytes(b"")
+            with mock.patch.object(video_utils, "_load_video_config", return_value={
+                    "kda_reader": "template", "ally_isolation_distance_px": 90,
+                    "minimap_pixels_per_world_unit": None,
+                    "hero_max_move_speed_world_units_sec": None,
+                 }), \
+                 mock.patch.object(video_utils, "make_template_kda_reader",
+                                   return_value=lambda p: None), \
+                 mock.patch.object(video_utils, "extract_death_events",
+                                   return_value=[event]), \
+                 mock.patch.object(video_utils, "extract_minimap_positions",
+                                   return_value=positions), \
+                 mock.patch.object(video_utils, "extract_death_location",
+                                   return_value=None):
+                replay = orch.build_replay_from_video_path(str(video))
+
+        detail = replay["death_analysis"]["details"][0]
+        self.assertTrue(detail["solo_in_enemy_half"])
+        self.assertEqual(detail["type"], "掉点死")
+
     def test_low_kda_read_coverage_adds_replay_warning(self):
         """AGE-187：少于一半HUD采样可读时，结果必须显式标为不可信。"""
         from core.orchestrator import Orchestrator

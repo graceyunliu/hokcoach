@@ -62,6 +62,12 @@ video:
     - [0.821, 0.375]
     - [0.929, 0.219]
     - [1.000, 0.116]
+  # AGE-236: in the calibrated 420x320 crop, a visible ally farther than this
+  # radius is treated as no nearby support. Real-video spot checks separated a
+  # clearly grouped sample (~74px) from a dispersed sample (~125px); 90px keeps
+  # the boundary between them. This remains a coarse proxy, not a claim that
+  # minimap distance exactly equals effective support distance.
+  ally_isolation_distance_px: 90
   # AGE-237：位移阈值要由经验标定或游戏数值提供；未标定时生产路径必须拒绝猜测。
   minimap_pixels_per_world_unit: null
   hero_max_move_speed_world_units_sec: null

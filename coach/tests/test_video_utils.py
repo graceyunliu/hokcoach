@@ -105,6 +105,41 @@ class TestRiverGeometry(unittest.TestCase):
                          "not_determinable")
 
 
+class TestSoloInEnemyHalf(unittest.TestCase):
+    CROP = {"x": 0, "y": 0, "w": 100, "h": 100}
+
+    @staticmethod
+    def _sample(teammate_x=None):
+        player = {"cx": 80.0, "cy": 10.0, "player_marker": True}
+        allies = [player]
+        if teammate_x is not None:
+            allies.append({"cx": float(teammate_x), "cy": 10.0})
+        return [{"ts": 10.0, "player": player, "allies": allies}]
+
+    def test_isolated_enemy_half_is_true(self):
+        self.assertTrue(video_utils.detect_solo_in_enemy_half(
+            self._sample(20), isolation_distance_px=40, crop=self.CROP))
+
+    def test_nearby_teammate_is_false(self):
+        self.assertFalse(video_utils.detect_solo_in_enemy_half(
+            self._sample(60), isolation_distance_px=40, crop=self.CROP))
+
+    def test_boundary_distance_is_not_isolated(self):
+        self.assertFalse(video_utils.detect_solo_in_enemy_half(
+            self._sample(40), isolation_distance_px=40, crop=self.CROP))
+
+    def test_missing_player_abstains(self):
+        self.assertIsNone(video_utils.detect_solo_in_enemy_half(
+            [{"ts": 10.0, "player": None, "allies": []}],
+            isolation_distance_px=40, crop=self.CROP))
+
+    def test_friendly_half_is_false_even_without_teammates(self):
+        player = {"cx": 20.0, "cy": 90.0, "player_marker": True}
+        self.assertFalse(video_utils.detect_solo_in_enemy_half(
+            [{"ts": 10.0, "player": player, "allies": [player]}],
+            isolation_distance_px=40, crop=self.CROP))
+
+
 @unittest.skipUnless(_HAS_CV2, "需要 opencv-python + numpy")
 class TestPlayerIconIdentity(unittest.TestCase):
     def test_unique_green_outer_ring_identifies_player(self):
