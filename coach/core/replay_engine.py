@@ -161,6 +161,10 @@ def build_replay_from_video(video_path: str,
             "death_location_source": event.get("location_source"),  # AGE-46
             "minimap_context": mm,
             "kill_traded": event.get("kill_traded"),
+            # AGE-236生产检测器尚需已标定的河道几何+玩家图标身份；
+            # 一旦上游event提供该信号，组装层不得丢失它。
+            "solo_in_enemy_half": event.get("solo_in_enemy_half"),
+            "anomalous_displacement": event.get("anomalous_displacement"),
             "self_attribution": None,
         }
         cls = classify_death(evidence, llm=llm, lang=lang)
@@ -176,6 +180,9 @@ def build_replay_from_video(video_path: str,
             "location_source": event.get("location_source"),  # AGE-46
             "killer": None,
             "minimap_context": mm,
+            "solo_in_enemy_half": event.get("solo_in_enemy_half"),
+            "anomalous_displacement": event.get("anomalous_displacement"),
+            "anomalous_displacements": event.get("anomalous_displacements", []),
             "self_attribution": None,
             "ai_comment": None,  # orchestrator填充
         }

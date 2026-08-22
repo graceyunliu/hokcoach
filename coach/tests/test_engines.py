@@ -192,6 +192,10 @@ class TestReplayEngine(unittest.TestCase):
         r = replay_engine.classify_death({"kill_traded": True})
         self.assertEqual(r["type"], "换头死")
 
+    def test_solo_in_enemy_half_classifies_as_isolation(self):
+        r = replay_engine.classify_death({"solo_in_enemy_half": True})
+        self.assertEqual(r["type"], "掉点死")
+
     def test_self_attribution_keywords(self):
         r = replay_engine.classify_death({"self_attribution": "贪了一波兵线被抓"})
         self.assertEqual(r["type"], "贪线死")
@@ -223,12 +227,15 @@ class TestReplayEngine(unittest.TestCase):
 
     def test_build_replay_from_video_carries_location_source(self):
         events = [{"ts": 30.0, "location": "河道草丛",
-                   "location_source": "minimap_x_marker", "kill_traded": False}]
+                   "location_source": "minimap_x_marker", "kill_traded": False,
+                   "solo_in_enemy_half": True}]
         replay = replay_engine.build_replay_from_video(
             "dummy.mp4", events, [None], llm=None)
         detail = replay["death_analysis"]["details"][0]
         self.assertEqual(detail["location"], "河道草丛")
         self.assertEqual(detail["location_source"], "minimap_x_marker")
+        self.assertTrue(detail["solo_in_enemy_half"])
+        self.assertEqual(detail["type"], "掉点死")
 
     def test_classify_manual_replay(self):
         replay = data_utils.default_replay("瑶")
@@ -241,6 +248,55 @@ class TestReplayEngine(unittest.TestCase):
         out = replay_engine.classify_manual_replay(replay, llm=None)
         self.assertEqual(out["death_analysis"]["details"][0]["type"], "探草死")
         self.assertEqual(out["death_analysis"]["categories"]["探草死"], 1)
+
+
+@unittest.skipUnless(_HAS_CV2, "需要 opencv-python + numpy")
+class TestHudFrameHopper(unittest.TestCase):
+    SLOTS = ((0, 0, 10, 10), (10, 0, 20, 10), (20, 0, 30, 10))
+
+    def _write(self, directory: str, name: str, values: tuple[int, int, int]) -> Path:
+        image = np.zeros((10, 30), dtype=np.uint8)
+        for i, value in enumerate(values):
+            image[:, i * 10:(i + 1) * 10] = value
+        path = Path(directory) / name
+        cv2.imwrite(str(path), image)
+        return path
+
+    def test_unchanged_slots_reuse_previous_result(self):
+        calls = []
+        reader = lambda path: calls.append(path) or (1, 2, 3)
+        hopper = video_utils._HudFrameHopper(reader, threshold=1.0, slots=self.SLOTS)
+        with tempfile.TemporaryDirectory() as tmp:
+            first = self._write(tmp, "first.png", (10, 20, 30))
+            second = self._write(tmp, "second.png", (10, 20, 30))
+            self.assertEqual(hopper.read(first), (1, 2, 3))
+            self.assertEqual(hopper.read(second), (1, 2, 3))
+        self.assertEqual(len(calls), 1)
+        self.assertEqual((hopper.stats.processed, hopper.stats.skipped), (1, 1))
+
+    def test_suspected_kda_change_forces_full_processing(self):
+        calls = []
+        reader = lambda path: calls.append(path) or (0, len(calls) - 1, 0)
+        hopper = video_utils._HudFrameHopper(reader, threshold=1.0, slots=self.SLOTS)
+        with tempfile.TemporaryDirectory() as tmp:
+            first = self._write(tmp, "first.png", (10, 20, 30))
+            changed = self._write(tmp, "changed.png", (10, 22, 30))
+            self.assertEqual(hopper.read(first), (0, 0, 0))
+            self.assertEqual(hopper.read(changed), (0, 1, 0))
+        self.assertEqual(len(calls), 2)
+        self.assertEqual((hopper.stats.processed, hopper.stats.skipped), (2, 0))
+
+    def test_boundary_difference_is_reused(self):
+        calls = []
+        reader = lambda path: calls.append(path) or (1, 0, 0)
+        hopper = video_utils._HudFrameHopper(reader, threshold=1.0, slots=self.SLOTS)
+        with tempfile.TemporaryDirectory() as tmp:
+            first = self._write(tmp, "first.png", (10, 20, 30))
+            boundary = self._write(tmp, "boundary.png", (11, 21, 31))
+            hopper.read(first)
+            hopper.read(boundary)
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(hopper.stats.skipped, 1)
 
 
 # ---------------------------------------------------------------------------

@@ -4,6 +4,7 @@
 import tempfile
 import sys
 import unittest
+import wave
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -86,6 +87,95 @@ class TestTemplateKdaReader(unittest.TestCase):
             path = Path(tmp) / "blank.png"
             cv2.imwrite(str(path), np.zeros((140, 650, 3), dtype=np.uint8))
             self.assertIsNone(video_utils.make_template_kda_reader()(path))
+
+
+class TestRiverGeometry(unittest.TestCase):
+    LINE = ((0.0, 1.0), (1.0, 0.0))
+
+    def test_enemy_friendly_and_boundary(self):
+        crop = {"x": 0, "y": 0, "w": 100, "h": 100}
+        self.assertEqual(video_utils.river_side((80, 10), crop, self.LINE), "enemy")
+        self.assertEqual(video_utils.river_side((20, 90), crop, self.LINE), "friendly")
+        self.assertEqual(video_utils.river_side((50, 50), crop, self.LINE), "river")
+
+    def test_outside_calibration_abstains(self):
+        crop = {"x": 0, "y": 0, "w": 100, "h": 100}
+        short = ((0.2, 0.8), (0.8, 0.2))
+        self.assertEqual(video_utils.river_side((5, 50), crop, short),
+                         "not_determinable")
+
+
+@unittest.skipUnless(_HAS_CV2, "需要 opencv-python + numpy")
+class TestPlayerIconIdentity(unittest.TestCase):
+    def test_unique_green_outer_ring_identifies_player(self):
+        image = np.zeros((320, 420, 3), dtype=np.uint8)
+        cv2.circle(image, (100, 100), 14, (255, 0, 0), -1)
+        cv2.circle(image, (200, 120), 27, (0, 255, 0), 4)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "icons.png"
+            cv2.imwrite(str(path), image)
+            icons = video_utils.detect_hero_icons(path)
+        player = video_utils.identify_player_icon(icons["allies"])
+        self.assertIsNotNone(player)
+        self.assertAlmostEqual(player["cx"], 200, delta=1)
+        self.assertEqual(player["player_marker_source"], "green_outer_ring")
+
+    def test_ambiguous_or_unmarked_abstains(self):
+        self.assertIsNone(video_utils.identify_player_icon([{"cx": 1, "cy": 1}]))
+        self.assertIsNone(video_utils.identify_player_icon([
+            {"player_marker": True}, {"player_marker": True}]))
+
+
+class TestAnomalousDisplacement(unittest.TestCase):
+    def _detect(self, distance):
+        samples = [
+            {"ts": 0.0, "enemies": [{"cx": 0.0, "cy": 0.0}]},
+            {"ts": 1.0, "enemies": [{"cx": distance, "cy": 0.0}]},
+        ]
+        return video_utils.detect_anomalous_displacements(
+            samples, max_move_speed_world_units_sec=10,
+            pixels_per_world_unit=1, threshold_multiplier=1.5,
+            jitter_tolerance_px=0)
+
+    def test_normal_movement_does_not_trigger(self):
+        self.assertEqual(self._detect(10), [])
+
+    def test_clear_jump_triggers(self):
+        findings = self._detect(25)
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0]["kind"], "anomalous_displacement")
+
+    def test_boundary_speed_does_not_trigger(self):
+        self.assertEqual(self._detect(15), [])
+
+
+@unittest.skipUnless(_HAS_CV2, "需要numpy")
+class TestAudioFusion(unittest.TestCase):
+    @staticmethod
+    def _wav(path: Path, samples, rate=8000):
+        values = np.clip(samples * 32767, -32768, 32767).astype("<i2")
+        with wave.open(str(path), "wb") as wav:
+            wav.setnchannels(1)
+            wav.setsampwidth(2)
+            wav.setframerate(rate)
+            wav.writeframes(values.tobytes())
+
+    def test_template_match_and_confidence_boost(self):
+        rate = 8000
+        tone = np.sin(2 * np.pi * 700 * np.arange(rate // 2) / rate)
+        audio = np.concatenate([np.zeros(rate), tone, np.zeros(rate)])
+        with tempfile.TemporaryDirectory() as tmp:
+            source, template = Path(tmp) / "source.wav", Path(tmp) / "kill.wav"
+            self._wav(source, audio, rate)
+            self._wav(template, tone, rate)
+            hits = video_utils.match_audio_template(
+                source, template, similarity_threshold=0.9)
+        self.assertTrue(hits)
+        self.assertAlmostEqual(hits[0]["ts"], 1.0, delta=0.06)
+        fused = video_utils.fuse_visual_audio_confidence(
+            0.6, 1.0, hits, matching_templates={"kill"})
+        self.assertTrue(fused["audio_corroborated"])
+        self.assertGreater(fused["confidence"], 0.6)
 
 
 if __name__ == "__main__":

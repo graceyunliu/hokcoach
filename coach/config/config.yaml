@@ -50,6 +50,22 @@ video:
   kda_reader: template   # vlm | template；AGE-136模板法已验证优于VLM，改为默认
   hud_crop:      {x: 1650, y: 0, w: 650, h: 140}   # KDA计数器区域
   minimap_crop:  {x: 0,    y: 0, w: 420, h: 320}   # 小地图区域
+  # AGE-247：玩家视角的小地图会将己方水晶规范化到左下、敌方水晶到右上。
+  # 下面是在三份真实录屏的420x320 minimap_crop坐标系中手工标定的
+  # 河道中心线（从左下到右上）。点位用归一化坐标，以允许等比缩放。
+  minimap_orientation: player_normalized_friendly_bottom_left
+  river_centerline_normalized:
+    - [0.405, 1.000]
+    - [0.500, 0.844]
+    - [0.607, 0.688]
+    - [0.714, 0.531]
+    - [0.821, 0.375]
+    - [0.929, 0.219]
+    - [1.000, 0.116]
+  # AGE-237：位移阈值要由经验标定或游戏数值提供；未标定时生产路径必须拒绝猜测。
+  minimap_pixels_per_world_unit: null
+  hero_max_move_speed_world_units_sec: null
+  anomalous_displacement_multiplier: 1.5
   # AGE-140标定完成（2026-08-17）：在ScreenRecording_08-12-2026 02-03-33_1.MP4
   # 三个独立死亡事件（ts=308/316/712）上核实"查看死亡回放"横幅+倒计时数字
   # 的真实像素位置，坐标系为ffmpeg按rotate元数据归一化后的2796x1290画面
@@ -68,6 +84,10 @@ video:
   respawn_crop_calibrated: true                       # 标定完真实坐标后改true
   coarse_interval_sec: 75
   precision_sec: 3
+  # AGE-242：仅跳过KDA数字槽视觉上未变的完整读数；疑似变化始终强制读取。
+  # 真实模板reader A/B总耗时反而+11.6%，因此默认不开；远程VLM reader可显式开启。
+  frame_skip_enabled: false
+  frame_skip_threshold: 1.0
 
 # 语音层已移出MVP（实现计划v1.0调整1），v1.1+再启用
 voice:

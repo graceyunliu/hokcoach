@@ -25,6 +25,7 @@ import logging
 import math
 import subprocess
 import tempfile
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Optional
 
@@ -95,6 +96,8 @@ DEFAULT_KDA_SLOTS = (
 )
 _DEFAULT_KDA_TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "assets" / "kda_templates"
 _FALLBACK_KDA_CONFIDENCE = 0.72
+_FALLBACK_FRAME_SKIP_THRESHOLD = 1.0
+_FALLBACK_FRAME_SKIP_ENABLED = False
 
 # HUD不可见时在邻近时刻重采的偏移序列（秒）
 _RESAMPLE_OFFSETS = (1.0, -1.0, 2.0, -2.0, 4.0, -4.0)
@@ -117,6 +120,65 @@ _MAX_BASELINE_COVERAGE = 0.25  # 排除圆估算覆盖裁剪区面积的比例�
 
 # config.yaml的video节里显式声明复活倒计时裁剪区是否已标定的开关键名
 _RESPAWN_CALIBRATED_KEY = "respawn_crop_calibrated"
+
+
+@dataclass
+class FrameSkipStats:
+    """AGE-242 HUD读取快路径计数器。"""
+
+    processed: int = 0
+    skipped: int = 0
+
+
+class _HudFrameHopper:
+    """对已调度的HUD帧做轻量变化检测，KDA槽未变时复用上次读数。
+
+    这一层不改变粗采样/二分定位的时间点，每个候选帧仍会解码。
+    仅当三个数字槽的平均绝对差都低于阈值时跳过较贵的读数器；
+    任一槽疑似变化都必定完整处理，因而不会跳过KDA变化点。
+    """
+
+    def __init__(self, reader: KdaReader, threshold: float,
+                 slots: tuple[tuple[int, int, int, int], ...] = DEFAULT_KDA_SLOTS):
+        self.reader = reader
+        self.threshold = max(float(threshold), 0.0)
+        self.slots = slots
+        self.previous_slots: Any = None
+        self.previous_result: Optional[KDA] = None
+        self.stats = FrameSkipStats()
+
+    def read(self, image_path: Path, force_full: bool = False) -> Optional[KDA]:
+        try:
+            import cv2  # type: ignore
+            import numpy as np  # type: ignore
+        except ImportError:
+            result = self.reader(image_path)
+            self.stats.processed += 1
+            return result
+
+        image = cv2.imread(str(image_path), cv2.IMREAD_GRAYSCALE)
+        if image is None:
+            result = self.reader(image_path)
+            self.stats.processed += 1
+            return result
+        slot_pixels = [image[y0:y1, x0:x1] for x0, y0, x1, y1 in self.slots]
+        same_shape = (self.previous_slots is not None and
+                      all(a.shape == b.shape for a, b in zip(slot_pixels, self.previous_slots)))
+        unchanged = same_shape and all(
+            float(np.mean(cv2.absdiff(current, previous))) <= self.threshold
+            for current, previous in zip(slot_pixels, self.previous_slots)
+        )
+        if not force_full and unchanged and self.previous_result is not None:
+            self.stats.skipped += 1
+            return self.previous_result
+
+        result = self.reader(image_path)
+        self.stats.processed += 1
+        # 不缓存不可读结果：邻近重采必须继续尝试完整读取。
+        if result is not None:
+            self.previous_slots = [slot.copy() for slot in slot_pixels]
+            self.previous_result = result
+        return result
 
 
 def _baseline_is_usable(points: list[tuple[float, float]],
@@ -190,7 +252,8 @@ def grab_hud_frame(video_path: str, ts: float, out_path: Path,
 
 def _read_kda_at(video_path: str, ts: float, kda_reader: KdaReader,
                  workdir: Path, crop: dict[str, int],
-                 duration: float) -> Optional[KDA]:
+                 duration: float,
+                 frame_hopper: Optional[_HudFrameHopper] = None) -> Optional[KDA]:
     """读取时刻ts的KDA；HUD不可见时在邻近时刻重采（tech spec 4.1.1已知局限(2)）。"""
     for offset in (0.0, *_RESAMPLE_OFFSETS):
         t = min(max(ts + offset, 0.0), max(duration - 0.1, 0.0))
@@ -199,7 +262,8 @@ def _read_kda_at(video_path: str, ts: float, kda_reader: KdaReader,
             grab_hud_frame(video_path, t, frame, crop)
         except subprocess.CalledProcessError:
             continue
-        kda = kda_reader(frame)
+        kda = (frame_hopper.read(frame) if frame_hopper is not None
+               else kda_reader(frame))
         if kda is not None:
             return kda
     return None
@@ -230,6 +294,9 @@ def extract_death_events(
     precision: float = DEFAULT_PRECISION,
     hud_crop: dict[str, int] = DEFAULT_HUD_CROP,
     coverage_cb: "Callable[[int, int], None] | None" = None,
+    frame_skip_enabled: Optional[bool] = None,
+    frame_skip_threshold: Optional[float] = None,
+    frame_skip_stats_cb: "Callable[[FrameSkipStats], None] | None" = None,
 ) -> list[dict[str, Any]]:
     """从回放视频提取死亡事件列表（tech spec 4.1.1 v1.2方案）。
 
@@ -244,6 +311,8 @@ def extract_death_events(
         coarse_interval: 粗采样间隔（秒），spec建议60-90。
         precision: 二分收敛窗口（秒）。
         hud_crop: HUD计数器裁剪区域（默认从config.yaml的video.hud_crop读取）。
+        frame_skip_enabled: KDA数字槽未变时复用上次读数（AGE-242）。
+        frame_skip_threshold: 数字槽平均绝对像素差阈值（0-255）。
 
     Returns:
         按时间升序的事件列表，每项:
@@ -253,13 +322,25 @@ def extract_death_events(
     """
     duration = video_duration(video_path)
     events: list[dict[str, Any]] = []
+    video_cfg = _load_video_config()
+    if frame_skip_enabled is None:
+        frame_skip_enabled = bool(video_cfg.get(
+            "frame_skip_enabled", _FALLBACK_FRAME_SKIP_ENABLED))
+    if frame_skip_threshold is None:
+        try:
+            frame_skip_threshold = float(video_cfg.get(
+                "frame_skip_threshold", _FALLBACK_FRAME_SKIP_THRESHOLD))
+        except (TypeError, ValueError):
+            frame_skip_threshold = _FALLBACK_FRAME_SKIP_THRESHOLD
 
     with tempfile.TemporaryDirectory(prefix="coach_hud_") as tmp:
         workdir = Path(tmp)
+        frame_hopper = (_HudFrameHopper(kda_reader, frame_skip_threshold)
+                        if frame_skip_enabled else None)
 
         def read(ts: float) -> Optional[KDA]:
             return _read_kda_at(video_path, ts, kda_reader, workdir,
-                                hud_crop, duration)
+                                hud_crop, duration, frame_hopper)
 
         # 1. 粗采样（跳过不可读点，窗口自然拉宽到下一个可读点）
         samples: list[tuple[float, KDA]] = []
@@ -311,6 +392,11 @@ def extract_death_events(
                 })
                 lo = hi  # 下一次递增只可能在其后
 
+        if frame_skip_stats_cb is not None:
+            stats = (frame_hopper.stats if frame_hopper is not None
+                     else FrameSkipStats(processed=0, skipped=0))
+            frame_skip_stats_cb(stats)
+
     return events
 
 
@@ -330,6 +416,11 @@ _MAX_ICON_AREA = 1500
 # 无法读取"处理，而不是猜测其中哪些是真英雄。
 _MAX_HEROES_PER_SIDE = 5
 
+_FALLBACK_RIVER_CENTERLINE_NORMALIZED = (
+    (0.405, 1.000), (0.500, 0.844), (0.607, 0.688), (0.714, 0.531),
+    (0.821, 0.375), (0.929, 0.219), (1.000, 0.116),
+)
+
 _ROW_NAMES = ("上", "中", "下")
 _COL_NAMES = ("左", "中", "右")
 
@@ -341,6 +432,49 @@ def region_label(cx: float, cy: float, w: int, h: int) -> str:
     if row == "中" and col == "中":
         return "地图中部(中路/河道)"
     return f"{col}{row}区域"
+
+
+def river_side(
+    coordinate: tuple[float, float],
+    crop: dict[str, int] = DEFAULT_MINIMAP_CROP,
+    centerline_normalized: Optional[list[list[float]] | tuple[tuple[float, float], ...]] = None,
+    boundary_tolerance_px: float = 3.0,
+) -> str:
+    """返回minimap坐标在己方半区、敌方半区或河道中线上。
+
+    标定坐标系是玩家视角规范化的小地图：己方基地左下，敌方基地
+    右上。折线以每个x对应的y分隔两侧；y小于中线是敌方半区。
+    超出crop或折线x标定范围时返回``not_determinable``，不外推猜测。
+    """
+    x, y = map(float, coordinate)
+    w, h = float(crop["w"]), float(crop["h"])
+    if not (0.0 <= x <= w and 0.0 <= y <= h):
+        return "not_determinable"
+    points = centerline_normalized
+    if points is None:
+        points = _load_video_config().get(
+            "river_centerline_normalized", _FALLBACK_RIVER_CENTERLINE_NORMALIZED)
+    try:
+        pixels = [(float(px) * w, float(py) * h) for px, py in points]
+    except (TypeError, ValueError):
+        return "not_determinable"
+    pixels.sort(key=lambda p: p[0])
+    for (x0, y0), (x1, y1) in zip(pixels, pixels[1:]):
+        if x0 <= x <= x1 and x1 > x0:
+            line_y = y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+            if abs(y - line_y) <= max(float(boundary_tolerance_px), 0.0):
+                return "river"
+            return "enemy" if y < line_y else "friendly"
+    return "not_determinable"
+
+
+def identify_player_icon(ally_icons: list[dict[str, Any]]) -> Optional[dict[str, Any]]:
+    """仅在己方图标中恰有一个绿色玩家外环时返回该图标。
+
+    无标记或多个候选都返回None，因为任选一个蓝色斑块会把猜测伪装成身份。
+    """
+    candidates = [icon for icon in ally_icons if icon.get("player_marker") is True]
+    return candidates[0] if len(candidates) == 1 else None
 
 
 def grab_minimap_frame(video_path: str, ts: float, out_path: Path,
@@ -504,6 +638,9 @@ def detect_hero_icons(minimap_image: Path,
     red = cv2.inRange(hsv, np.array([0, 90, 90]), np.array([10, 255, 255])) | \
           cv2.inRange(hsv, np.array([170, 90, 90]), np.array([180, 255, 255]))
     blue = cv2.inRange(hsv, np.array([95, 90, 90]), np.array([130, 255, 255]))
+    # 真实录屏中玩家自己的头像外环为高饱和绿色，队友为青/蓝色。
+    # 绿环是AGE-247跨三份录屏核对后采用的身份证据。
+    green = cv2.inRange(hsv, np.array([35, 80, 70]), np.array([90, 255, 255]))
 
     zones = exclude_zones or []
 
@@ -526,7 +663,42 @@ def detect_hero_icons(minimap_image: Path,
             return []
         return out
 
-    return {"enemies": _components(red), "allies": _components(blue)}
+    enemies = _components(red)
+    allies = _components(blue)
+    # 外环在当前420x320 crop中约50px见方、为中空环（低extent）。
+    # 不直接复用英雄颜色连通域：头像内部/地图植被也可能是绿色。
+    green_candidates: list[dict[str, Any]] = []
+    n_green, _, green_stats, green_centroids = cv2.connectedComponentsWithStats(green)
+    for i in range(1, n_green):
+        x, y, width, height, area = map(int, green_stats[i])
+        extent = area / max(width * height, 1)
+        aspect = width / max(height, 1)
+        if (120 <= area <= 1200 and width >= 45 and height >= 35 and
+                0.65 <= aspect <= 1.55 and extent <= 0.35):
+            cx, cy = green_centroids[i]
+            if not _in_zones(cx, cy, zones):
+                green_candidates.append({
+                    "cx": float(cx), "cy": float(cy), "area": area,
+                    "region": region_label(cx, cy, crop["w"], crop["h"]),
+                })
+    for marker in green_candidates:
+        nearest = min(
+            allies,
+            key=lambda icon: (icon["cx"] - marker["cx"]) ** 2 +
+                             (icon["cy"] - marker["cy"]) ** 2,
+            default=None,
+        )
+        if nearest is not None and math.hypot(
+                nearest["cx"] - marker["cx"], nearest["cy"] - marker["cy"]) <= 12.0:
+            nearest["player_marker"] = True
+            nearest["player_marker_source"] = "green_outer_ring"
+        else:
+            marker["player_marker"] = True
+            marker["player_marker_source"] = "green_outer_ring"
+            allies.append(marker)
+    if len(allies) > _MAX_HEROES_PER_SIDE:
+        allies = []
+    return {"enemies": enemies, "allies": allies}
 
 
 def extract_minimap_positions(
@@ -571,6 +743,8 @@ def extract_minimap_positions(
             positions.append({
                 "ts": ts,
                 "enemies": icons["enemies"],
+                "allies": icons["allies"],
+                "player": identify_player_icon(icons["allies"]),
                 "enemy_visible_count": len(icons["enemies"]),
                 "ally_visible_count": len(icons["allies"]),
             })
@@ -599,6 +773,188 @@ def summarize_minimap_context(positions: list[dict[str, Any]],
     if len(parts) > 3:
         parts = [parts[0], parts[len(parts) // 2], parts[-1]]
     return "；".join(parts)
+
+
+def detect_anomalous_displacements(
+    samples: list[dict[str, Any]],
+    *,
+    max_move_speed_world_units_sec: float,
+    pixels_per_world_unit: float,
+    threshold_multiplier: float = 1.5,
+    jitter_tolerance_px: float = 2.0,
+) -> list[dict[str, Any]]:
+    """从连续minimap敌方图标集合中检测超出物理移速的位移。
+
+    相邻帧用互为最近邻做保守的短轨迹关联；不唯一的匹配被丢弃。阈值为
+    ``max_speed * dt * scale * multiplier + jitter``。该函数只报告
+    “异常位移”，不宣称它一定是闪现。
+    """
+    speed = float(max_move_speed_world_units_sec)
+    scale = float(pixels_per_world_unit)
+    multiplier = float(threshold_multiplier)
+    jitter = max(float(jitter_tolerance_px), 0.0)
+    if speed <= 0 or scale <= 0 or multiplier < 1.0:
+        raise ValueError("speed/scale必须为正数且threshold_multiplier不得小于1")
+
+    findings: list[dict[str, Any]] = []
+    ordered = sorted(samples, key=lambda sample: float(sample["ts"]))
+    for previous, current in zip(ordered, ordered[1:]):
+        dt = float(current["ts"]) - float(previous["ts"])
+        if dt <= 0:
+            continue
+        before = previous.get("enemies") or []
+        after = current.get("enemies") or []
+        if not before or not after:
+            continue
+        nearest_after = {
+            i: min(range(len(after)), key=lambda j: math.hypot(
+                float(after[j]["cx"]) - float(icon["cx"]),
+                float(after[j]["cy"]) - float(icon["cy"])))
+            for i, icon in enumerate(before)
+        }
+        nearest_before = {
+            j: min(range(len(before)), key=lambda i: math.hypot(
+                float(before[i]["cx"]) - float(icon["cx"]),
+                float(before[i]["cy"]) - float(icon["cy"])))
+            for j, icon in enumerate(after)
+        }
+        limit = speed * scale * dt * multiplier + jitter
+        for i, j in nearest_after.items():
+            if nearest_before.get(j) != i:
+                continue
+            distance = math.hypot(
+                float(after[j]["cx"]) - float(before[i]["cx"]),
+                float(after[j]["cy"]) - float(before[i]["cy"]),
+            )
+            if distance > limit:
+                findings.append({
+                    "ts": float(current["ts"]), "from_ts": float(previous["ts"]),
+                    "distance_px": distance, "threshold_px": limit,
+                    "confidence": min(1.0, 0.5 + 0.25 * (distance / limit - 1.0)),
+                    "kind": "anomalous_displacement",
+                    "limitation": "may_include_dash_or_tracking_error",
+                })
+    return findings
+
+
+# ---------------------------------------------------------------------------
+# AGE-243: audio template matching + confidence fusion
+# ---------------------------------------------------------------------------
+
+def extract_audio_track(video_path: str, output_wav: Path,
+                        sample_rate: int = 16000) -> Path:
+    """用ffmpeg将录屏音轨提取为单声16-bit PCM WAV。"""
+    if sample_rate <= 0:
+        raise ValueError("sample_rate必须为正数")
+    output_wav.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run(
+        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+         "-i", video_path, "-vn", "-ac", "1", "-ar", str(sample_rate),
+         "-c:a", "pcm_s16le", str(output_wav)],
+        check=True,
+    )
+    return output_wav
+
+
+def _read_pcm_wav(path: Path) -> tuple[Any, int]:
+    import wave
+    try:
+        import numpy as np  # type: ignore
+    except ImportError as e:
+        raise RuntimeError("audio template matching需要numpy") from e
+    with wave.open(str(path), "rb") as wav:
+        if wav.getsampwidth() != 2:
+            raise ValueError("只支持16-bit PCM WAV")
+        rate = wav.getframerate()
+        channels = wav.getnchannels()
+        values = np.frombuffer(wav.readframes(wav.getnframes()), dtype="<i2").astype(np.float32)
+    if channels > 1:
+        values = values.reshape(-1, channels).mean(axis=1)
+    peak = float(np.max(np.abs(values))) if values.size else 0.0
+    return (values / peak if peak else values), rate
+
+
+def _audio_features(samples: Any, sample_rate: int,
+                    window_ms: float = 40.0, hop_ms: float = 20.0) -> Any:
+    """轻量对数频谱特征；每帧去均值+单位化，减小录音音量差异。"""
+    import numpy as np  # type: ignore
+    win = max(32, int(sample_rate * window_ms / 1000.0))
+    hop = max(1, int(sample_rate * hop_ms / 1000.0))
+    if len(samples) < win:
+        return np.empty((0, win // 2 + 1), dtype=np.float32)
+    frames = np.stack([samples[start:start + win]
+                       for start in range(0, len(samples) - win + 1, hop)])
+    spectrum = np.log1p(np.abs(np.fft.rfft(frames * np.hanning(win), axis=1)))
+    spectrum -= spectrum.mean(axis=1, keepdims=True)
+    norms = np.linalg.norm(spectrum, axis=1, keepdims=True)
+    return (spectrum / np.maximum(norms, 1e-8)).astype(np.float32)
+
+
+def match_audio_template(
+    audio_wav: Path,
+    template_wav: Path,
+    *,
+    similarity_threshold: float = 0.78,
+    min_separation_sec: float = 1.0,
+) -> list[dict[str, Any]]:
+    """在整段音轨中用对数频谱归一化互相关匹配短音效模板。"""
+    import numpy as np  # type: ignore
+    audio, rate = _read_pcm_wav(audio_wav)
+    template, template_rate = _read_pcm_wav(template_wav)
+    if rate != template_rate:
+        raise ValueError("音轨与模板sample rate必须一致")
+    source_f = _audio_features(audio, rate)
+    template_f = _audio_features(template, rate)
+    n = len(template_f)
+    if n == 0 or len(source_f) < n:
+        return []
+    template_flat = template_f.reshape(-1)
+    template_norm = float(np.linalg.norm(template_flat))
+    hits: list[dict[str, Any]] = []
+    # 20ms hop是_audio_features的默认；逐帧扫描保留与视频相同的时间基准。
+    hop_sec = 0.020
+    for start in range(len(source_f) - n + 1):
+        window = source_f[start:start + n].reshape(-1)
+        denom = float(np.linalg.norm(window)) * template_norm
+        score = float(np.dot(window, template_flat) / denom) if denom else 0.0
+        ts = start * hop_sec
+        if score < similarity_threshold:
+            continue
+        if hits and ts - hits[-1]["ts"] < min_separation_sec:
+            if score > hits[-1]["similarity"]:
+                hits[-1] = {"ts": ts, "similarity": score,
+                            "template": template_wav.stem}
+            continue
+        hits.append({"ts": ts, "similarity": score, "template": template_wav.stem})
+    return hits
+
+
+def fuse_visual_audio_confidence(
+    visual_confidence: float,
+    visual_ts: float,
+    audio_events: list[dict[str, Any]],
+    *,
+    matching_templates: Optional[set[str]] = None,
+    window_sec: float = 1.5,
+    corroboration_boost: float = 0.15,
+    missing_penalty: float = 0.0,
+) -> dict[str, Any]:
+    """用时间邻近的音频事件修饰视觉置信度，不让音频独立触发事件。"""
+    candidates = [event for event in audio_events
+                  if abs(float(event["ts"]) - float(visual_ts)) <= window_sec
+                  and (matching_templates is None or event.get("template") in matching_templates)]
+    matched = max(candidates, key=lambda event: float(event.get("similarity", 0.0)),
+                  default=None)
+    confidence = float(visual_confidence)
+    if matched is not None:
+        confidence += corroboration_boost * float(matched.get("similarity", 1.0))
+    else:
+        confidence -= missing_penalty
+    return {
+        "confidence": min(1.0, max(0.0, confidence)),
+        "audio_corroborated": matched is not None,
+        "audio_event": matched,
+    }
 
 
 # ---------------------------------------------------------------------------

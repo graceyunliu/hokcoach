@@ -386,12 +386,32 @@ class Orchestrator:
 
         _tick("提取死亡地点与小地图轨迹")
         contexts: list[str | None] = []
+        movement_cfg = video_utils._load_video_config()
         for e in events:
             try:
                 positions = video_utils.extract_minimap_positions(
                     video_path, around_ts=e["ts"])
-                contexts.append(
-                    video_utils.summarize_minimap_context(positions, e["ts"]))
+                context = video_utils.summarize_minimap_context(positions, e["ts"])
+                scale = movement_cfg.get("minimap_pixels_per_world_unit")
+                max_speed = movement_cfg.get("hero_max_move_speed_world_units_sec")
+                if scale is not None and max_speed is not None:
+                    jumps = video_utils.detect_anomalous_displacements(
+                        positions,
+                        max_move_speed_world_units_sec=float(max_speed),
+                        pixels_per_world_unit=float(scale),
+                        threshold_multiplier=float(movement_cfg.get(
+                            "anomalous_displacement_multiplier", 1.5)),
+                    )
+                    e["anomalous_displacements"] = jumps
+                    e["anomalous_displacement"] = bool(jumps)
+                    if jumps:
+                        note = (f"检测到{len(jumps)}次超出常规移速的敌方位移"
+                                "（可能为闪现/位移技能或跟踪误差）")
+                        context = f"{context}；{note}" if context else note
+                else:
+                    # 没有已标定的世界单位→像素比例时不制造一个“看起来合理”的阈值。
+                    e["anomalous_displacement"] = None
+                contexts.append(context)
             except RuntimeError as err:  # 缺opencv
                 print(f"[minimap检测不可用] {err}", file=sys.stderr)
                 contexts.append(None)
