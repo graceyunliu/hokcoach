@@ -177,6 +177,14 @@ class TestAudioFusion(unittest.TestCase):
         self.assertTrue(fused["audio_corroborated"])
         self.assertGreater(fused["confidence"], 0.6)
 
+    def test_shipped_player_death_template_is_valid_pcm(self):
+        template = (Path(__file__).resolve().parents[1] / "assets" /
+                    "audio_templates" / "player_death_v1.wav")
+        samples, rate = video_utils._read_pcm_wav(template)
+        self.assertEqual(rate, 16000)
+        self.assertEqual(len(samples), 12800)
+        self.assertGreater(float(np.max(np.abs(samples))), 0.9)
+
 
 if __name__ == "__main__":
     unittest.main()

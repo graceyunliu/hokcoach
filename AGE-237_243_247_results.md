@@ -68,14 +68,16 @@ correlation and returns video-timeline timestamps. `fuse_visual_audio_confidence
 can boost an existing visual candidate when a matching cue is nearby; audio
 does not create primary events. Missing audio has zero penalty by default.
 
-No production sound templates are shipped. The available death windows contain
-combat, voice, and UI mixtures, and the repository has no isolated or labelled
-callout clips. Treating one mixed fight as a fixed callout template would cause
-fight-specific false matches. The catalog README documents this abstention and
-the clean samples still needed (`first_blood`, `double_kill`, and
-`tower_destroyed`) plus the required pairwise confusion check. A synthetic-tone
-unit test verifies timestamp alignment and confidence fusion without claiming
-that the real callout catalog has been validated.
+One conservative experimental template is shipped: `player_death_v1.wav`, a
+0.8-second motif selected by repetition across independent KDA-confirmed death
+windows. At similarity threshold 0.82 it produced four matches across the three
+recordings, all within 3.2 seconds of a confirmed death, and no off-death
+matches: observed precision 4/4 and recall 4/12 on this very small set. It is
+therefore positive corroboration only; absence carries no penalty. A proposed
+kill-trade motif failed to reproduce across the other kill-trade windows and
+was rejected. No `first_blood`, `double_kill`, or `tower_destroyed` template is
+claimed because those labels still lack clean, independently verified samples.
+The catalog README records provenance, checksum, thresholds, and limitations.
 
 ## Verification
 
