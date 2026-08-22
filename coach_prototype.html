@@ -25,7 +25,7 @@
     font-family:"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
     min-height:100vh;
   }
-  .app{max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
+  .app{width:100%;max-width:1600px;margin:0 auto;padding:28px clamp(16px,2.4vw,38px) 60px;}
 
   /* header */
   .top{
@@ -322,6 +322,12 @@
   }
 
   /* ===== VIEW 5: 录像处理流水线 ===== */
+  .processing-toggle{
+    display:none;margin:0 0 12px auto;border:1px solid var(--border);background:var(--panel);
+    color:var(--text-dim);min-height:40px;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit;
+  }
+  #v5.results-ready:not(.processing-expanded) .processing-card{display:none;}
+  #v5.results-ready .processing-toggle{display:block;}
   .uploadrow{
     display:flex;align-items:center;gap:14px;background:var(--panel2);
     border:1px dashed var(--border);border-radius:12px;padding:14px 16px;margin-bottom:18px;
@@ -436,7 +442,7 @@
   }
   .extractrow .jumpbtn:hover{background:var(--gold-dim);color:#1a1408;}
 
-  /* ===== AGE-197 方案二：时间轴导航 + 单条聚焦面板 ===== */
+  /* ===== AGE-196/197：时间轴导航 + 视频/点评dashboard ===== */
   .p2-timeline{
     display:flex;gap:6px;padding:12px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
     overflow-x:auto;background:var(--panel2);
@@ -450,10 +456,9 @@
   .p2-tick.active{border-color:var(--gold);background:#241f10;color:var(--gold);}
   .p2-tick.active .tm{color:var(--gold);}
 
-  .p2-body{display:grid;grid-template-columns:1.15fr .85fr;min-height:420px;}
-  @media(max-width:860px){.p2-body{grid-template-columns:1fr;}}
+  .p2-body{display:grid;grid-template-columns:1fr;min-height:420px;}
   .p2-left{padding:16px;display:flex;flex-direction:column;border-right:1px solid var(--border);}
-  @media(max-width:860px){.p2-left{border-right:none;border-bottom:1px solid var(--border);}}
+  .p2-left{border-right:none;border-bottom:1px solid var(--border);}
   .video-shell{background:#000;border-radius:10px;overflow:hidden;flex:1;display:flex;}
   .video-shell video{width:100%;max-height:420px;background:#000;display:block;}
   .p2-nav{display:flex;align-items:center;gap:10px;padding:10px 2px 0;}
@@ -465,7 +470,7 @@
   .p2-nav button:disabled{opacity:.35;cursor:default;}
   .p2-nav .counter{font-size:11.5px;color:var(--text-dim);flex:1;text-align:center;}
 
-  .p2-right{padding:18px 20px;overflow-y:auto;max-height:480px;}
+  .p2-right{padding:14px;overflow-y:visible;max-height:none;}
   .p2-right .k{font-size:10.5px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;}
   .p2-right .headline{font-size:15px;font-weight:700;margin-bottom:10px;}
   .p2-right .desc{font-size:12.5px;color:var(--text-dim);line-height:1.85;white-space:pre-wrap;}
@@ -477,6 +482,66 @@
     margin-top:18px;min-height:90px;border-radius:10px;border:1px dashed var(--border);
     background:#0d1119;display:flex;align-items:center;justify-content:center;
     font-size:10.5px;color:var(--text-dim);text-align:center;padding:12px;line-height:1.6;
+  }
+
+  .death-accordion{
+    background:var(--panel2);border:1px solid var(--border);border-radius:11px;margin-bottom:10px;
+    overflow:hidden;scroll-margin:12px;
+  }
+  .death-accordion[open],.death-accordion.active{border-color:var(--gold-dim);}
+  .death-summary{
+    min-height:52px;padding:10px 12px;display:grid;grid-template-columns:58px minmax(0,1fr) 76px;
+    align-items:center;gap:10px;cursor:pointer;list-style:none;position:relative;
+  }
+  .death-summary::-webkit-details-marker{display:none;}
+  .death-summary::after{content:'›';position:absolute;right:11px;top:50%;margin-top:-10px;color:var(--text-dim);font-size:18px;transform:rotate(90deg);transition:.15s;}
+  .death-accordion[open] .death-summary::after{transform:rotate(-90deg);color:var(--gold);}
+  .death-summary .death-time{font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums;}
+  .death-summary .death-meta{min-width:0;font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .death-summary .death-confidence{grid-column:3;grid-row:1;width:52px;margin-right:20px;}
+  .death-summary .death-confidence .bar{height:5px;background:#2a2f3d;border-radius:99px;overflow:hidden;}
+  .death-summary .death-confidence .bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));}
+  .death-summary .death-confidence small{display:block;color:var(--text-dim);font-size:9px;margin-top:3px;text-align:right;}
+  .death-comment{border-top:1px solid var(--border);padding:13px 14px 15px;}
+  .death-comment .body{font-size:12.5px;color:var(--text-dim);line-height:1.8;white-space:pre-wrap;}
+  .death-comment .watch-segment{
+    margin-top:12px;min-height:40px;border:1px solid var(--gold-dim);background:#241f10;color:var(--gold);
+    border-radius:8px;padding:7px 12px;font:600 12px inherit;cursor:pointer;
+  }
+
+  @media(min-width:1200px){
+    .p2-body{grid-template-columns:minmax(0,1.45fr) minmax(340px,.55fr);height:min(68vh,680px);}
+    .p2-left{border-right:1px solid var(--border);border-bottom:none;min-height:0;position:sticky;top:12px;align-self:start;}
+    .video-shell video{max-height:calc(min(68vh,680px) - 70px);}
+    .p2-right{overflow-y:auto;max-height:min(68vh,680px);padding:14px;}
+  }
+  @media(min-width:768px) and (max-width:1199px){
+    .video-shell video{max-height:360px;}
+    .p2-right{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+    .death-accordion{margin-bottom:0;}
+  }
+  @media(max-width:767px){
+    .app{padding:16px 12px 40px;}
+    .top{align-items:flex-start;gap:12px;flex-wrap:wrap;}
+    .profile{max-width:100%;}
+    .tabs{overflow-x:auto;justify-content:flex-start;}
+    .tab{flex:0 0 auto;min-width:118px;min-height:44px;display:flex;align-items:center;justify-content:center;}
+    .card{padding:15px 14px;border-radius:12px;}
+    .uploadrow{align-items:flex-start;flex-wrap:wrap;padding:12px;}
+    .uploadrow input{width:100%;max-width:none!important;min-height:44px;}
+    .uploadrow .fstatus{margin-left:52px;}
+    .pipeline{margin-left:-4px;margin-right:-4px;}
+    .pstep{min-width:86px;}
+    .p2-timeline{padding:10px 12px;}
+    .p2-tick{min-height:44px;padding:7px 12px;}
+    .p2-left{padding:12px;}
+    .p2-nav button{min-height:44px;padding:8px 10px;}
+    .p2-right{padding:12px;}
+    .death-summary{min-height:58px;grid-template-columns:52px minmax(0,1fr) 70px;padding:10px;}
+    .death-comment .watch-segment{width:100%;min-height:44px;}
+    .grid2,.stat4{grid-template-columns:1fr;}
+    .msg{max-width:94%;}
+    .journey{overflow-x:auto;}
   }
 </style>
 </head>
@@ -532,7 +597,8 @@
 
   <!-- VIEW 5: 录像处理 -->
   <div class="view active" id="v5">
-    <div class="card">
+    <button class="processing-toggle" id="processingToggle" type="button" aria-expanded="false">查看处理详情</button>
+    <div class="card processing-card">
       <h3 data-i18n="replayPipeline">录像处理流水线</h3>
       <div class="sub" data-i18n="pipelineHelp">python coach.py --replay last_game.mp4 · 从原始录像到结构化决策点，全流程可视化</div>
 
@@ -556,7 +622,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card processing-card">
       <h3 data-i18n="processingLog">处理日志</h3>
       <div class="sub" id="termSub">等待上传 · 这里是/replay/{job_id}/status真实轮询结果，不是模拟台词</div>
       <div class="termwrap" id="termwrap"><div class="dim" data-i18n="waitingUpload">[待机] 上传录像后开始分析…</div></div>
@@ -1216,7 +1282,15 @@
     const replayVideoCard = document.getElementById('replayVideoCard');
     const replayVideo = document.getElementById('replayVideo');
     const replayVideoNote = document.getElementById('replayVideoNote');
+    const replayView = document.getElementById('v5');
+    const processingToggle = document.getElementById('processingToggle');
     if(!input) return;
+
+    processingToggle.addEventListener('click', () => {
+      const expanded = replayView.classList.toggle('processing-expanded');
+      processingToggle.setAttribute('aria-expanded', String(expanded));
+      processingToggle.textContent = expanded ? '收起处理详情' : '查看处理详情';
+    });
 
     function setStage(stageText){
       // 后端progress_cb给的stage文案跟pipeline卡片上data-stage属性做前缀匹配
@@ -1268,6 +1342,10 @@
           termLine(term, 'ok', `处理完成 ✓ replay_id=${status.replay_id}`);
           statusText.textContent = '已完成';
           await loadResult(status.replay_id);
+          replayView.classList.add('results-ready');
+          replayView.classList.remove('processing-expanded');
+          processingToggle.setAttribute('aria-expanded', 'false');
+          processingToggle.textContent = '查看处理详情';
           return;
         }
         if(status.status === 'failed'){
@@ -1279,9 +1357,9 @@
       }
     }
 
-    // 跟教练一起看回放（AGE-197 方案二）：顶部时间轴列出全部死亡事件，
-    // 点某个时间点/上一次/下一次 → 视频跳到那一刻附近播放，右侧聚焦面板
-    // 换成那一条的完整点评。同一时间只展示一条，不用列表滚动。
+    // 跟教练一起看回放（AGE-196~199）：顶部时间轴控制视频，右栏用原生
+    // details手风琴显示全部死亡点评。用户主动选中某条时自动展开；视频自然
+    // 播放触发的timeupdate只高亮，不强制展开，避免布局频繁跳动。
     const REPLAY_LEAD_IN_SEC = 6;
     const timelineEl = document.getElementById('deathTimeline');
     const focusPanel = document.getElementById('focusPanel');
@@ -1292,6 +1370,7 @@
 
     let focusDetails = [];   // 当前这局的死亡事件详情（带ts_seconds的和不带的都在内）
     let focusIdx = 0;
+    let expandedDeaths = new Set();
     let suppressSeek = false; // ontimeupdate驱动的聚焦切换不应该反过来再seek一次视频
 
     function seekAndPlay(tsSeconds){
@@ -1302,28 +1381,57 @@
                                            // catch只是防止未处理rejection报错
     }
 
-    function renderFocusPanel(d){
-      const confPct = Math.round((d.confidence || 0) * 100);
-      const hasConf = d.confidence != null;
-      focusPanel.innerHTML = `
-        <div class="k">决策点 · ${d.timestamp || '?'}</div>
-        <div class="headline">${d.type || '未知归因'}${d.location ? ' · ' + d.location : ''}</div>
-        <div class="desc">${d.ai_comment || '暂无点评文字。'}</div>
-        ${hasConf ? `<div class="conf"><div class="lbl">归因置信度 ${confPct}%</div><div class="bar"><div style="width:${confPct}%"></div></div></div>` : ''}
-        <div class="minimap-slot">小地图轨迹回放（占位 · 数据源与调研见 AGE-200，未接入）</div>
-      `;
+    function escapeHtml(value){
+      return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+      })[ch]);
     }
 
-    function renderFocus(idx, {seek} = {seek: true}){
+    function renderCommentList(){
+      focusPanel.innerHTML = focusDetails.map((d, i) => {
+        const confPct = Math.round((d.confidence || 0) * 100);
+        const hasConf = d.confidence != null;
+        const meta = `${d.type || '未知归因'}${d.location ? ' · ' + d.location : ''}`;
+        return `<details class="death-accordion${i === focusIdx ? ' active' : ''}" data-idx="${i}" ${expandedDeaths.has(i) ? 'open' : ''}>
+          <summary class="death-summary">
+            <span class="death-time">${escapeHtml(d.timestamp || '?')}</span>
+            <span class="death-meta">${escapeHtml(meta)}</span>
+            ${hasConf ? `<span class="death-confidence"><span class="bar"><span style="width:${confPct}%"></span></span><small>${confPct}%</small></span>` : ''}
+          </summary>
+          <div class="death-comment">
+            <div class="body">${escapeHtml(d.ai_comment || '暂无点评文字。')}</div>
+            ${d.ts_seconds != null ? `<button class="watch-segment" type="button" data-watch="${i}">▶ 看这段（提前${REPLAY_LEAD_IN_SEC}秒）</button>` : ''}
+            <div class="minimap-slot">小地图轨迹回放（占位 · 数据源与调研见 AGE-200，未接入）</div>
+          </div>
+        </details>`;
+      }).join('');
+
+      focusPanel.querySelectorAll('.death-accordion').forEach(item => {
+        item.addEventListener('toggle', () => {
+          const idx = Number(item.dataset.idx);
+          if(item.open) expandedDeaths.add(idx); else expandedDeaths.delete(idx);
+        });
+      });
+      focusPanel.querySelectorAll('[data-watch]').forEach(button => {
+        button.addEventListener('click', () => renderFocus(Number(button.dataset.watch), {seek:true, expand:true}));
+      });
+    }
+
+    function renderFocus(idx, {seek = true, expand = true, scroll = true} = {}){
       if(focusDetails.length === 0) return;
       focusIdx = Math.max(0, Math.min(idx, focusDetails.length - 1));
       const d = focusDetails[focusIdx];
+      if(expand) expandedDeaths.add(focusIdx);
 
       [...timelineEl.children].forEach((tick, i) => tick.classList.toggle('active', i === focusIdx));
       focusCounter.textContent = `第 ${focusIdx + 1} / ${focusDetails.length} 个`;
       focusPrevBtn.disabled = focusIdx === 0;
       focusNextBtn.disabled = focusIdx === focusDetails.length - 1;
-      renderFocusPanel(d);
+      renderCommentList();
+      if(scroll){
+        const active = focusPanel.querySelector(`.death-accordion[data-idx="${focusIdx}"]`);
+        if(active) active.scrollIntoView({block:'nearest',behavior:'smooth'});
+      }
 
       if(seek && d.ts_seconds != null){
         suppressSeek = true;
@@ -1381,11 +1489,14 @@
                                                                     // 让高亮跟"死亡发生的那一秒"对齐
           let activeIdx = -1;
           focusDetails.forEach((d, i) => { if(d.ts_seconds != null && d.ts_seconds <= t) activeIdx = i; });
-          if(activeIdx !== -1 && activeIdx !== focusIdx) renderFocus(activeIdx, {seek: false});
+          if(activeIdx !== -1 && activeIdx !== focusIdx){
+            renderFocus(activeIdx, {seek:false, expand:false, scroll:true});
+          }
         };
       }
 
-      renderFocus(0, {seek: false});
+      expandedDeaths = new Set();
+      renderFocus(0, {seek:false, expand:false, scroll:false});
     }
 
     async function loadResult(replayId){
@@ -1422,6 +1533,9 @@
     input.addEventListener('change', async () => {
       const file = input.files[0];
       if(!file) return;
+      replayView.classList.remove('results-ready', 'processing-expanded');
+      processingToggle.setAttribute('aria-expanded', 'false');
+      processingToggle.textContent = '查看处理详情';
       fname.textContent = file.name;
       fmeta.textContent = `${(file.size / 1024 / 1024).toFixed(1)} MB · 上传中…`;
       statusWrap.style.display = 'flex';
