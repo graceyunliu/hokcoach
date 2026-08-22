@@ -55,8 +55,15 @@ class TestApiSmoke(unittest.TestCase):
         self._tmp.cleanup()
 
     def test_health(self):
-        r = self.client.get("/health")
+        with mock.patch("api.main.LLMClient.from_config", return_value=None), \
+             mock.patch("api.main.VisionClient.from_config", return_value=mock.Mock()):
+            r = self.client.get("/health")
         self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.json(), {
+            "status": "ok",
+            "llm_configured": False,
+            "vlm_configured": True,
+        })
 
     def test_progress_and_profile_default_to_empty_shapes(self):
         r = self.client.get("/progress")

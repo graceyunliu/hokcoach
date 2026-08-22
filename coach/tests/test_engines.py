@@ -73,6 +73,31 @@ class TestExtractJson(unittest.TestCase):
                 {"llm": {"base_url": "x", "model": "y",
                          "api_key_env": "NOPE_KEY"}}))
 
+    def test_from_config_none_logs_warning(self):
+        # AGE-244: 配置缺失时from_config()返回None不应静默——必须打warning日志，
+        # 且日志内容要点出具体缺失哪个字段(api_key)和对应的环境变量名(NOPE_KEY)，
+        # 而不是只说"配置不完整"。
+        with mock.patch.dict("os.environ", {}, clear=True):
+            with self.assertLogs(level="WARNING") as cm:
+                result = LLMClient.from_config(
+                    {"llm": {"base_url": "x", "model": "y",
+                             "api_key_env": "NOPE_KEY"}})
+        self.assertIsNone(result)
+        joined = "\n".join(cm.output)
+        self.assertIn("api_key", joined)
+        self.assertIn("NOPE_KEY", joined)
+
+    def test_from_config_with_key_no_warning(self):
+        # 正常配置时不应触发这条警告日志（避免正常路径也刷屏）。
+        with mock.patch.dict("os.environ", {"K": "sk-test"}):
+            with self.assertRaises(AssertionError):
+                # assertNoLogs不是所有Python版本都有，这里用assertLogs必然
+                # 抛AssertionError（因为没有日志产生）来间接断言"没有warning"。
+                with self.assertLogs(level="WARNING"):
+                    LLMClient.from_config(
+                        {"llm": {"base_url": "https://api.x.com/v1/", "model": "m",
+                                 "api_key_env": "K"}})
+
     def test_from_config_with_key(self):
         with mock.patch.dict("os.environ", {"K": "sk-test"}):
             c = LLMClient.from_config(

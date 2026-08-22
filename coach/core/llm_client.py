@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import base64
 import json
+import logging
 import os
 import urllib.error
 import urllib.request
@@ -81,6 +82,15 @@ class LLMClient:
             timeout_sec = llm_cfg.get("timeout_sec")
         api_key = os.environ.get(key_env, "") if key_env else ""
         if not (base_url and model and api_key):
+            missing = [name for name, val in (
+                ("base_url", base_url), ("model", model), ("api_key", api_key),
+            ) if not val]
+            logging.warning(
+                "[LLMClient] config missing (%s) for section=%r; api_key_env=%r "
+                "-> LLMClient.from_config() returning None, caller falls back to "
+                "rule-based/degraded output.",
+                ", ".join(missing), section_name, key_env,
+            )
             return None
         return cls(base_url=base_url, model=model, api_key=api_key,
                    timeout=int(timeout_sec or 120))

@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from core.llm_client import LLMClient, VisionClient
 from utils import config_utils
 
 # 复用coach.py同样的本地secrets加载方式，API进程也需要LLM/VLM key。
@@ -43,5 +44,14 @@ app.include_router(progress.router)
 
 
 @app.get("/health")
-async def health() -> dict[str, str]:
-    return {"status": "ok"}
+async def health() -> dict[str, object]:
+    # AGE-244：暴露LLM/VLM是否已配置，方便前端/运维一眼看出是否在降级模式
+    # 运行，不用翻日志。是否为None的语义与core.orchestrator.Orchestrator一致。
+    config = config_utils.load_config()
+    llm_configured = LLMClient.from_config(config) is not None
+    vlm_configured = VisionClient.from_config(config) is not None
+    return {
+        "status": "ok",
+        "llm_configured": llm_configured,
+        "vlm_configured": vlm_configured,
+    }

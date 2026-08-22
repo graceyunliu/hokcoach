@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+import logging
 import sys
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -51,7 +52,20 @@ class Orchestrator:
         self.config = config_utils.load_config()
         self.persona = config_utils.load_persona()
         self.llm: Optional[LLMClient] = LLMClient.from_config(self.config)
+        if self.llm is None:
+            logging.warning(
+                "[Orchestrator] LLM未配置 -> 死亡分类将只能依赖结构化信号+自述关键词"
+                "（LLM兜底_classify_with_llm不会被调用），复盘点评将走_fallback_comment"
+                "模板化输出（无AI点评）。若这不是预期行为，检查config.yaml的llm段和"
+                "对应环境变量（默认COACH_LLM_API_KEY）。"
+            )
         self.vlm: Optional[VisionClient] = VisionClient.from_config(self.config)
+        if self.vlm is None:
+            logging.warning(
+                "[Orchestrator] 视觉模型未配置 -> HUD/KDA读数、图片OCR等依赖VLM的功能"
+                "将不可用。检查config.yaml的llm.vision/llm.vision_fallback段和对应"
+                "环境变量（默认COACH_VLM_API_KEY，缺省回落到COACH_LLM_API_KEY）。"
+            )
         self.principles = knowledge_engine.load_all_principles()
         self.profile = data_utils.load_player_profile()
 
