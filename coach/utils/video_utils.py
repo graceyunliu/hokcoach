@@ -22,6 +22,7 @@ HUD/minimap裁剪坐标与采样参数从 config.yaml 的 `video:` 节读取（A
 from __future__ import annotations
 
 import json
+import hashlib
 import logging
 import math
 import subprocess
@@ -1040,6 +1041,228 @@ def match_audio_template(
     return hits
 
 
+def _audio_cache_key(
+    path: Path,
+    *,
+    sample_rate: int,
+    trim_silence: Optional[bool] = None,
+) -> str:
+    """Stable cache key that invalidates when the source file changes."""
+    resolved = Path(path).resolve()
+    stat = resolved.stat()
+    raw = (
+        f"{resolved}\0{stat.st_size}\0{stat.st_mtime_ns}\0{sample_rate}"
+        f"\0trim={trim_silence}"
+    )
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
+
+
+def _resample_audio(samples: Any, source_rate: int, target_rate: int) -> Any:
+    """Deterministic linear resampling for local voice templates."""
+    import numpy as np  # type: ignore
+    if source_rate == target_rate or not len(samples):
+        return samples.astype(np.float32, copy=False)
+    count = max(1, int(round(len(samples) * target_rate / source_rate)))
+    old_x = np.linspace(0.0, 1.0, len(samples), endpoint=False)
+    new_x = np.linspace(0.0, 1.0, count, endpoint=False)
+    return np.interp(new_x, old_x, samples).astype(np.float32)
+
+
+def _normalize_trim_audio(samples: Any, *, silence_ratio: float = 0.015) -> Any:
+    """Peak-normalize and remove leading/trailing near-silence, preserving pauses."""
+    import numpy as np  # type: ignore
+    values = np.asarray(samples, dtype=np.float32)
+    if not values.size:
+        return values
+    peak = float(np.max(np.abs(values)))
+    if peak <= 0:
+        return values
+    values = values / peak
+    active = np.flatnonzero(np.abs(values) >= max(float(silence_ratio), 0.0))
+    return values[active[0]:active[-1] + 1] if active.size else values[:0]
+
+
+def _cached_audio_features(
+    wav_path: Path,
+    cache_dir: Path,
+    *,
+    sample_rate: int = 16000,
+    trim_silence: bool = True,
+) -> Any:
+    """Load normalized log-spectrum features, computing them once per file version."""
+    import numpy as np  # type: ignore
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = cache_dir / f"features_{_audio_cache_key(wav_path, sample_rate=sample_rate, trim_silence=trim_silence)}.npy"
+    if cache_path.is_file():
+        return np.load(cache_path, allow_pickle=False)
+    samples, source_rate = _read_pcm_wav(wav_path)
+    resampled = _resample_audio(samples, source_rate, sample_rate)
+    if trim_silence:
+        normalized = _normalize_trim_audio(resampled)
+    else:
+        peak = float(np.max(np.abs(resampled))) if len(resampled) else 0.0
+        normalized = resampled / peak if peak > 0 else resampled
+    features = _audio_features(normalized, sample_rate)
+    np.save(cache_path, features, allow_pickle=False)
+    return features
+
+
+def _match_cached_features(
+    source_f: Any,
+    template_f: Any,
+    *,
+    similarity_threshold: float,
+    min_separation_sec: float,
+) -> list[dict[str, float]]:
+    """Match one cached template against already-computed replay features."""
+    import numpy as np  # type: ignore
+    n = len(template_f)
+    if n == 0 or len(source_f) < n:
+        return []
+    template_norm = float(np.linalg.norm(template_f))
+    window_count = len(source_f) - n + 1
+    numerator = np.zeros(window_count, dtype=np.float64)
+    for offset in range(n):
+        numerator += np.einsum(
+            "ij,j->i", source_f[offset:offset + window_count],
+            template_f[offset], dtype=np.float64)
+    frame_energy = np.sum(source_f * source_f, axis=1, dtype=np.float64)
+    cumulative = np.concatenate(([0.0], np.cumsum(frame_energy)))
+    window_norms = np.sqrt(cumulative[n:] - cumulative[:-n]) * template_norm
+    scores = np.divide(
+        numerator, window_norms, out=np.zeros(window_count, dtype=np.float64),
+        where=window_norms > 0)
+    hits: list[dict[str, float]] = []
+    hop_sec = 0.020
+    for start in np.flatnonzero(scores >= similarity_threshold):
+        score = float(scores[start])
+        ts = start * hop_sec
+        if hits and ts - hits[-1]["ts"] < min_separation_sec:
+            if score > hits[-1]["score"]:
+                hits[-1] = {"ts": ts, "score": score}
+            continue
+        hits.append({"ts": ts, "score": score})
+    return hits
+
+
+def build_audio_event_timeline(
+    video_path: str,
+    *,
+    template_dir: Path = _DEFAULT_LOCAL_GAME_VOICES,
+    catalog_path: Path = _DEFAULT_AUDIO_CATALOG,
+    cache_dir: Optional[Path] = None,
+    usages: Optional[set[str]] = None,
+    similarity_threshold: float = 0.78,
+    min_separation_sec: float = 1.0,
+    alternate_dedupe_sec: float = 1.0,
+    sample_rate: int = 16000,
+) -> list[dict[str, Any]]:
+    """Build a deterministic, match-wide semantic audio-event timeline (AGE-248).
+
+    The replay audio and its spectral features are produced once and cached. Local
+    templates are normalized, silence-trimmed, resampled, and feature-cached by file
+    version. Default usage includes gameplay evidence, tactical intent, and match
+    context; draft-only ``exclude`` entries are deliberately omitted.
+    """
+    if sample_rate <= 0:
+        raise ValueError("sample_rate must be positive")
+    if not 0.0 <= similarity_threshold <= 1.0:
+        raise ValueError("similarity_threshold must be between 0 and 1")
+    selected_usages = usages or {"evidence", "intent", "context"}
+    if not selected_usages <= _AUDIO_CATALOG_USAGES - {"exclude"}:
+        raise ValueError("timeline usages cannot include unknown/excluded audio")
+
+    root = Path(cache_dir) if cache_dir is not None else (
+        Path(tempfile.gettempdir()) / "hokcoach_audio_cache")
+    root.mkdir(parents=True, exist_ok=True)
+    video = Path(video_path)
+    audio_key = _audio_cache_key(video, sample_rate=sample_rate)
+    replay_wav = root / f"replay_{audio_key}.wav"
+    if not replay_wav.is_file():
+        extract_audio_track(str(video), replay_wav, sample_rate=sample_rate)
+    source_f = _cached_audio_features(
+        replay_wav, root, sample_rate=sample_rate, trim_silence=False)
+
+    candidates: list[dict[str, Any]] = []
+    entries = resolve_audio_template_catalog(
+        template_dir, catalog_path, usages=selected_usages, require_files=True)
+    for entry in entries:
+        template_f = _cached_audio_features(
+            Path(entry["path"]), root, sample_rate=sample_rate)
+        for hit in _match_cached_features(
+                source_f, template_f,
+                similarity_threshold=similarity_threshold,
+                min_separation_sec=min_separation_sec):
+            event = {
+                "ts": hit["ts"],
+                "event": entry["event"],
+                "perspective": entry["perspective"],
+                "score": hit["score"],
+                "template": entry["file"],
+                "category": entry["category"],
+                "usage": entry["usage"],
+            }
+            if entry.get("variant"):
+                event["variant"] = entry["variant"]
+            candidates.append(event)
+
+    # Alternate announcer clips with the same semantics may both match one cue.
+    # Keep the strongest within the overlap window; never collapse different events.
+    kept: list[dict[str, Any]] = []
+    for candidate in sorted(candidates, key=lambda e: (-float(e["score"]), e["template"])):
+        duplicate = any(
+            candidate["event"] == event["event"] and
+            candidate["perspective"] == event["perspective"] and
+            abs(float(candidate["ts"]) - float(event["ts"])) <= alternate_dedupe_sec
+            for event in kept
+        )
+        if not duplicate:
+            kept.append(candidate)
+    return sorted(kept, key=lambda e: (
+        float(e["ts"]), e["event"], e["perspective"], -float(e["score"]),
+        e["template"],
+    ))
+
+
+def relate_audio_events_to_death(
+    audio_events: list[dict[str, Any]],
+    death_ts: float,
+    *,
+    before_sec: float = 30.0,
+    after_sec: float = 20.0,
+    direct_window_sec: float = 2.0,
+    timestamp_uncertainty_sec: float = 0.0,
+) -> list[dict[str, Any]]:
+    """Relate audio to an existing HUD-confirmed death without creating one."""
+    if before_sec < 0 or after_sec < 0 or direct_window_sec < 0:
+        raise ValueError("audio/death relationship windows must be non-negative")
+    uncertainty = max(0.0, float(timestamp_uncertainty_sec))
+    related: list[dict[str, Any]] = []
+    for raw in audio_events:
+        delta = float(raw["ts"]) - float(death_ts)
+        if delta < -before_sec - uncertainty or delta > after_sec + uncertainty:
+            continue
+        event = dict(raw)
+        event["offset_from_death_sec"] = round(delta, 3)
+        if raw.get("usage") == "intent":
+            relationship = "team_intent"
+        elif raw.get("category") == "objective":
+            relationship = "objective_state"
+        elif delta < -direct_window_sec - uncertainty:
+            relationship = "pre_death_context"
+        elif delta > direct_window_sec + uncertainty:
+            relationship = "post_death_consequence"
+        else:
+            relationship = "possible_direct_relationship"
+        event["relationship"] = relationship
+        event["identity_confirmation_required"] = bool(
+            relationship == "possible_direct_relationship" and
+            raw.get("category") == "combat")
+        related.append(event)
+    return sorted(related, key=lambda event: (
+        float(event["ts"]), event["event"], event["perspective"]))
+
+
 def fuse_visual_audio_confidence(
     visual_confidence: float,
     visual_ts: float,
@@ -1054,11 +1277,13 @@ def fuse_visual_audio_confidence(
     candidates = [event for event in audio_events
                   if abs(float(event["ts"]) - float(visual_ts)) <= window_sec
                   and (matching_templates is None or event.get("template") in matching_templates)]
-    matched = max(candidates, key=lambda event: float(event.get("similarity", 0.0)),
+    matched = max(candidates, key=lambda event: float(
+        event.get("score", event.get("similarity", 0.0))),
                   default=None)
     confidence = float(visual_confidence)
     if matched is not None:
-        confidence += corroboration_boost * float(matched.get("similarity", 1.0))
+        confidence += corroboration_boost * float(
+            matched.get("score", matched.get("similarity", 1.0)))
     else:
         confidence -= missing_penalty
     return {

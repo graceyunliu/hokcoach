@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """AGE-136：确定性KDA模板读数器。"""
 
+import json
 import tempfile
 import sys
 import unittest
 import wave
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -236,6 +238,69 @@ class TestAudioFusion(unittest.TestCase):
         self.assertTrue(all(entry["usage"] == "evidence" for entry in evidence))
         self.assertFalse(any(entry["category"] in {"draft", "communication"}
                              for entry in evidence))
+
+    def test_global_timeline_preserves_intent_and_deduplicates_variants(self):
+        rate = 8000
+        motif = np.sin(2 * np.pi * 700 * np.arange(rate // 2) / rate)
+        source_samples = np.concatenate([np.zeros(rate), motif, np.zeros(rate)])
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            video = root / "clip.mp4"
+            video.write_bytes(b"placeholder")
+            replay_wav = root / "source.wav"
+            self._wav(replay_wav, source_samples, rate)
+            template_dir = root / "templates"
+            template_dir.mkdir()
+            for filename in ("normal.wav", "variant.wav", "ping.wav"):
+                self._wav(template_dir / filename, motif, rate)
+            catalog = root / "catalog.json"
+            catalog.write_text(json.dumps({
+                "schema_version": 1,
+                "entries": [
+                    {"file": "normal.wav", "event": "hero_killed",
+                     "category": "combat", "perspective": "allied",
+                     "usage": "evidence"},
+                    {"file": "variant.wav", "event": "hero_killed",
+                     "category": "combat", "perspective": "allied",
+                     "usage": "evidence", "variant": "alternate"},
+                    {"file": "ping.wav", "event": "ping_attack_enemy",
+                     "category": "communication", "perspective": "allied",
+                     "usage": "intent"},
+                ],
+            }), encoding="utf-8")
+            with mock.patch.object(video_utils, "extract_audio_track",
+                                   side_effect=lambda _v, out, sample_rate: (
+                                       out.write_bytes(replay_wav.read_bytes()) or out)) as extract:
+                first = video_utils.build_audio_event_timeline(
+                    str(video), template_dir=template_dir, catalog_path=catalog,
+                    cache_dir=root / "cache", sample_rate=rate,
+                    similarity_threshold=0.9)
+                second = video_utils.build_audio_event_timeline(
+                    str(video), template_dir=template_dir, catalog_path=catalog,
+                    cache_dir=root / "cache", sample_rate=rate,
+                    similarity_threshold=0.9)
+
+        self.assertEqual(first, second)
+        self.assertEqual(extract.call_count, 1, "replay audio should be extracted once")
+        self.assertEqual([event["event"] for event in first],
+                         ["hero_killed", "ping_attack_enemy"])
+        self.assertEqual(first[1]["usage"], "intent")
+        self.assertAlmostEqual(first[0]["ts"], 1.0, delta=0.06)
+
+    def test_death_relationships_respect_time_direction_and_identity(self):
+        events = [
+            {"ts": 92.0, "event": "kill_streak_3", "category": "combat",
+             "perspective": "enemy", "usage": "evidence"},
+            {"ts": 101.1, "event": "multi_kill_2", "category": "combat",
+             "perspective": "enemy", "usage": "evidence"},
+            {"ts": 105.0, "event": "ping_attack_enemy", "category": "communication",
+             "perspective": "allied", "usage": "intent"},
+        ]
+        related = video_utils.relate_audio_events_to_death(events, 100.0)
+        self.assertEqual(related[0]["relationship"], "pre_death_context")
+        self.assertEqual(related[1]["relationship"], "possible_direct_relationship")
+        self.assertTrue(related[1]["identity_confirmation_required"])
+        self.assertEqual(related[2]["relationship"], "team_intent")
 
 
 if __name__ == "__main__":

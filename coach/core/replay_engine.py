@@ -140,6 +140,7 @@ def _classify_with_llm(evidence: dict[str, Any],
 def build_replay_from_video(video_path: str,
                             death_events: list[dict[str, Any]],
                             minimap_contexts: list[str | None],
+                            audio_timeline: Optional[list[dict[str, Any]]] = None,
                             llm: Optional[LLMClient] = None,
                             lang: str = "zh") -> dict[str, Any]:
     """把阶段0管线输出（死亡事件+minimap轨迹摘要）组装成replay记录并逐条归因。
@@ -147,14 +148,19 @@ def build_replay_from_video(video_path: str,
     death_events: video_utils.extract_death_events() 输出
     minimap_contexts: 与death_events等长，每项为该死亡前15秒的minimap摘要文本
     """
-    from utils import data_utils  # 延迟导入避免循环
+    from utils import data_utils, video_utils  # 延迟导入避免循环
 
     replay = data_utils.default_replay()
     replay["source"] = {"type": "video", "path": str(video_path)}
     replay["deaths"] = len(death_events)
     replay["death_analysis"]["total"] = len(death_events)
+    replay["audio_timeline"] = list(audio_timeline or [])
 
     for event, mm in zip(death_events, minimap_contexts):
+        audio_context = video_utils.relate_audio_events_to_death(
+            replay["audio_timeline"], float(event.get("ts", 0.0)),
+            timestamp_uncertainty_sec=float(
+                event.get("timestamp_uncertainty_sec", 0.0)))
         evidence = {
             "death_time": format_ts(event.get("ts")),
             "death_location": event.get("location"),
@@ -183,6 +189,7 @@ def build_replay_from_video(video_path: str,
             "solo_in_enemy_half": event.get("solo_in_enemy_half"),
             "anomalous_displacement": event.get("anomalous_displacement"),
             "anomalous_displacements": event.get("anomalous_displacements", []),
+            "audio_context": audio_context,
             "self_attribution": None,
             "ai_comment": None,  # orchestrator填充
         }

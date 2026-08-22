@@ -627,6 +627,26 @@ class TestOrchestratorStructuredReview(unittest.TestCase):
         self.assertIsNone(analysis["first_death"].get("ai_comment"))
         self.assertEqual(len(analysis["other_deaths"]), 1)
 
+    def test_comment_prompt_includes_bounded_audio_context_with_caveat(self):
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = mock.Mock()
+        orch.llm.chat_text.return_value = "coach output"
+        detail = {
+            "timestamp": "1:40", "type": "掉点死", "confidence": 0.8,
+            "classify_reason": "test", "evidence_sufficient": True,
+            "audio_context": [{
+                "offset_from_death_sec": 1.1, "event": "multi_kill_2",
+                "relationship": "possible_direct_relationship",
+                "identity_confirmation_required": True,
+            }],
+        }
+        orch.comment_death(detail, lang="en")
+        prompt = orch.llm.chat_text.call_args.kwargs["user"]
+        self.assertIn("Audio timeline (corroboration only)", prompt)
+        self.assertIn("identity unconfirmed", prompt)
+
     def test_finalize_review_returns_structured_result_and_saves(self):
         from core.orchestrator import Orchestrator
 

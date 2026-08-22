@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import logging
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -109,6 +110,19 @@ class Orchestrator:
         if detail.get("minimap_context"):
             context_parts.append((f"Minimap: {detail['minimap_context']}" if lang == "en"
                                   else f"小地图：{detail['minimap_context']}"))
+        if detail.get("audio_context"):
+            audio_lines = []
+            for event in detail["audio_context"]:
+                relation = event.get("relationship", "context")
+                identity_note = (
+                    "; identity unconfirmed" if lang == "en" else "；身份未确认"
+                ) if event.get("identity_confirmation_required") else ""
+                audio_lines.append(
+                    f"{float(event.get('offset_from_death_sec', 0)):+.1f}s "
+                    f"{event.get('event')} [{relation}{identity_note}]")
+            prefix = "Audio timeline (corroboration only): " if lang == "en" else (
+                "音频时间线（仅作佐证，不可独立证明死亡）：")
+            context_parts.append(prefix + ", ".join(audio_lines))
         if detail.get("self_attribution"):
             context_parts.append((f"Player account: {detail['self_attribution']}" if lang == "en"
                                   else f"玩家自述：{detail['self_attribution']}"))
@@ -398,6 +412,13 @@ class Orchestrator:
             video_path, kda_reader,
             coverage_cb=lambda ok, total: coverage.update(ok=ok, total=total))
 
+        _tick("构建全局音频事件时间线")
+        try:
+            audio_timeline = video_utils.build_audio_event_timeline(video_path)
+        except (OSError, RuntimeError, ValueError, subprocess.CalledProcessError) as err:
+            logging.warning("[audio timeline unavailable] %s", err)
+            audio_timeline = []
+
         _tick("提取死亡地点与小地图轨迹")
         contexts: list[str | None] = []
         movement_cfg = video_utils._load_video_config()
@@ -458,7 +479,8 @@ class Orchestrator:
 
         _tick("生成复盘记录")
         replay = replay_engine.build_replay_from_video(
-            video_path, events, contexts, llm=self.llm, lang=self._lang(lang))
+            video_path, events, contexts, audio_timeline=audio_timeline,
+            llm=self.llm, lang=self._lang(lang))
         replay["language"] = lang
         p = (self.profile or {}).get("player") or {}
         replay["hero_played"] = p.get("target_hero")
