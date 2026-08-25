@@ -50,6 +50,7 @@ DEATH_TYPE_KEYWORDS: dict[str, list[str]] = {
 class Principle:
     id: str
     text: str
+    text_en: str | None = None
     tier: str = ""
     tags: list[str] = field(default_factory=list)
     applies_when: str | None = None
@@ -62,7 +63,13 @@ class Principle:
     def is_tier3(self) -> bool:
         return str(self.tier).strip().startswith("3")
 
-    def format_for_prompt(self) -> str:
+    def format_for_prompt(self, lang: str = "zh") -> str | None:
+        if lang == "en":
+            if not self.text_en:
+                return None
+            return (f"[{self.id}] {self.text_en}\n"
+                    f"  (tier: {self.tier or 'unmarked'}; version: "
+                    f"{self.valid_as_of_patch or 'unmarked'})")
         cap = f"（要求能力：{self.requires_capability}）" if self.requires_capability else ""
         return (f"[{self.id}] {self.text}{cap}\n"
                 f"  （tier: {self.tier or '未标'}；来源: {self.source or '未标'}；"
@@ -118,6 +125,8 @@ def _parse_md(path: Path) -> list[Principle]:
             current.valid_as_of_patch = str(value or "")
         elif key == "last_reviewed":
             current.last_reviewed = str(value or "")
+        elif key == "text_en":
+            current.text_en = value
     return entries
 
 
@@ -130,6 +139,7 @@ def _parse_hero_json(path: Path) -> list[Principle]:
         out.append(Principle(
             id=e.get("id", "hero_?"),
             text=e.get("text", ""),
+            text_en=e.get("text_en"),
             tier=e.get("tier", "1_mechanical_fact"),
             tags=list(e.get("tags", [])),
             applies_when=e.get("applies_when"),
@@ -194,9 +204,18 @@ def retrieve_principles(category: str, context: str = "",
     return [p for _, p in scored[:k]]
 
 
-def format_principles(principles: list[Principle]) -> str:
+def format_principles(principles: list[Principle], lang: str = "zh") -> str:
     """组装进4.1.3提示词 {retrieved_principles} 槽位的文本。"""
     if not principles:
+        if lang == "en":
+            return ("(No knowledge-base principle matched this death type. "
+                    "State that evidence is insufficient; do not invent advice.)")
         return ("（知识库中没有检索到与本次死亡类型匹配的原则条目。"
                 "你必须声明证据不足，不得凭空推演。）")
-    return "\n".join(p.format_for_prompt() for p in principles)
+    formatted = [p.format_for_prompt(lang=lang) for p in principles]
+    reviewed = [text for text in formatted if text]
+    if lang == "en" and not reviewed:
+        return ("(Matching principles exist, but no human-reviewed English "
+                "translations are available. Treat the knowledge evidence as "
+                "unavailable; do not translate or invent it.)")
+    return "\n".join(reviewed)

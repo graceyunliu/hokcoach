@@ -162,6 +162,23 @@ class TestKnowledgeEngine(unittest.TestCase):
         txt = knowledge_engine.format_principles([])
         self.assertIn("证据不足", txt)
 
+    def test_english_format_never_injects_unreviewed_chinese(self):
+        untranslated = knowledge_engine.Principle(
+            id="vision_zh", text="不要脸探草丛",
+            tier="2_converged_consensus")
+        rendered = knowledge_engine.format_principles(
+            [untranslated], lang="en")
+        self.assertNotIn("不要", rendered)
+        self.assertIn("no human-reviewed English translations", rendered)
+
+        translated = knowledge_engine.Principle(
+            id="vision_en", text="不要脸探草丛",
+            text_en="Do not face-check an unscouted brush.",
+            tier="2_converged_consensus")
+        rendered = knowledge_engine.format_principles([translated], lang="en")
+        self.assertIn("Do not face-check", rendered)
+        self.assertNotIn("不要", rendered)
+
     def test_parse_fields(self):
         entries = {e.id: e for e in knowledge_engine.load_all_principles(self.kb)}
         v = entries["vision_001"]

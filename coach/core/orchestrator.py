@@ -159,7 +159,8 @@ class Orchestrator:
             death_time=detail.get("timestamp") or "未知",
             death_type=death_type,
             context_before=context,
-            retrieved_principles=knowledge_engine.format_principles(retrieved),
+            retrieved_principles=knowledge_engine.format_principles(
+                retrieved, lang=lang),
             player_constraints=constraints_engine.format_constraints(
                 self._constraints(), compat),
         )
@@ -181,8 +182,15 @@ class Orchestrator:
                 f"{detail.get('classify_reason', '')})",
             ]
             if retrieved:
-                lines.append("Relevant principles (original knowledge-base text; not AI-generated):")
-                lines += [f"  {p.format_for_prompt()}" for p in retrieved]
+                reviewed = [p.format_for_prompt(lang="en") for p in retrieved]
+                reviewed = [text for text in reviewed if text]
+                if reviewed:
+                    lines.append("Relevant reviewed principles (not AI-generated):")
+                    lines += [f"  {text}" for text in reviewed]
+                else:
+                    lines.append(
+                        "Matching principles have no human-reviewed English "
+                        "translation, so they were omitted.")
             else:
                 lines.append("No matching knowledge-base principle was found.")
             lines.append("(AI coaching unavailable: no LLM is configured. Showing rule-based results only.)")
