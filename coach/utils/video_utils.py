@@ -1176,6 +1176,45 @@ def build_audio_event_timeline(
         Path(tempfile.gettempdir()) / "hokcoach_audio_cache")
     root.mkdir(parents=True, exist_ok=True)
     video = Path(video_path)
+    entries = resolve_audio_template_catalog(
+        template_dir, catalog_path, usages=selected_usages, require_files=True)
+
+    # Cache the final structured timeline as well as intermediate features. Feature
+    # caching avoids decoding/FFT work, but a repeat replay analysis previously still
+    # spent 44-61 seconds correlating every template. The key includes every input
+    # file version and matching parameter, so tuning a threshold or replacing one
+    # local template cannot silently reuse stale detections (AGE-252).
+    timeline_inputs = {
+        "schema": 1,
+        "video": _audio_cache_key(video, sample_rate=sample_rate),
+        "catalog": _audio_cache_key(
+            Path(catalog_path), sample_rate=sample_rate),
+        "templates": [
+            [entry["file"], _audio_cache_key(
+                Path(entry["path"]), sample_rate=sample_rate,
+                trim_silence=True)]
+            for entry in entries
+        ],
+        "usages": sorted(selected_usages),
+        "similarity_threshold": float(similarity_threshold),
+        "min_separation_sec": float(min_separation_sec),
+        "alternate_dedupe_sec": float(alternate_dedupe_sec),
+        "sample_rate": int(sample_rate),
+    }
+    timeline_key = hashlib.sha256(json.dumps(
+        timeline_inputs, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")).hexdigest()[:24]
+    timeline_cache = root / f"timeline_{timeline_key}.json"
+    if timeline_cache.is_file():
+        try:
+            cached = json.loads(timeline_cache.read_text(encoding="utf-8"))
+            if cached.get("schema_version") == 1 and isinstance(
+                    cached.get("events"), list):
+                return cached["events"]
+        except (OSError, json.JSONDecodeError):
+            # A partial/corrupt cache is disposable; recompute from source evidence.
+            pass
+
     audio_key = _audio_cache_key(video, sample_rate=sample_rate)
     replay_wav = root / f"replay_{audio_key}.wav"
     if not replay_wav.is_file():
@@ -1184,8 +1223,6 @@ def build_audio_event_timeline(
         replay_wav, root, sample_rate=sample_rate, trim_silence=False)
 
     candidates: list[dict[str, Any]] = []
-    entries = resolve_audio_template_catalog(
-        template_dir, catalog_path, usages=selected_usages, require_files=True)
     for entry in entries:
         template_f = _cached_audio_features(
             Path(entry["path"]), root, sample_rate=sample_rate)
@@ -1218,10 +1255,16 @@ def build_audio_event_timeline(
         )
         if not duplicate:
             kept.append(candidate)
-    return sorted(kept, key=lambda e: (
+    timeline = sorted(kept, key=lambda e: (
         float(e["ts"]), e["event"], e["perspective"], -float(e["score"]),
         e["template"],
     ))
+    temp_cache = timeline_cache.with_suffix(".tmp")
+    temp_cache.write_text(json.dumps(
+        {"schema_version": 1, "events": timeline}, ensure_ascii=False,
+        separators=(",", ":")), encoding="utf-8")
+    temp_cache.replace(timeline_cache)
+    return timeline
 
 
 def relate_audio_events_to_death(

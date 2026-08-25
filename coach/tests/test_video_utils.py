@@ -270,11 +270,14 @@ class TestAudioFusion(unittest.TestCase):
             }), encoding="utf-8")
             with mock.patch.object(video_utils, "extract_audio_track",
                                    side_effect=lambda _v, out, sample_rate: (
-                                       out.write_bytes(replay_wav.read_bytes()) or out)) as extract:
+                                       out.write_bytes(replay_wav.read_bytes()) or out)) as extract, \
+                 mock.patch.object(video_utils, "_match_cached_features",
+                                   wraps=video_utils._match_cached_features) as matcher:
                 first = video_utils.build_audio_event_timeline(
                     str(video), template_dir=template_dir, catalog_path=catalog,
                     cache_dir=root / "cache", sample_rate=rate,
                     similarity_threshold=0.9)
+                first_match_calls = matcher.call_count
                 second = video_utils.build_audio_event_timeline(
                     str(video), template_dir=template_dir, catalog_path=catalog,
                     cache_dir=root / "cache", sample_rate=rate,
@@ -282,6 +285,9 @@ class TestAudioFusion(unittest.TestCase):
 
         self.assertEqual(first, second)
         self.assertEqual(extract.call_count, 1, "replay audio should be extracted once")
+        self.assertEqual(first_match_calls, 3)
+        self.assertEqual(matcher.call_count, first_match_calls,
+                         "cached timeline should skip all repeat correlations")
         self.assertEqual([event["event"] for event in first],
                          ["hero_killed", "ping_attack_enemy"])
         self.assertEqual(first[1]["usage"], "intent")
