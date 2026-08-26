@@ -70,7 +70,7 @@ def classify_death(evidence: dict[str, Any],
     """
     # --- 1. 结构化证据规则（4.1.2优先级） ---
     if (evidence.get("near_brush") and
-            evidence.get("visible_enemy_engagement") is not True):
+            evidence.get("visible_enemy_engagement") is False):
         return _result("探草死", 0.4,
                        "代理信号：死亡前位于草丛附近，且窗口内无可见敌方交战",
                        proxy=True)

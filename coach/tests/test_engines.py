@@ -229,13 +229,18 @@ class TestReplayEngine(unittest.TestCase):
     def test_rule_priority(self):
         # 4.1.2优先级：探草 > 掉点 > 换头 > 贪线
         r = replay_engine.classify_death(
-            {"near_brush": True, "kill_traded": True})
+            {"near_brush": True, "visible_enemy_engagement": False, "kill_traded": True})
         self.assertEqual(r["type"], "探草死")
         self.assertTrue(r["proxy"])
         self.assertLessEqual(r["confidence"], 0.4)
         r = replay_engine.classify_death({"kill_traded": True})
         self.assertEqual(r["type"], "换头死")
         self.assertFalse(r["proxy"])
+
+    def test_unknown_engagement_does_not_create_brush_verdict(self):
+        r = replay_engine.classify_death({"near_brush": True, "visible_enemy_engagement": None})
+        self.assertEqual(r["type"], "机制死")
+        self.assertFalse(r["evidence_sufficient"])
 
     def test_visible_engagement_blocks_brush_proxy(self):
         r = replay_engine.classify_death({

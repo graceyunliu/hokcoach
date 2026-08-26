@@ -137,6 +137,10 @@ def build_evidence_ledger(detail: dict[str, Any], lang: str = "zh") -> dict[str,
         for reason in object_evidence.get("reason_codes") or []:
             if reason == "mixed_combat_and_wave":
                 unresolved.append("Team fight and wave-clearing signals overlap; do not label this greedily." if english else "团战与清线信号重叠，不能直接归为贪线。")
+            elif reason == "vision_gap":
+                unresolved.append("Enemy vision is incomplete; confirm threat locations before committing." if english else "敌方视野不完整，投入龙坑前需要先确认威胁位置。")
+            elif reason == "side_lane_pressure":
+                observed.append("Side-lane minion pressure is present." if english else "边线小兵压力存在。")
 
     audio = detail.get("audio_context")
     if audio:
