@@ -57,3 +57,17 @@ Actions页面手动点 "Run workflow" 触发。
 
 游戏机制类知识错误会直接误导训练建议，且信源可靠度参差不齐（主播解说 ≠
 官方数值）。因此管线只负责"发现变化 + 起草条目"，合并决策始终由人工完成。
+
+## 2026-08-26 English translation draft
+
+`2026-08-26_english_translation_draft.json` contains machine-generated English counterparts for all 50 currently loaded knowledge-base entries. The draft was generated in one structured batch with `gpt-5-mini`, preserving each entry ID and requesting faithful translation of conditions, numbers, qualifiers, and game-specific names.
+
+This file is intentionally **not loaded by production retrieval**. English coaching must fail closed when a principle has no human-reviewed `text_en`; a machine draft is not sufficient evidence for the Coach knowledge layer. Before promotion, a reviewer should compare every translation against its Chinese source, correct terminology and version qualifiers, and then add the reviewed `text_en` fields to `macro_principles.md`, `map_mechanics.md`, and `hero_mechanics.json`. Run:
+
+```bash
+cd coach
+python3 -m tools.audit_knowledge_base --json
+python3 -m tools.audit_knowledge_base --strict-en
+```
+
+The strict command should only be used as a release gate after all promoted translations have been reviewed. Until then, the expected audit result is 0% production English coverage and English prompt generation will explicitly state that matching evidence is unavailable rather than silently mixing Chinese evidence into an English response.

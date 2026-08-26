@@ -1,0 +1,204 @@
+{
+  "translations": [
+    {
+      "id": "vision_001",
+      "text_en": "If the jungler has been missing from the minimap for more than 15 seconds, assume they may be nearby before passing any unwarded brush."
+    },
+    {
+      "id": "MP_TOWER_ROTATE_DAMAGE",
+      "text_en": "When diving under a tower for a kill, rotate who draws tower aggro instead of letting the same person remain under the tower: tower damage against the same target ramps with consecutive attacks (1.0→4.0 AD, nearly 4× within 6 hits). Having one person draw aggro and leave before damage rises, then swapping in another person, can significantly reduce team incoming damage and is a core low-interruption technique for tower dives."
+    },
+    {
+      "id": "MP_WAVE_CLEAR_FAKE_DIRECTION",
+      "text_en": "After clearing a wave there is a brief residual vision; if you immediately walk straight toward the target lane the enemy can read your roam intent from the residual vision and pre-warn, causing the gank to fail. Instead, move briefly in the opposite direction to confuse them, then circle to the real target."
+    },
+    {
+      "id": "MP_BUSH_BAIT_TURN_BACK",
+      "text_en": "When fatigued and anxious about a bush ambush, from about 2–3 body lengths away suddenly change direction or turn back to see whether someone chases out; if no one chases, re-approach; if someone chases, either fight or retreat based on the situation — safer than face-checking the bush directly."
+    },
+    {
+      "id": "MP_BUSH_SKILL_SCOUT_FIRST",
+      "text_en": "Squishy heroes (mage/marksman) without a support scout should not recklessly approach brush; prioritize using self-scouting skills (e.g., 孙尚香 / 鲁班七号 / 后羿 / 蒙犽 abilities). Mages can use 回响之杖 passive to infer whether someone is in the bush. If none of these options exist, check the minimap for key threat heroes' positions and movements before approaching brush."
+    },
+    {
+      "id": "MP_GANK_OPPORTUNITY_COST",
+      "text_en": "Actively ganking sacrifices roughly a stable ~300 gold income (half the jungle: one kill ~150 + one buff ~120 + a jungle camp ~90) in exchange for an uncertain ~150-gold kill reward: if you secure the gank you roughly break even (300−150), if you fail you lose ~300 stable gold, and if you get counter-killed you lose >600 (your death gold plus opponent double-effect from counter-jungling). Early game, if you cannot secure a kill within ~15 seconds you are usually losing money (time cost ~10 gold per second); only after getting the kill and then taking jungle/pushing/taking objectives does the gank truly pay off."
+    },
+    {
+      "id": "MP_FARM_MARGINAL_VALUE_DECLINE",
+      "text_en": "Farming has diminishing marginal returns: after completing core items (e.g., 无尽战刃 / 暗影战斧 / 巫术法杖 or corresponding core pieces), continued jungle/farm yield drops noticeably; after full build and into late game, further farming adds almost no incremental team value — at that point actively hand resources to lower-economy teammates instead of solo-farming."
+    },
+    {
+      "id": "MP_LOWER_ELO_FARM_PRIORITY",
+      "text_en": "In lower ranks (source reference: \"王者70星以下\"), players commonly lack the 'farm first then fight' mindset and tend to fight constantly, wasting time. In this bracket, simply farming steadily and restraining the impulse to actively fight generally produces a noticeably higher win rate — secure solid development before repeatedly attempting dives/ganks; risk assessment should be conservative."
+    },
+    {
+      "id": "MP_COMEBACK_ECONOMY_MECHANIC",
+      "text_en": "Original comeback economy coefficient (introduced in S29): when team gold difference exceeds a certain magnitude (growing over time), kills by the advantaged side grant 10% less gold and kills by the disadvantaged side grant 10% more. This means even with a large lead, deaths from overextending/greedy laning that let the behind team score kills are amplified by this mechanic — leading games should not relax risk assessment for solo pushing/greedy laning; a single death that allows comeback gold is worth more than it appears."
+    },
+    {
+      "id": "MP_FAKE_VISION_REROUTE",
+      "text_en": "When your vision is already exposed (e.g., after killing an enemy mid or being seen leaving a bush by the wave/tower), use the residual vision window to fake a direction by initially moving toward the false target, then circle to the real destination. Example: after killing mid and intending to go to enemy red buff, first move noticeably toward blue buff for a short distance, then loop back to red — the enemy receives the signal 'went to blue' rather than the real destination, significantly reducing prediction/encounter probability."
+    },
+    {
+      "id": "MP_BUSH_BAIT_ASYMMETRIC_EXPOSURE",
+      "text_en": "Bush-bait tactic: have a teammate secretly wait inside the bush while you stand outside, attack the enemy, then dive into the bush — only your vision will be briefly exposed while the pre-placed teammate remains hidden. The enemy will misjudge there is only one person in the bush and chase, running into a two-person ambush. This tactic depends on the residual-vision seconds discussed elsewhere (disputed; see MM_BUSH_ENTER_RESIDUAL_TIME), but the asymmetric effect 'one person exposed, teammate not exposed' itself is reliable."
+    },
+    {
+      "id": "MP_NO_TRADE_THREE_RULES",
+      "text_en": "Three 'absolute no-trade' signals: (1) incomplete skills (missing core CC/escape/survival); (2) wave disadvantage (when enemy minion wave presence makes minion damage early-game far exceed hero damage); (3) lack of vision (river/critical area blacked out, high probability of enemy jungler ambush). If any of these apply, forgo trading and play safely."
+    },
+    {
+      "id": "MP_SKILL_VACUUM_TRADE_WINDOW",
+      "text_en": "Top-lane warrior-type heroes' core skill cooldowns are generally around 10 seconds; after a full combo there is at least a ~3-second 'vacuum' (core skills not available). You should choose to trade/press when the opponent is in this vacuum window, not when their skills are fully available."
+    },
+    {
+      "id": "MP_EXECUTE_LINE_RETREAT",
+      "text_en": "'Execute line': the maximum HP threshold at which the opponent's full combo can one-shot you. Once your HP falls into the opponent's execute line and you have no counterplay or escape, even if you lose some CS you should recall/heal rather than stay and fight — this threshold has no universal formula and requires practical experience against the specific opponent's damage."
+    },
+    {
+      "id": "MP_FLASH_VACUUM_PUNISH",
+      "text_en": "After the enemy uses Flash or a displacement skill, they have a distinct 'weak period' (for a while they can only rely on autos/movement). You should immediately pressure or use area abilities to lock their landing spot the instant they have used Flash/displacement, rather than waiting for them to recover."
+    },
+    {
+      "id": "MP_COUNTER_FLASH",
+      "text_en": "If an enemy Flashes in on you and you judge they intend to one-combo you, you can Flash in the opposite direction at the moment they Flash — opponents commonly Flash when they believe they can secure a kill, and counter-Flash at that timing often yields higher survival than straight-line fleeing."
+    },
+    {
+      "id": "MP_PURIFY_PREEMPTIVE",
+      "text_en": "When you see an enemy control champion begin an obvious cast animation or skill sound cue, preemptively press Purify or a built-in cleanse rather than waiting to be hit — pressing Purify still leaves a very short reaction window to avoid interruption from damage-based channeled spells."
+    },
+    {
+      "id": "MP_CONTROL_CHAIN_TIMING",
+      "text_en": "When multiple allied crowd-controls are chained, do not add your control while a teammate already has the enemy locked (this causes 'wasted control'); instead wait until the teammate's control is about to end, or until the enemy has used their Purify, then apply your control to extend the chain."
+    },
+    {
+      "id": "MP_DONT_DIVE_WITHOUT_ESCAPE",
+      "text_en": "If you lack Purify/positioning/defensive items, do not forcefully dive in to save teammates hit by suppression-type ultimates (e.g., 东皇大招 / 张良大招) — suppression cannot be removed by Purify and forcing a rescue usually only gets you killed too, gifting double kills. If you have no survival means, prioritize saving yourself rather than instinctively saving others."
+    },
+    {
+      "id": "MM_ORIGIN_GUARD",
+      "text_en": "Original guard mechanic (S43 '陌上相逢' live): first 4 minutes, enemy heroes inside our turret reduce incoming damage by 25% (single enemy unchanged), and each additional enemy inside the turret reduces damage by an extra 3.75%; from 4–10 minutes, damage reduction is 10% (single enemy unchanged) and each additional enemy reduces an extra 1.5%."
+    },
+    {
+      "id": "MM_TOWER_BASE_STATS",
+      "text_en": "Turret base stats: first/second turret initial attack 470, +3 every 30s, cap 540 at 10 minutes; inhibitor turret initial 630, +5 every 30s, cap 724; crystal initial 580. Attack cadence: turret 1 attack/sec, crystal 1 attack/2 sec."
+    },
+    {
+      "id": "MM_TOWER_DAMAGE_RAMP",
+      "text_en": "Turret damage against the same hero increases on consecutive attacks: first hit 1.0 AD, then +0.6 AD each subsequent hit, reaching cap 4.0 AD on the 6th hit (example for a 470 base turret: 470→752→1034→1316→1598→1880). Damage is 100% armor-piercing physical damage; it can be reduced by shields/damage-reduction abilities, but hero physical defense is ineffective."
+    },
+    {
+      "id": "MM_TOWER_NO_MINION_REDUCTION",
+      "text_en": "With no minion wave present, turret damage is reduced by 55%, crystal damage reduced by 90% (turret damage calc priority: base damage × armor reduction × breaker coefficient → cap at 1000/2000 → then multiply no-minion damage reduction factor)."
+    },
+    {
+      "id": "MM_TOWER_DAMAGE_CAP",
+      "text_en": "Single-hit damage cap against turrets is 1000; with 'strong-strike' passives (宗师之力, or enhanced autos from 刘禅 / 铠 / 孙策, etc.) the cap increases to 2000. Turrets can never be critically struck by basic attacks, and autos on turrets do not lifesteal."
+    },
+    {
+      "id": "MM_TOWER_AGGRO_RULES",
+      "text_en": "Turret aggro priority (without interference): the first hero who dives without minions ＞ the first hero who deals damage to an enemy under the turret ＞ minions. Once aggro is locked it ramps damage against the same target; leaving attack range immediately clears aggro lock. Displacement/interrupt effects do not clear already-locked aggro."
+    },
+    {
+      "id": "MM_TOWER_AGGRO_CLEAR_SKILLS",
+      "text_en": "Some un-targetable states can clear a locked turret aggro: 芈月 / 貂蝉 / 李白 / 宫本武藏 / 瑶 displacement or stealth states, the 无法被选中 effect from 辉月,曜's ultimate, 镜's 飞雷神 effect, and death/resurrection."
+    },
+    {
+      "id": "MM_BUSH_HIDDEN_FROM_OUTSIDE",
+      "text_en": "Bush concealment principle: if a unit is pre-hidden inside a bush and has not interacted with enemies outside, the bush unit can see approaching outside enemies while outside enemies cannot see the bush unit; once the bush unit attacks an outside target its vision is immediately revealed to the enemy."
+    },
+    {
+      "id": "MM_BUSH_ENTER_RESIDUAL_TIME",
+      "text_en": "Residual vision when entering bush: if no attack occurred before entering, vision persists for 0.5 seconds (does not disappear immediately) — both sources agree on this. The specific scenario 'attack an enemy outside then immediately enter the bush' has an unresolved contradiction: the same author reported 2.5 seconds in a 2020-08-31 article but 0.5 seconds in a 2021-08-04 article for nearly identical descriptions. Until which value corresponds to the current version is clarified, only the qualitative conclusion stands: 'entering bush immediately after fighting is not instantly safe' — do not cite 2.5s or 0.5s as definitive."
+    },
+    {
+      "id": "MM_BUSH_ATTACK_FROM_INSIDE_RESIDUAL",
+      "text_en": "Attacking from inside a bush at an outside enemy (different from the previous scenario): as long as you continue fighting your vision stays exposed; even if you stop attacking and remain still inside the bush, vision lingers for about 4 seconds before disappearing — do not assume a quick hit restores stealth. If another teammate is positioned at some distance within the same long brush (e.g., opposite ends of mid long bush), your attack only exposes your own vision and does not expose the distant teammate."
+    },
+    {
+      "id": "MM_VISION_PERSISTS_INTO_BUSH",
+      "text_en": "If your vision was already exposed before entering bush (e.g., the enemy portrait appears in the target-lock display), entering the bush does not immediately remove that exposure — exposed vision does not reset upon entering bush. The correct action is to reroute when you detect impending exposure and enter only after the enemy portrait no longer displays, not to expose first and expect bush to fix it. Similarly, if an enemy is clearing the intersecting minion wave, charging directly from the bush will first be revealed by minion vision; reroute outside minion vision before acting."
+    },
+    {
+      "id": "MM_BUSH_SKILL_DETECTION_EXCEPTIONS",
+      "text_en": "Some scouting/hit effects interact with bush-stealthed units inconsistently; these are hero-mechanic exceptions rather than general rules: 张良's first skill hitting a bush-stealthed target does not reveal their vision; 王昭君's first skill hitting a target reveals a small area of vision around them (usable versus stealth); 花木兰's Light Sword second skill hitting does not reveal bush targets; 鲁班七号's first skill (grenade) thrown into brush grants bush vision; 司马懿 passive detects units casting skills inside brush within 2000 range."
+    },
+    {
+      "id": "MM_TOWER_VISION_YELLOW_CIRCLE",
+      "text_en": "When approaching a turret, the turret attack circle turning yellow indicates your vision has been exposed to the enemy (this is a vision-exposure signal and is distinct from whether you are inside attack range)."
+    },
+    {
+      "id": "MM_MINION_VISION_ON_ATTACK",
+      "text_en": "Approaching minions and being attacked (i.e., entering minion aggro/attack range) exposes vision to both teams, similar to turret vision rules; solo-pushing players often mistakenly think they remain unseen, but the wave already reveals their presence."
+    },
+    {
+      "id": "MM_VISION_RECIPROCITY",
+      "text_en": "Vision reciprocity principle: if you see the opponent, they simultaneously see you (hero vision is bidirectional); if you are in enemy vision before entering bush, entering bush afterwards does not hide your path. You can enable 'lock enemy portrait display' in settings — when an enemy portrait suddenly appears near your skill bar it indicates mutual vision, useful to self-check whether you are exposed."
+    },
+    {
+      "id": "MM_TOWER_VISION_EXCEEDS_CIRCLE",
+      "text_en": "A turret's actual detection range exceeds the displayed yellow caution circle — not seeing the yellow circle does not guarantee you are not exposed; leave extra safety margin when invading (especially around blue buff) instead of relying solely on the yellow circle."
+    },
+    {
+      "id": "MM_WAVE_ECONOMY",
+      "text_en": "Last-hit gold per minion rises from 41 to 61, about +33%; one wave of three minions yields roughly +60 gold; waves spawn about every 33 seconds. Over 10 minutes, consistently last-hitting versus never last-hitting yields about a 1200 gold difference, roughly equivalent to a large portion of an item."
+    },
+    {
+      "id": "MM_KILL_ECONOMY",
+      "text_en": "Base kill bounty is about 150 gold; the more consecutive deaths the enemy has, the lower the single-bounty (the original punishment mechanic reduces kill reward for consecutive deaths). Assists split the bounty among participating teammates."
+    },
+    {
+      "id": "MM_JUNGLE_ECONOMY",
+      "text_en": "Small jungle monsters give about 50 gold each, respawn every 70 seconds; red/blue buffs respawn every 90 seconds (red provides damage+slow, blue reduces skill cooldown; both indirectly speed up wave clear and thus CS acquisition). Jungle resources have a 'double economic difference' effect — your gain is simultaneously the opponent's loss of the same amount."
+    },
+    {
+      "id": "MM_OBJECTIVE_ECONOMY",
+      "text_en": "Before ten minutes, killing 主宰 grants each teammate 40 gold and killing 暴君 grants 20 gold (excluding the buff's combat effect). The economic value of one 主宰 kill (including CS-equivalence) is about 180 gold, close to a minion wave (~250 gold). Controlling dragons stacked and shared by the team can create significant gold differences."
+    },
+    {
+      "id": "MM_TOWER_PUSH_ECONOMY",
+      "text_en": "Destroying a first turret grants 75 gold, a second turret 97 gold, and additionally when a turret is destroyed each teammate receives 100 gold; taking an outer turret can create approximately a 575 gold swing (including direct rewards and team share)."
+    },
+    {
+      "id": "MM_VISION_SPIRIT_MECHANICS",
+      "text_en": "Vision Spirit mechanic (adjusted S24, confirmed 2021-06-22; replaces the old 'only allied can see' rule which is now outdated): visibility is now also seen by enemies, but the vision spirit itself hides inside a bush and enemies must enter that bush to discover and approach to destroy it (destroyer gets 1 gold). The spirit no longer patrols the jungle but hides in brush to provide that brush's vision for allies; duration extended from 55s to 60s, cooldown shortened from 180s to 120s. Trigger condition unchanged: after destroying the outer lane second turret, a hero standing on the wreck for 2 seconds activates it."
+    },
+    {
+      "id": "HM_FLASH_BASE_CD",
+      "text_en": "Summoner skill 'Flash' base cooldown 120 seconds; instantly relocates in a chosen direction, can pass thin walls, unlocks at level 19; built-in cooldown active during the first 15 seconds of the match, cannot be used then."
+    },
+    {
+      "id": "HM_COOLDOWN_BOOTS_SUMMONER_CD",
+      "text_en": "The Calm Boots passive '静谧' was changed in S34 (2023-12-27) to 'accelerate summoner spell cooldown' (previously only affected hero skill cooldowns). The current in-game item page shows acceleration of 10%–20% (scaling with level) while the S34 announcement stated a fixed 15% — a discrepancy exists. After equipping the item Flash's actual cooldown is roughly in the 96–110s range; specifics should follow the in-game description and be version-checked regularly."
+    },
+    {
+      "id": "HM_HOUYI_ULT_STUN",
+      "text_en": "Hou Yi's ultimate '灼日之矢' stun duration scales with travel distance from 0.75 to 3.5 seconds; the projectile has no cast windup."
+    },
+    {
+      "id": "HM_XIAOQIAO_SKILL2_KNOCKUP",
+      "text_en": "Xiao Qiao's second skill '甜蜜恋风' knock-up duration 1.5 seconds; the skill has a short cast windup (official milliseconds not provided)."
+    },
+    {
+      "id": "HM_WANGZHAOJUN_SKILL2_FREEZE",
+      "text_en": "Wang Zhaojun's second skill '禁锢寒霜' freeze duration 2.5 seconds; cast windup about 0.8 seconds (one of the few official skills with a precise windup value)."
+    },
+    {
+      "id": "HM_PURIFY_MECHANIC",
+      "text_en": "Summoner 'Purify' cooldown 120 seconds; removes all negative and control effects on self (slow/stun/knock-up/knockback/silence/petrify/freeze, etc.) and grants 1.5 seconds of control immunity; casting moment provides approximately 0.2–0.3 seconds of invulnerability. Cannot remove suppression/dominion-class effects (e.g., 东皇太一 ultimate '堕神契约', 张良 ultimate '言灵·操纵', 老夫子 ultimate '圣人之威')."
+    },
+    {
+      "id": "HM_ZHUANGZHOU_PASSIVE_CLEANSE",
+      "text_en": "Zhuangzhou passive '自然意志' every 6 seconds automatically enters a dream state, removing and granting immunity to all control effects (suppression excluded), lasting 2 seconds; no manual activation required."
+    },
+    {
+      "id": "HM_ZHUANGZHOU_ULT_CLEANSE",
+      "text_en": "Zhuangzhou ultimate '天人合一' removes control effects (suppression excluded) from nearby allies and makes them control-immune, granting a 500/900/1300 shield for 2 seconds; cooldown 60/55/50 seconds by level. Activation has about a 0.3-second windup (player-tested). Cannot remove certain specific cases including: 兰陵王 second-skill follow-up damage, 孙膑 first-skill explosion, 金蝉 紧箍咒, 弈星 ultimate terrain, and ordering interactions with 老夫子 ultimate (the one who casts first takes effect)."
+    },
+    {
+      "id": "HM_DIANWEI_ALL_SKILLS_CLEANSE",
+      "text_en": "Dianwei's skills all cleanse control; each successful cleanse grants an 'Rage' effect that increases physical attack and attack range for 6 seconds, stacking up to 6 layers; cleansing hard-CC grants 2 stacks, cleansing soft-CC grants 1 stack."
+    }
+  ]
+}
