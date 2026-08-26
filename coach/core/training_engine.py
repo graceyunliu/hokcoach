@@ -101,6 +101,43 @@ def weekly_assessment(week_data: dict[str, Any]) -> tuple[str, str]:
 # 任务生成（4.2.2）
 # ---------------------------------------------------------------------------
 
+def _replay_weakness_scores(recent_replays: list[dict[str, Any]] | None = None) -> dict[str, float]:
+    """Score recurring weaknesses by evidence quality, not only event volume.
+
+    A real coach does not assign a week of practice from an unverified proxy
+    death in isolation. High-confidence, evidence-sufficient events count fully;
+    proxy or insufficient events contribute less while remaining visible. Older
+    category-only records remain supported as a backward-compatible fallback.
+    """
+    scores: dict[str, float] = {}
+    for replay in recent_replays or []:
+        details = replay.get("death_analysis", {}).get("details") or []
+        if details:
+            for detail in details:
+                weakness = DEATH_TYPE_TO_WEAKNESS.get(detail.get("type"))
+                if not weakness:
+                    continue
+                try:
+                    confidence = min(max(float(detail.get("confidence", 0.5)), 0.0), 1.0)
+                except (TypeError, ValueError):
+                    confidence = 0.5
+                weight = confidence
+                if detail.get("evidence_sufficient") is False:
+                    weight *= 0.25
+                if detail.get("proxy") is True:
+                    weight *= 0.5
+                scores[weakness] = scores.get(weakness, 0.0) + weight
+            continue
+
+        # Pre-structured replay records only expose category counts. Treat each
+        # count as a neutral observation rather than pretending it is verified.
+        for dtype, count in replay.get("death_analysis", {}).get("categories", {}).items():
+            weakness = DEATH_TYPE_TO_WEAKNESS.get(dtype)
+            if weakness and count:
+                scores[weakness] = scores.get(weakness, 0.0) + float(count) * 0.5
+    return scores
+
+
 def pick_next_weakness(progress: dict[str, Any],
                        recent_replays: list[dict[str, Any]] | None = None,
                        exclude: set[str] | None = None) -> str:
@@ -117,14 +154,9 @@ def pick_next_weakness(progress: dict[str, Any],
         if entry.get("status") == "in_progress" and name not in exclude:
             return name
 
-    # 复盘数据驱动
-    counts: dict[str, int] = {}
-    for r in recent_replays or []:
-        for dtype, n in r.get("death_analysis", {}).get("categories", {}).items():
-            w = DEATH_TYPE_TO_WEAKNESS.get(dtype)
-            if w and n:
-                counts[w] = counts.get(w, 0) + n
-    for w, _ in sorted(counts.items(), key=lambda x: -x[1]):
+    # 复盘数据驱动：按证据质量加权，避免低置信代理信号淹没稳定模式。
+    scores = _replay_weakness_scores(recent_replays)
+    for w, _ in sorted(scores.items(), key=lambda x: (-x[1], WEAKNESS_ORDER.index(x[0]))):
         if w in tracker and tracker[w].get("status") != "done" and w not in exclude:
             return w
 

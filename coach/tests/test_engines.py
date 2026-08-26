@@ -1310,6 +1310,27 @@ class TestTrainingEngine(unittest.TestCase):
             self.assertIn("checkin_method", t)
             self.assertEqual(t["status"], "in_progress")
 
+    def test_evidence_weighted_replay_focus_prefers_reliable_pattern(self):
+        progress = data_utils.default_progress()
+        replays = [
+            {"death_analysis": {"details": [
+                {"type": "贪线死", "confidence": 0.95,
+                 "evidence_sufficient": True, "proxy": False},
+            ]}},
+            {"death_analysis": {"details": [
+                {"type": "探草死", "confidence": 0.4,
+                 "evidence_sufficient": False, "proxy": True},
+                {"type": "探草死", "confidence": 0.4,
+                 "evidence_sufficient": False, "proxy": True},
+                {"type": "探草死", "confidence": 0.4,
+                 "evidence_sufficient": False, "proxy": True},
+            ]}},
+        ]
+        scores = training_engine._replay_weakness_scores(replays)
+        self.assertGreater(scores["优势期决策"], scores["探草意识"])
+        self.assertEqual(
+            training_engine.pick_next_weakness(progress, replays), "优势期决策")
+
     def test_pick_next_weakness_from_replays(self):
         progress = data_utils.default_progress()
         replays = [{"death_analysis": {"categories": {"贪线死": 3, "探草死": 1}}}]
