@@ -81,6 +81,59 @@ def build_reflection_question(detail: dict[str, Any], lang: str = "zh") -> str:
     return questions.get(dtype, "你当时想完成什么、看到了什么，又是什么让这个选择看起来是安全的？")
 
 
+def build_evidence_ledger(detail: dict[str, Any], lang: str = "zh") -> dict[str, list[str]]:
+    """Separate observed replay facts from questions a coach must still ask.
+
+    The ledger is deliberately conservative: missing signals become unresolved
+    questions, never negative facts. This gives the UI/report a coach-like
+    evidence board and prevents a confident-sounding comment from hiding gaps.
+    """
+    english = (lang or "zh").lower() == "en"
+    observed: list[str] = []
+    unresolved: list[str] = []
+
+    if detail.get("location"):
+        source = detail.get("location_source")
+        if english:
+            observed.append(f"Death location: {detail['location']} ({'direct system marker' if source == 'minimap_x_marker' else 'inferred'})")
+        else:
+            observed.append(f"死亡地点：{detail['location']}（{'系统X标记直接读取' if source == 'minimap_x_marker' else '轨迹推断'}）")
+    else:
+        unresolved.append("Confirm the death location from the replay." if english else "需要回放确认死亡地点。")
+
+    if detail.get("minimap_context"):
+        observed.append("Minimap context available." if english else "已有死亡前小地图轨迹上下文。")
+    else:
+        unresolved.append("Check the minimap before the death." if english else "需要回放查看死亡前小地图。")
+
+    for key, en_text, zh_text in (
+        ("solo_in_enemy_half", "Player was alone in enemy half.", "玩家独自在敌方半区。"),
+        ("anomalous_displacement", "Anomalous enemy displacement detected.", "检测到敌方异常位移。"),
+        ("visible_enemy_engagement", "Visible enemy engagement was present.", "死亡窗口内有可见敌方交战。"),
+        ("pushing_wave", "Pushing-wave signal was detected.", "检测到推线/收线信号。"),
+    ):
+        value = detail.get(key)
+        if value is True:
+            observed.append(en_text if english else zh_text)
+        elif value is None:
+            unresolved.append(
+                f"Replay signal unavailable: {key}." if english
+                else f"回放信号不可用：{key}。"
+            )
+
+    audio = detail.get("audio_context")
+    if audio:
+        observed.append("Audio events are available as corroboration only." if english else "已有音频事件，但只能作为佐证。")
+    else:
+        unresolved.append("No audio corroboration was available." if english else "没有可用的音频佐证。")
+
+    if detail.get("self_attribution") or detail.get("user_intent"):
+        observed.append("Player intent/account is recorded." if english else "已记录玩家意图/自述。")
+    else:
+        unresolved.append("Ask what the player intended and saw." if english else "需要先问玩家当时的意图和所见。")
+    return {"observed": observed, "unresolved": unresolved}
+
+
 class Orchestrator:
     def __init__(self) -> None:
         self.config = config_utils.load_config()
@@ -267,6 +320,7 @@ class Orchestrator:
         details = replay["death_analysis"]["details"]
         for detail in details:
             detail.setdefault("coach_question", build_reflection_question(detail))
+            detail.setdefault("evidence_ledger", build_evidence_ledger(detail))
         return {
             "deaths": replay.get("deaths", 0),
             "first_death": details[0] if details else None,
@@ -323,6 +377,7 @@ class Orchestrator:
         comments: list[str | None] = []
         for detail in details:
             detail.setdefault("coach_question", build_reflection_question(detail, lang=lang))
+            detail.setdefault("evidence_ledger", build_evidence_ledger(detail, lang=lang))
             comment = self.comment_death(detail, lang=lang)
             detail["ai_comment"] = comment
             comments.append(comment)
@@ -400,6 +455,11 @@ class Orchestrator:
             lines.append(f"- 归因：{d.get('type')}（{d.get('classify_reason', '')}）")
             if d.get("coach_question"):
                 lines.append(f"- 教练先问：{d['coach_question']}")
+            ledger = d.get("evidence_ledger") or {}
+            if ledger.get("observed"):
+                lines.append(f"- 已观察：{'；'.join(ledger['observed'])}")
+            if ledger.get("unresolved"):
+                lines.append(f"- 待确认：{'；'.join(ledger['unresolved'])}")
             if d.get("location"):
                 tag = "系统X标记" if d.get("location_source") == "minimap_x_marker" else "推断"
                 lines.append(f"- 死亡地点：{d['location']}（{tag}）")

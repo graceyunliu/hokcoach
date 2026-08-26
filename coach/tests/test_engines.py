@@ -689,6 +689,24 @@ class TestOrchestratorStructuredReview(unittest.TestCase):
         ]
         return replay
 
+    def test_evidence_ledger_is_conservative_and_bilingual(self):
+        from core.orchestrator import build_evidence_ledger
+
+        ledger = build_evidence_ledger({
+            "location": "中路草", "location_source": "minimap_x_marker",
+            "minimap_context": "enemy disappeared", "solo_in_enemy_half": True,
+            "anomalous_displacement": None, "visible_enemy_engagement": False,
+            "pushing_wave": None, "audio_context": [],
+        })
+        self.assertTrue(any("系统X标记" in item for item in ledger["observed"]))
+        self.assertTrue(any("敌方半区" in item for item in ledger["observed"]))
+        self.assertTrue(any("anomalous_displacement" in item for item in ledger["unresolved"]))
+        self.assertTrue(any("意图" in item for item in ledger["unresolved"]))
+
+        english = build_evidence_ledger({"location": "mid", "location_source": "inferred"}, lang="en")
+        self.assertTrue(any("Death location" in item for item in english["observed"]))
+        self.assertTrue(any("Check the minimap" in item for item in english["unresolved"]))
+
     def test_reflection_question_is_evidence_specific_and_bilingual(self):
         from core.orchestrator import build_reflection_question
 
