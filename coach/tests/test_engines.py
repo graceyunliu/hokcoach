@@ -324,6 +324,43 @@ class TestHudFrameHopper(unittest.TestCase):
         self.assertEqual(hopper.stats.skipped, 1)
 
 
+class TestCoarseFrameSkipStride(unittest.TestCase):
+    @staticmethod
+    def _reader(path: Path):
+        ts = float(path.stem.removeprefix("hud_"))
+        return (0, int(ts >= 25.0) + int(ts >= 45.0), 0)
+
+    def _extract(self, stride=None):
+        kwargs = {} if stride is None else {"frame_skip_stride": stride}
+        decoded = []
+
+        def fake_grab(video_path, ts, out_path, crop):
+            decoded.append(ts)
+            return out_path
+
+        with (mock.patch.object(video_utils, "video_duration", return_value=61.0),
+              mock.patch.object(video_utils, "grab_hud_frame", side_effect=fake_grab),
+              mock.patch.object(video_utils, "_load_video_config", return_value={})):
+            events = video_utils.extract_death_events(
+                "fixture.mp4", self._reader, coarse_interval=10.0,
+                precision=1.0, **kwargs)
+        return events, decoded
+
+    def test_stride_one_is_byte_identical_to_no_skip_path(self):
+        baseline, baseline_decodes = self._extract()
+        stride_one, stride_one_decodes = self._extract(1)
+        self.assertEqual(repr(stride_one).encode(), repr(baseline).encode())
+        self.assertEqual(stride_one_decodes, baseline_decodes)
+
+    def test_stride_skips_coarse_decodes_but_keeps_death_count(self):
+        baseline, baseline_decodes = self._extract(1)
+        skipped, skipped_decodes = self._extract(3)
+        self.assertEqual(len(skipped), len(baseline))
+        self.assertLess(len(skipped_decodes), len(baseline_decodes))
+        # Refinement points are intentionally not stride-filtered.
+        self.assertIn(15.0, skipped_decodes)
+
+
 # ---------------------------------------------------------------------------
 # video_utils: 死亡"X"标记检测 (AGE-46)
 # ---------------------------------------------------------------------------

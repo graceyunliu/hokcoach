@@ -90,6 +90,10 @@ video:
   respawn_crop_calibrated: true                       # 标定完真实坐标后改true
   coarse_interval_sec: 75
   precision_sec: 3
+  # FrameHopper粗采样步长：1=处理每个已调度的粗采样帧（与现有行为完全一致）；
+  # N>1=仅解码/读取每N个粗采样帧。首帧、尾帧和命中窗口的二分精定位帧
+  # 不跳过；死亡计数单调，因此跳过的静态HUD粗采样点不会改变事件数。
+  frame_skip_stride: 1
   # AGE-242：仅跳过KDA数字槽视觉上未变的完整读数；疑似变化始终强制读取。
   # 真实模板reader A/B总耗时反而+11.6%，因此默认不开；远程VLM reader可显式开启。
   frame_skip_enabled: false

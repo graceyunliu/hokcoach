@@ -100,6 +100,7 @@ _DEFAULT_KDA_TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "assets" / 
 _FALLBACK_KDA_CONFIDENCE = 0.72
 _FALLBACK_FRAME_SKIP_THRESHOLD = 1.0
 _FALLBACK_FRAME_SKIP_ENABLED = False
+_FALLBACK_FRAME_SKIP_STRIDE = 1
 
 # HUD不可见时在邻近时刻重采的偏移序列（秒）
 _RESAMPLE_OFFSETS = (1.0, -1.0, 2.0, -2.0, 4.0, -4.0)
@@ -299,11 +300,13 @@ def extract_death_events(
     frame_skip_enabled: Optional[bool] = None,
     frame_skip_threshold: Optional[float] = None,
     frame_skip_stats_cb: "Callable[[FrameSkipStats], None] | None" = None,
+    frame_skip_stride: Optional[int] = None,
 ) -> list[dict[str, Any]]:
     """从回放视频提取死亡事件列表（tech spec 4.1.1 v1.2方案）。
 
     步骤：
-    1. 以coarse_interval为间隔粗采样，只解码+裁剪HUD计数器区域；
+    1. 以coarse_interval为间隔粗采样；frame_skip_stride>1时只解码
+       每N个调度点（首点和尾点始终保留）；
     2. 相邻可读采样点间死亡计数递增 → 命中候选窗口；
     3. 窗口内对每一次递增分别二分定位（跳变≥2时拆分），收敛到precision秒。
 
@@ -315,6 +318,8 @@ def extract_death_events(
         hud_crop: HUD计数器裁剪区域（默认从config.yaml的video.hud_crop读取）。
         frame_skip_enabled: KDA数字槽未变时复用上次读数（AGE-242）。
         frame_skip_threshold: 数字槽平均绝对像素差阈值（0-255）。
+        frame_skip_stride: 粗采样帧步长；1完全保留现有行为，N>1时仅处理
+            每N个粗采样点。二分定位帧不跳过。
 
     Returns:
         按时间升序的事件列表，每项:
@@ -334,6 +339,13 @@ def extract_death_events(
                 "frame_skip_threshold", _FALLBACK_FRAME_SKIP_THRESHOLD))
         except (TypeError, ValueError):
             frame_skip_threshold = _FALLBACK_FRAME_SKIP_THRESHOLD
+    if frame_skip_stride is None:
+        frame_skip_stride = video_cfg.get(
+            "frame_skip_stride", _FALLBACK_FRAME_SKIP_STRIDE)
+    try:
+        frame_skip_stride = max(1, int(frame_skip_stride))
+    except (TypeError, ValueError):
+        frame_skip_stride = _FALLBACK_FRAME_SKIP_STRIDE
 
     with tempfile.TemporaryDirectory(prefix="coach_hud_") as tmp:
         workdir = Path(tmp)
@@ -348,12 +360,15 @@ def extract_death_events(
         samples: list[tuple[float, KDA]] = []
         expected_points = 0
         ts = 0.0
+        sample_index = 0
         while ts < duration:
-            expected_points += 1
-            kda = read(ts)
-            if kda is not None:
-                samples.append((ts, kda))
+            if sample_index % frame_skip_stride == 0:
+                expected_points += 1
+                kda = read(ts)
+                if kda is not None:
+                    samples.append((ts, kda))
             ts += coarse_interval
+            sample_index += 1
         if not samples or samples[-1][0] < duration - coarse_interval / 2:
             expected_points += 1
             kda = read(duration - 1.0)
