@@ -26,6 +26,38 @@ class TestTemplateKdaReader(unittest.TestCase):
     ROOT = Path(__file__).resolve().parents[2]
     ISOLATED_SLOTS = ((5, 0, 45, 45), (90, 0, 135, 45), (175, 0, 220, 45))
 
+    @classmethod
+    def setUpClass(cls):
+        cls.library = video_utils._load_kda_templates(
+            video_utils._DEFAULT_KDA_TEMPLATE_DIR)
+
+    @classmethod
+    def _render_slot(cls, value):
+        slot = np.zeros((40, 70), dtype=np.uint8)
+        glyphs = []
+        for char in str(value):
+            image = cls.library[int(char)][0]
+            ys, xs = np.where(image > 0)
+            glyph = image[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+            height = 28
+            width = max(2, round(glyph.shape[1] * height / glyph.shape[0]))
+            glyphs.append(cv2.resize(
+                glyph, (width, height), interpolation=cv2.INTER_NEAREST))
+        total = sum(glyph.shape[1] for glyph in glyphs) + 3 * (len(glyphs) - 1)
+        x = 65 - total
+        for glyph in glyphs:
+            slot[6:6 + glyph.shape[0], x:x + glyph.shape[1]] = glyph
+            x += glyph.shape[1] + 3
+        return cv2.cvtColor(slot, cv2.COLOR_GRAY2BGR)
+
+    def _read_rendered_values(self, values):
+        fixture = np.hstack([self._render_slot(value) for value in values])
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "rendered_kda.png"
+            cv2.imwrite(str(path), fixture)
+            slots = ((0, 0, 70, 40), (70, 0, 140, 40), (140, 0, 210, 40))
+            return video_utils.make_template_kda_reader(slots=slots)(path)
+
     def test_same_frame_is_deterministic(self):
         reader = video_utils.make_template_kda_reader(slots=self.ISOLATED_SLOTS)
         frame = self.ROOT / "assets" / "age131_kda_slots_crop.png"
@@ -33,9 +65,7 @@ class TestTemplateKdaReader(unittest.TestCase):
         self.assertEqual(results, [(1, 3, 0)] * 5)
 
     def test_digit_one_has_multiple_real_exemplars(self):
-        library = video_utils._load_kda_templates(
-            video_utils._DEFAULT_KDA_TEMPLATE_DIR)
-        self.assertGreaterEqual(len(library[1]), 5)
+        self.assertGreaterEqual(len(self.library[1]), 5)
         reader = video_utils.make_template_kda_reader(slots=self.ISOLATED_SLOTS)
         self.assertEqual(
             reader(self.ROOT / "assets" / "age131_kda_slots_crop.png"),
@@ -54,35 +84,19 @@ class TestTemplateKdaReader(unittest.TestCase):
             reader = video_utils.make_template_kda_reader(slots=slots)
             self.assertEqual(reader(path), (1, 1, 1))
 
-    def test_segments_multi_digit_value(self):
-        library = video_utils._load_kda_templates(
-            video_utils._DEFAULT_KDA_TEMPLATE_DIR)
+    def test_recognizes_committed_templates_for_digits_6_to_9(self):
+        for digit in range(6, 10):
+            with self.subTest(digit=digit):
+                self.assertGreaterEqual(len(self.library[digit]), 5)
+                self.assertEqual(
+                    self._read_rendered_values((digit, digit, digit)),
+                    (digit, digit, digit),
+                )
 
-        def raw_glyph(digit):
-            image = library[digit][0]
-            ys, xs = np.where(image > 0)
-            glyph = image[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
-            height = 28
-            width = max(2, round(glyph.shape[1] * height / glyph.shape[0]))
-            return cv2.resize(glyph, (width, height), interpolation=cv2.INTER_NEAREST)
-
-        def render_slot(value):
-            slot = np.zeros((40, 70), dtype=np.uint8)
-            glyphs = [raw_glyph(int(ch)) for ch in str(value)]
-            total = sum(g.shape[1] for g in glyphs) + 3 * (len(glyphs) - 1)
-            x = 65 - total
-            for glyph in glyphs:
-                slot[6:6 + glyph.shape[0], x:x + glyph.shape[1]] = glyph
-                x += glyph.shape[1] + 3
-            return cv2.cvtColor(slot, cv2.COLOR_GRAY2BGR)
-
-        fixture = np.hstack([render_slot(10), render_slot(0), render_slot(1)])
-        with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / "multi_digit.png"
-            cv2.imwrite(str(path), fixture)
-            slots = ((0, 0, 70, 40), (70, 0, 140, 40), (140, 0, 210, 40))
-            reader = video_utils.make_template_kda_reader(slots=slots)
-            self.assertEqual(reader(path), (10, 0, 1))
+    def test_segments_multi_digit_values(self):
+        for values in ((10, 0, 1), (12, 23, 10), (23, 12, 10)):
+            with self.subTest(values=values):
+                self.assertEqual(self._read_rendered_values(values), values)
 
     def test_rejects_unreadable_frame_instead_of_guessing(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -70,7 +70,7 @@ The KDA HUD row renders three single-digit counters (kills/deaths/assists) next 
 
 ### 4.3 Ground truth
 
-14 frames spanning K/D/A values 0-5 were read by eye directly from the extracted HUD images (not trusted to the VLM) and used as a held-out test set. Digits 6-9 never appeared in this particular player's stats for this recording and remain **untested**.
+14 frames spanning K/D/A values 0-5 were read by eye directly from the extracted HUD images (not trusted to the VLM) and used as a held-out test set. This original prototype did not include digits 6-9; AGE-187 subsequently added regression coverage using their committed real replay glyphs.
 
 ### 4.4 Results: iteration and the specific fix that mattered
 
@@ -113,9 +113,9 @@ The figure below is a static reconstruction of the interactive walkthrough revie
 
 ## 5. What is NOT proven yet
 
-- **Digits 6-9 are completely unvalidated.** This recording's player never reached those values. Needs a different (or longer) recording.
+- **Resolved by AGE-187:** digits 6-9 now have focused regression coverage using committed real late-game glyphs from replay 0.
 - **Single-video validation only.** All templates and thresholds are calibrated to one recording's exact pixel alignment, resolution, and compression profile. A different device/resolution/game-UI-version would need its own calibration and re-validation before this can be trusted generally.
-- **Single-digit assumption.** The segmentation step (`largest connected component = the digit`) does not handle a stat reaching double digits (10+), which is possible in longer/higher-kill games. Needs to be generalized to detect and read multiple glyphs per slot before that's safe.
+- **Resolved in production and covered by AGE-187:** segmentation reads multiple connected glyphs left-to-right; synthetic `10`, `12`, and `23` fixtures cover composition because no source recording reaches a two-digit personal stat.
 - **Not integrated.** This lives entirely in scratch scripts (`/tmp/age131_template_match*.py`), not in `coach/utils/video_utils.py`, and is not wired in as a `KdaReader` implementation. `extract_death_events()` still uses the VLM-based reader in the actual codebase today.
 - **AGE-131's own respawn co-occurrence feature is unrelated to this fix** and remains blocked separately on `respawn_crop` calibration (still a placeholder value in `config.yaml`).
 
@@ -131,8 +131,8 @@ The figure below is a static reconstruction of the interactive walkthrough revie
 
 **AGE-136 — substantially de-risked, but NOT ready to close.** The template-matching prototype demonstrates a credible fix path (100% on a small held-out set, fully deterministic), but:
 - Not integrated into the actual pipeline (`video_utils.py` untouched).
-- Digits 6-9 untested.
+- Digits 6-9 were untested in the prototype; AGE-187 now covers their committed real replay glyphs.
 - Only one recording used for calibration/validation.
-- No handling yet for double-digit stat values.
+- Double-digit values were not handled in the prototype; production composition now has AGE-187 synthetic regression coverage.
 
-**Suggested next steps, in order:** (1) integrate the template-matching `KdaReader` into `video_utils.py` behind the existing interface so `extract_death_events()` can use it without other code changes, (2) source digits 6-9 from a longer/higher-kill recording and validate, (3) generalize segmentation to handle multi-digit values, (4) once KDA reading is trustworthy, calibrate `respawn_crop` and re-run the full AGE-131 respawn co-occurrence validation that's been blocked this whole time.
+**Original suggested next steps:** integrate the reader, validate digits 6-9, add multi-digit segmentation, then calibrate `respawn_crop`. The first three are now implemented; AGE-187 supplies focused coverage for the latter two. Cross-device validation and respawn-crop calibration remain separate follow-ups.
