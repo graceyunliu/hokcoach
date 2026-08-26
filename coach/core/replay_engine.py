@@ -2,7 +2,7 @@
 """复盘引擎（阶段2，tech spec 4.1）。
 
 - 死亡事件输入：utils/video_utils.py（阶段0验证的检测管线）或 ManualInputAdapter
-- 死亡归因分类器（4.1.2）：探草死/掉点死/换头死/贪线死/机制死
+- 死亡归因分类器（4.1.2）：探草死（低置信代理信号）/掉点死/换头死/贪线死/机制死
 - 输出决策点 + death_type，供 knowledge_engine 检索（4.1.4步骤1）
 
 分类策略：规则优先，LLM兜底。
@@ -23,7 +23,7 @@ PROMPTS_DIR = BASE_DIR / "prompts"
 
 DEATH_TYPES = ["探草死", "掉点死", "换头死", "贪线死", "机制死"]
 
-# 自述关键词 → 死亡类型（按4.1.2优先级排列）
+# 自述关键词 → 死亡类型（按4.1.2优先级排列）。探草死命中后只作代理信号。
 _SELF_ATTRIBUTION_RULES: list[tuple[str, tuple[str, ...]]] = [
     ("探草死", ("探草", "草丛", "草里", "蹲草", "脸探", "埋伏")),
     ("掉点死", ("掉点", "孤立", "一个人", "单独", "队友撤", "越塔", "深入", "没队友")),
@@ -58,14 +58,22 @@ def classify_death(evidence: dict[str, Any],
           "kill_traded": bool|None,      # 同窗口击杀+1（换头信号，来自阶段0管线）
           "solo_in_enemy_half": bool|None,  # 结构化信号（有则用）
           "near_brush": bool|None,
+          "visible_enemy_engagement": bool|None,  # 死亡窗口内是否有可见交战
           "pushing_wave": bool|None,
         }
     Returns:
-        {"type": str, "confidence": float, "reason": str, "evidence_sufficient": bool}
+        {"type": str, "confidence": float, "reason": str,
+         "evidence_sufficient": bool, "proxy": bool}
+
+        探草死没有可持久读取的屏幕真值标记，因此始终以低置信
+        proxy返回，不与其他规则确认类型等同。
     """
     # --- 1. 结构化证据规则（4.1.2优先级） ---
-    if evidence.get("near_brush"):
-        return _result("探草死", 0.8, "检测到死亡前贴近未探明草丛")
+    if (evidence.get("near_brush") and
+            evidence.get("visible_enemy_engagement") is not True):
+        return _result("探草死", 0.4,
+                       "代理信号：死亡前位于草丛附近，且窗口内无可见敌方交战",
+                       proxy=True)
     if evidence.get("solo_in_enemy_half"):
         return _result("掉点死", 0.8, "队友已撤退/阵亡，玩家独自处于敌方半区")
     if evidence.get("kill_traded"):
@@ -77,6 +85,11 @@ def classify_death(evidence: dict[str, Any],
     attribution = (evidence.get("self_attribution") or "").strip()
     for dtype, kws in _SELF_ATTRIBUTION_RULES:
         if any(kw in attribution for kw in kws):
+            if dtype == "探草死":
+                return _result(dtype, 0.3,
+                               f"代理信号：仅依据用户自述（“{attribution}”），"
+                               "无持久画面标记可验证草丛埋伏",
+                               proxy=True)
             return _result(dtype, 0.6, f"依据用户自述（“{attribution}”）判定")
 
     # --- 3. LLM兜底 ---
@@ -91,9 +104,9 @@ def classify_death(evidence: dict[str, Any],
 
 
 def _result(dtype: str, conf: float, reason: str,
-            sufficient: bool = True) -> dict[str, Any]:
+            sufficient: bool = True, proxy: bool = False) -> dict[str, Any]:
     return {"type": dtype, "confidence": conf, "reason": reason,
-            "evidence_sufficient": sufficient}
+            "evidence_sufficient": sufficient, "proxy": proxy}
 
 
 def _format_death_location(evidence: dict[str, Any]) -> str:
@@ -129,6 +142,10 @@ def _classify_with_llm(evidence: dict[str, Any],
         return None
     reason = str(data.get("reason", ""))
     sufficient = "证据不足" not in reason and "insufficient evidence" not in reason.lower()
+    if dtype == "探草死":
+        return _result(dtype, min(float(data.get("confidence", 0.5)), 0.4),
+                       f"代理信号：{reason or 'LLM判定'}",
+                       sufficient=sufficient, proxy=True)
     return _result(dtype, float(data.get("confidence", 0.5)),
                    reason or "LLM判定", sufficient=sufficient)
 
@@ -172,6 +189,8 @@ def build_replay_from_video(video_path: str,
             # AGE-236生产检测器尚需已标定的河道几何+玩家图标身份；
             # 一旦上游event提供该信号，组装层不得丢失它。
             "solo_in_enemy_half": event.get("solo_in_enemy_half"),
+            "near_brush": event.get("near_brush"),
+            "visible_enemy_engagement": event.get("visible_enemy_engagement"),
             "anomalous_displacement": event.get("anomalous_displacement"),
             "self_attribution": None,
         }
@@ -184,6 +203,7 @@ def build_replay_from_video(video_path: str,
             "confidence": cls["confidence"],
             "classify_reason": cls["reason"],
             "evidence_sufficient": cls["evidence_sufficient"],
+            "proxy": cls["proxy"],
             "location": event.get("location"),
             "location_source": event.get("location_source"),  # AGE-46
             "killer": None,
@@ -212,6 +232,7 @@ def classify_manual_replay(replay: dict[str, Any],
             detail.setdefault("confidence", 1.0)
             detail.setdefault("classify_reason", "用户手动指定死亡类型")
             detail.setdefault("evidence_sufficient", True)
+            detail.setdefault("proxy", False)
             cats[detail["type"]] += 1
             continue
         cls = classify_death({
@@ -224,5 +245,6 @@ def classify_manual_replay(replay: dict[str, Any],
         detail["confidence"] = cls["confidence"]
         detail["classify_reason"] = cls["reason"]
         detail["evidence_sufficient"] = cls["evidence_sufficient"]
+        detail["proxy"] = cls["proxy"]
         cats[cls["type"]] += 1
     return replay

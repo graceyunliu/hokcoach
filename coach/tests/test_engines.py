@@ -231,8 +231,20 @@ class TestReplayEngine(unittest.TestCase):
         r = replay_engine.classify_death(
             {"near_brush": True, "kill_traded": True})
         self.assertEqual(r["type"], "探草死")
+        self.assertTrue(r["proxy"])
+        self.assertLessEqual(r["confidence"], 0.4)
         r = replay_engine.classify_death({"kill_traded": True})
         self.assertEqual(r["type"], "换头死")
+        self.assertFalse(r["proxy"])
+
+    def test_visible_engagement_blocks_brush_proxy(self):
+        r = replay_engine.classify_death({
+            "near_brush": True,
+            "visible_enemy_engagement": True,
+            "kill_traded": True,
+        })
+        self.assertEqual(r["type"], "换头死")
+        self.assertFalse(r["proxy"])
 
     def test_solo_in_enemy_half_classifies_as_isolation(self):
         r = replay_engine.classify_death({"solo_in_enemy_half": True})
@@ -243,6 +255,17 @@ class TestReplayEngine(unittest.TestCase):
         self.assertEqual(r["type"], "贪线死")
         r = replay_engine.classify_death({"self_attribution": "队友都走了我一个人在塔下"})
         self.assertEqual(r["type"], "掉点死")
+        self.assertFalse(r["proxy"])
+
+    def test_brush_self_attribution_is_low_confidence_proxy(self):
+        r = replay_engine.classify_death({"self_attribution": "脸探草被蹲了"})
+        self.assertEqual(r["type"], "探草死")
+        self.assertTrue(r["proxy"])
+        self.assertLessEqual(r["confidence"], 0.4)
+
+        hard = replay_engine.classify_death({"self_attribution": "贪了一波兵线被抓"})
+        self.assertEqual(hard["type"], "贪线死")
+        self.assertFalse(hard["proxy"])
 
     def test_insufficient_evidence(self):
         r = replay_engine.classify_death({})
@@ -289,6 +312,7 @@ class TestReplayEngine(unittest.TestCase):
         })
         out = replay_engine.classify_manual_replay(replay, llm=None)
         self.assertEqual(out["death_analysis"]["details"][0]["type"], "探草死")
+        self.assertTrue(out["death_analysis"]["details"][0]["proxy"])
         self.assertEqual(out["death_analysis"]["categories"]["探草死"], 1)
 
 
