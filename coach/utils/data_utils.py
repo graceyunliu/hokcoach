@@ -144,6 +144,8 @@ def default_replay(hero_played: str | None = None) -> dict[str, Any]:
             "details": [],
         },
         "decision_points": [],
+        # 证据门控的主播式教练卡片，由 replay_engine 填充。
+        "coaching_feedback": [],
         "review_quality_self_score": None,
     }
 

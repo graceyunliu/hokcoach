@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 from core.llm_client import LLMClient, LLMError, extract_json
+from core import feedback_engine
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROMPTS_DIR = BASE_DIR / "prompts"
@@ -172,6 +173,7 @@ def build_replay_from_video(video_path: str,
     replay["deaths"] = len(death_events)
     replay["death_analysis"]["total"] = len(death_events)
     replay["audio_timeline"] = list(audio_timeline or [])
+    replay["coaching_feedback"] = []
 
     for event, mm in zip(death_events, minimap_contexts):
         audio_context = video_utils.relate_audio_events_to_death(
@@ -220,6 +222,7 @@ def build_replay_from_video(video_path: str,
         }
         replay["death_analysis"]["categories"][cls["type"]] += 1
         replay["death_analysis"]["details"].append(detail)
+    replay["coaching_feedback"] = feedback_engine.build_coaching_feedback(replay)
     return replay
 
 
@@ -250,4 +253,5 @@ def classify_manual_replay(replay: dict[str, Any],
         detail["evidence_sufficient"] = cls["evidence_sufficient"]
         detail["proxy"] = cls["proxy"]
         cats[cls["type"]] += 1
+    replay["coaching_feedback"] = feedback_engine.build_coaching_feedback(replay)
     return replay

@@ -31,12 +31,13 @@ python coach.py --chat               # 自由对话
 | `--voice` 语音层 | v1.1+，移出MVP |
 
 **降级模式：** 未配置LLM时仍可用——输出规则层死亡归因 + 知识库检索原文，
-明确声明AI点评不可用，绝不编造。
+明确声明AI点评不可用，绝不编造。复盘记录新增 `coaching_feedback` 字段；每张卡片包含能力、反馈、下一步、证据质量与置信度。探草/大闪等没有持久真值的判断会显式标记代理或待补证据。
 
 ## 架构（tech spec v1.1 / 实现计划v1.0）
 
 - `core/orchestrator.py` 调度：归因 → 知识检索 → 约束检查 → prompt → LLM
-- `core/replay_engine.py` 死亡归因分类器（规则优先，LLM兜底，证据不足时诚实降级）
+- `core/replay_engine.py` 死亡归因分类器（规则优先，LLM兜底，证据不足时诚实降级）+ 证据门控的主播式反馈卡片
+- `core/feedback_engine.py` 反馈能力目录与自动化边界：探草、兵线/资源、转线、装备、连招/大闪、团战、推塔转化、归因心态；没有对应信号时只输出“需要补数据”，不把死亡自动判成操作失误
 - `core/knowledge_engine.py` RAG检索（标签+关键词匹配；tier 3条目加载时强制过滤）
 - `core/constraints_engine.py` 约束画像兼容性检查 + 4.6.3固定约束识别
 - `core/training_engine.py` 每周评估（advance/change_method/encourage/continue/compensate）、任务生成、打卡
@@ -52,5 +53,5 @@ tier 3（风格化/有争议）禁止进入基本功库，引擎加载时会过�
 ## 测试
 
 ```bash
-python -m unittest discover tests    # 34项，全部离线（LLM mock）
+python -m unittest discover tests    # 离线回归（LLM mock；当前仓库共144项）
 ```
