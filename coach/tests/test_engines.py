@@ -689,6 +689,29 @@ class TestOrchestratorStructuredReview(unittest.TestCase):
         ]
         return replay
 
+    def test_reflection_question_is_evidence_specific_and_bilingual(self):
+        from core.orchestrator import build_reflection_question
+
+        brush = build_reflection_question({"type": "探草死", "evidence_sufficient": True})
+        self.assertIn("草", brush)
+        self.assertIn("安全", brush)
+        isolation = build_reflection_question({"type": "掉点死", "evidence_sufficient": True}, lang="en")
+        self.assertIn("teammates", isolation)
+        insufficient = build_reflection_question({"type": "机制死", "evidence_sufficient": False})
+        self.assertIn("看到了什么", insufficient)
+        self.assertIn("根据哪条敌方信息", insufficient)
+
+    def test_analyze_first_death_exposes_coach_reflection_question(self):
+        from core.orchestrator import Orchestrator
+
+        orch = Orchestrator()
+        orch.llm = None
+        replay = self._replay_with_deaths(2)
+        analysis = orch.analyze_first_death(replay)
+        self.assertIn("coach_question", analysis["first_death"])
+        self.assertIn("草", analysis["first_death"]["coach_question"])
+        self.assertIn("coach_question", analysis["other_deaths"][0])
+
     def test_analyze_first_death_no_llm_call_and_no_stdin(self):
         from core.orchestrator import Orchestrator
 
@@ -803,6 +826,7 @@ class TestOrchestratorStructuredReview(unittest.TestCase):
         for detail in replay["death_analysis"]["details"]:
             self.assertIsInstance(detail.get("ai_comment"), str)
             self.assertTrue(detail["ai_comment"])
+            self.assertIn("coach_question", detail)
 
     def test_finalize_review_all_zero_deaths_does_not_crash(self):
         from core.orchestrator import Orchestrator

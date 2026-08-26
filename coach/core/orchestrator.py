@@ -48,6 +48,39 @@ def _ask_user(prompt: str) -> str:
         return ""
 
 
+def build_reflection_question(detail: dict[str, Any], lang: str = "zh") -> str:
+    """Build the next player-reflection question for a coach-led replay session.
+
+    A real coach does not open with a verdict. The first move is to recover the
+    player's perception and intent, then compare it with the replay evidence.
+    This deterministic cue keeps that interaction available even when no LLM is
+    configured and gives API/UI callers a stable prompt to render before asking
+    for the final coaching comment.
+    """
+    lang = (lang or "zh").lower()
+    dtype = detail.get("type")
+    sufficient = detail.get("evidence_sufficient", True)
+    if lang == "en":
+        if not sufficient:
+            return "Before we judge this death: what did you see, what did you think was safe, and which enemy information were you relying on?"
+        questions = {
+            "探草死": "What information made you believe this brush was safe, and did you have a way to check it without face-checking?",
+            "掉点死": "When did you last know where your teammates and the main threats were, and what made you continue alone?",
+            "换头死": "What were you trying to trade for, and what did you expect to happen after the first cooldowns were used?",
+            "贪线死": "What did you want to get from this wave or tower, and what was your planned exit if the enemy appeared?",
+        }
+        return questions.get(dtype, "What were you trying to accomplish here, what did you see, and what made that option feel safe?")
+    if not sufficient:
+        return "我们先不急着下结论：你当时看到了什么、觉得哪里是安全的、又是根据哪条敌方信息做判断的？"
+    questions = {
+        "探草死": "是什么信息让你觉得这片草安全？当时有没有不用脸探、也能确认草里情况的方法？",
+        "掉点死": "你最后一次确认队友和主要威胁在哪里是什么时候？当时为什么还决定一个人继续往前？",
+        "换头死": "你当时想用这次换血换到什么？第一轮技能交完后，你预期接下来会发生什么？",
+        "贪线死": "你这波想从兵线或塔上拿到什么？如果敌人出现，你原本准备从哪里撤？",
+    }
+    return questions.get(dtype, "你当时想完成什么、看到了什么，又是什么让这个选择看起来是安全的？")
+
+
 class Orchestrator:
     def __init__(self) -> None:
         self.config = config_utils.load_config()
@@ -232,6 +265,8 @@ class Orchestrator:
         }
         """
         details = replay["death_analysis"]["details"]
+        for detail in details:
+            detail.setdefault("coach_question", build_reflection_question(detail))
         return {
             "deaths": replay.get("deaths", 0),
             "first_death": details[0] if details else None,
@@ -287,6 +322,7 @@ class Orchestrator:
         details = replay["death_analysis"]["details"]
         comments: list[str | None] = []
         for detail in details:
+            detail.setdefault("coach_question", build_reflection_question(detail, lang=lang))
             comment = self.comment_death(detail, lang=lang)
             detail["ai_comment"] = comment
             comments.append(comment)
@@ -327,7 +363,9 @@ class Orchestrator:
 
         user_intent = None
         if interactive and _interactive_possible():
-            user_intent = _ask_user("Coach> 你当时是想去干嘛？") or None
+            user_intent = _ask_user(
+                first.get("coach_question") or build_reflection_question(first, lang=lang)
+            ) or None
 
         result = self.finalize_review(replay, first, user_intent=user_intent,
                                       output=output, lang=lang)
@@ -360,6 +398,8 @@ class Orchestrator:
         for i, d in enumerate(replay["death_analysis"]["details"], 1):
             lines.append(f"## 第{i}次死亡 {d.get('timestamp', '?')}")
             lines.append(f"- 归因：{d.get('type')}（{d.get('classify_reason', '')}）")
+            if d.get("coach_question"):
+                lines.append(f"- 教练先问：{d['coach_question']}")
             if d.get("location"):
                 tag = "系统X标记" if d.get("location_source") == "minimap_x_marker" else "推断"
                 lines.append(f"- 死亡地点：{d['location']}（{tag}）")
