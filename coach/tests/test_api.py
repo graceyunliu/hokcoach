@@ -100,6 +100,47 @@ class TestApiSmoke(unittest.TestCase):
         r = self.client.get("/replay/does-not-exist")
         self.assertEqual(r.status_code, 404)
 
+    def test_replay_detail_rejects_path_traversal_identifier(self):
+        r = self.client.get("/replay/../outside")
+        self.assertEqual(r.status_code, 404)
+
+    def test_replay_upload_rejects_unsupported_format_without_creating_a_job(self):
+        r = self.client.post(
+            "/replay", files={"file": ("payload.txt", b"not-video", "text/plain")}
+        )
+        self.assertEqual(r.status_code, 415)
+        self.assertIn("视频格式", r.json()["detail"])
+
+    def test_replay_upload_enforces_size_limit_and_cleans_partial_file(self):
+        from api.routers import replay as replay_router
+
+        before = set(replay_router._UPLOAD_DIR.glob("*.mp4"))
+        with mock.patch.object(replay_router, "MAX_UPLOAD_BYTES", 4):
+            r = self.client.post(
+                "/replay", files={"file": ("clip.mp4", b"12345", "video/mp4")}
+            )
+        self.assertEqual(r.status_code, 413)
+        self.assertEqual(set(replay_router._UPLOAD_DIR.glob("*.mp4")), before)
+
+    def test_replay_upload_strips_client_path_from_saved_filename(self):
+        from api.routers import replay as replay_router
+        from core.orchestrator import Orchestrator
+
+        captured = {}
+
+        def fake_build(self, video_path, progress_cb=None, lang="zh"):
+            captured["path"] = Path(video_path)
+            return data_utils.default_replay(hero_played="瑶")
+
+        with mock.patch.object(Orchestrator, "build_replay_from_video_path", fake_build):
+            r = self.client.post(
+                "/replay",
+                files={"file": ("../../outside.mp4", b"fake-bytes", "video/mp4")},
+            )
+        self.assertEqual(r.status_code, 200)
+        self.assertNotIn("..", captured["path"].name)
+        self.assertEqual(captured["path"].parent, replay_router._UPLOAD_DIR)
+
     def test_replay_upload_starts_job_and_status_reaches_done(self):
         """不跑真实视频管线：mock掉Orchestrator.build_replay_from_video_path，
         只验证job生命周期（queued→running→done）能通过HTTP轮询观察到，
@@ -216,6 +257,12 @@ class TestApiSmoke(unittest.TestCase):
                 headers={"Range": "bytes=990-"})
             self.assertEqual(r.status_code, 206)
             self.assertEqual(r.content, payload[990:])
+
+            r = self.client.get(
+                f"/replay/{replay_id}/video",
+                headers={"Range": "bytes=-15"})
+            self.assertEqual(r.status_code, 206)
+            self.assertEqual(r.content, payload[-15:])
 
             r = self.client.get(
                 f"/replay/{replay_id}/video",

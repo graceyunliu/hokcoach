@@ -6,9 +6,9 @@ v5（录像处理）视图靠这个路由驱动：上传视频→轮询进度→
 
 from __future__ import annotations
 
-import shutil
+import os
 import tempfile
-import threading
+import uuid
 from pathlib import Path
 from typing import Any, Literal
 
@@ -23,10 +23,59 @@ from utils import data_utils
 # prefix，索性每个路由自己写全路径，比硬凑prefix更直白。
 router = APIRouter(tags=["replay"])
 
+
+def _replay_json_path(replay_id: str) -> Path:
+    """Resolve only a single replay filename component, never a user path."""
+    if not replay_id or Path(replay_id).name != replay_id or replay_id in {".", ".."}:
+        raise HTTPException(status_code=404, detail=f"未找到复盘记录: {replay_id}")
+    return data_utils.REPLAYS_DIR / f"{replay_id}.json"
+
+
 # 上传的视频文件落到这里，job跑完后不主动清理——单用户本地工具，磁盘由
 # 用户自己管，不做自动垃圾回收（避免job还没跑完文件就被误删这种时序坑）。
 _UPLOAD_DIR = Path(tempfile.gettempdir()) / "coach_api_uploads"
 _UPLOAD_DIR.mkdir(exist_ok=True)
+
+# Uploads are local-only, but a malformed filename must never influence the
+# destination path and a client must not be able to exhaust the user's disk by
+# sending an unbounded stream. Keep the limit configurable for local testing.
+MAX_UPLOAD_BYTES = int(os.environ.get("COACH_MAX_UPLOAD_BYTES", str(2 * 1024**3)))
+_UPLOAD_CHUNK_SIZE = 1024 * 1024
+_ALLOWED_VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v", ".mkv", ".webm", ".avi"}
+
+
+def _safe_upload_name(filename: str | None) -> str:
+    """Return a harmless display name and reject unsupported uploads."""
+    # UploadFile.filename is client-controlled and may contain ../ or an
+    # absolute path. Only retain the final component before adding our UUID.
+    name = Path(filename or "upload.mp4").name
+    if name in {"", ".", ".."}:
+        name = "upload.mp4"
+    if Path(name).suffix.lower() not in _ALLOWED_VIDEO_EXTENSIONS:
+        raise HTTPException(status_code=415, detail="仅支持常见视频格式：mp4、mov、m4v、mkv、webm、avi")
+    return name
+
+
+def _save_upload(file: UploadFile) -> Path:
+    """Stream an upload to disk, enforcing the configured byte limit."""
+    safe_name = _safe_upload_name(file.filename)
+    dest = _UPLOAD_DIR / f"{uuid.uuid4().hex}_{safe_name}"
+    written = 0
+    try:
+        with dest.open("wb") as out:
+            while chunk := file.file.read(_UPLOAD_CHUNK_SIZE):
+                written += len(chunk)
+                if written > MAX_UPLOAD_BYTES:
+                    raise HTTPException(
+                        status_code=413,
+                        detail=f"视频文件过大，最大支持 {MAX_UPLOAD_BYTES} 字节",
+                    )
+                out.write(chunk)
+    except Exception:
+        # Do not leave a partial upload behind after validation or I/O errors.
+        dest.unlink(missing_ok=True)
+        raise
+    return dest
 
 
 @router.post("/replay")
@@ -37,10 +86,7 @@ async def upload_replay(file: UploadFile, background_tasks: BackgroundTasks,
     不同步跑：一份15-20分钟录屏的自动复盘要跑数十次真实VLM调用、数分钟
     耗时（参照AGE-141复验：单录屏约60-80个采样点），同步请求会直接超时。
     """
-    dest = _UPLOAD_DIR / f"{threading.get_ident()}_{file.filename}"
-    with dest.open("wb") as out:
-        shutil.copyfileobj(file.file, out)
-
+    dest = _save_upload(file)
     job = job_store.create(video_path=str(dest), language=lang)
     background_tasks.add_task(run_replay_job, job, Orchestrator)
     return {"job_id": job.id}
@@ -75,7 +121,7 @@ async def list_replays() -> dict[str, Any]:
 
 @router.get("/replay/{replay_id}")
 async def get_replay(replay_id: str) -> dict[str, Any]:
-    path = data_utils.REPLAYS_DIR / f"{replay_id}.json"
+    path = _replay_json_path(replay_id)
     data = data_utils.load_json(path)
     if data is None:
         raise HTTPException(status_code=404, detail=f"未找到复盘记录: {replay_id}")
@@ -96,7 +142,7 @@ async def get_replay_video(replay_id: str, request: Request):
     卡在加载圈。手写Range解析而非依赖FileResponse的内置支持，因为不同
     starlette版本对Range的支持程度不一致，这个本地工具不想赌用户装的版本。
     """
-    path = data_utils.REPLAYS_DIR / f"{replay_id}.json"
+    path = _replay_json_path(replay_id)
     data = data_utils.load_json(path)
     if data is None:
         raise HTTPException(status_code=404, detail=f"未找到复盘记录: {replay_id}")
@@ -133,10 +179,20 @@ async def get_replay_video(replay_id: str, request: Request):
         if units.strip() != "bytes":
             raise ValueError
         start_s, _, end_s = range_spec.partition("-")
-        start = int(start_s) if start_s else 0
-        end = int(end_s) if end_s else file_size - 1
+        if not start_s and not end_s:
+            raise ValueError
+        if start_s:
+            start = int(start_s)
+            end = int(end_s) if end_s else file_size - 1
+        else:
+            # RFC 9110: bytes=-N requests the final N bytes.
+            suffix_length = int(end_s)
+            if suffix_length <= 0:
+                raise ValueError
+            start = max(file_size - suffix_length, 0)
+            end = file_size - 1
         end = min(end, file_size - 1)
-        if start > end or start < 0:
+        if start > end or start < 0 or start >= file_size:
             raise ValueError
     except ValueError:
         return Response(status_code=416, headers={"Content-Range": f"bytes */{file_size}"})
