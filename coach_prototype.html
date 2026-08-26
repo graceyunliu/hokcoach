@@ -504,6 +504,13 @@
   .death-summary .death-confidence small{display:block;color:var(--text-dim);font-size:9px;margin-top:3px;text-align:right;}
   .death-comment{border-top:1px solid var(--border);padding:13px 14px 15px;}
   .death-comment .body{font-size:12.5px;color:var(--text-dim);line-height:1.8;white-space:pre-wrap;}
+  .coach-question{margin:0 0 11px;padding:10px 11px;border-left:3px solid var(--gold);background:rgba(232,179,77,.08);color:var(--text);font-size:12px;line-height:1.65;}
+  .coach-question strong{display:block;color:var(--gold);font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+  .evidence-ledger{display:grid;gap:7px;margin:0 0 11px;font-size:11px;line-height:1.55;}
+  .evidence-ledger .ledger-row{padding:7px 9px;border-radius:5px;background:rgba(255,255,255,.035);}
+  .evidence-ledger .ledger-label{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;margin-bottom:2px;}
+  .evidence-ledger .observed .ledger-label{color:#8ed6a5;}
+  .evidence-ledger .unresolved .ledger-label{color:#e8b34d;}
   .death-comment .watch-segment{
     margin-top:12px;min-height:40px;border:1px solid var(--gold-dim);background:#241f10;color:var(--gold);
     border-radius:8px;padding:7px 12px;font:600 12px inherit;cursor:pointer;
@@ -1145,7 +1152,7 @@
       styleProtector:'保护者倾向 · 承伤稳定', styleCaiYan:'蔡文姬进攻性 Top 20%', styleSkirmish:'小规模团战偏强', styleTeamfight:'大规模团战待提升', styleParticipation:'参战率 63%',
       survivalAwareness:'生存意识', protection:'保护能力', skirmishing:'小规模团战', teamfighting:'大规模团战', initiative:'进攻主动性',
       coachMission:'<b style="color:#e8b34d;">教练的首要任务不是"教"，而是帮你看见自己已经拥有的东西。</b> 风格不是变强后才拥有的，它藏在你的历史数据里，等待被发现。',
-      unknownAttribution:'未知归因', noComment:'暂无点评文字。', watchSegment:'▶ 看这段（提前{seconds}秒）', minimapPlaceholder:'小地图轨迹回放（占位 · 数据源与调研见 AGE-200，未接入）',
+      unknownAttribution:'未知归因', noComment:'暂无点评文字。', watchSegment:'▶ 看这段（提前{seconds}秒）', minimapPlaceholder:'小地图轨迹回放（占位 · 数据源与调研见 AGE-200，未接入）', coachQuestionLabel:'教练先问', observedLabel:'已观察', unresolvedLabel:'待确认',
       videoUnavailable:'原视频已不可用（可能是本地临时文件被清理了），只能看右侧文字点评。', unreliableReading:'读数不可信', zeroDeaths:'这局零死亡，没有死亡事件可看。',
       uploading:'上传中', analyzingResults:'分析中，完成后这里会显示真实结果…', failed:'失败', uploadComplete:'上传完成', processing:'处理中',
       days:['周一','周二','周三','周四','周五','周六','周日'], addCheckin:'点击补打卡', ratePrompt:'{date} 的执行率（0-100）：', invalidRate:'请输入0-100之间的整数',
@@ -1212,7 +1219,7 @@
       styleProtector:'Protector · Stable damage absorption', styleCaiYan:'Cai Yan aggression · Top 20%', styleSkirmish:'Strong in skirmishes', styleTeamfight:'Teamfighting to improve', styleParticipation:'Fight participation 63%',
       survivalAwareness:'Survival', protection:'Protection', skirmishing:'Skirmishing', teamfighting:'Teamfighting', initiative:'Initiative',
       coachMission:'<b style="color:#e8b34d;">A coach’s first job is not to teach, but to help you see what you already have.</b> Your style already exists in your history, waiting to be discovered.',
-      unknownAttribution:'Unknown attribution', noComment:'No written feedback yet.', watchSegment:'▶ Watch segment ({seconds}s lead-in)', minimapPlaceholder:'Minimap path replay (placeholder · data research in AGE-200; not connected)',
+      unknownAttribution:'Unknown attribution', noComment:'No written feedback yet.', watchSegment:'▶ Watch segment ({seconds}s lead-in)', minimapPlaceholder:'Minimap path replay (placeholder · data research in AGE-200; not connected)', coachQuestionLabel:'Coach asks first', observedLabel:'Observed', unresolvedLabel:'Still to confirm',
       videoUnavailable:'The original video is unavailable (the local temporary file may have been removed). Text feedback is still available.', unreliableReading:'Unreliable reading', zeroDeaths:'No deaths in this game, so there are no death events to review.',
       uploading:'Uploading', analyzingResults:'Analyzing… Real results will appear here when complete.', failed:'Failed', uploadComplete:'Upload complete', processing:'Processing',
       days:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], addCheckin:'Click to add check-in', ratePrompt:'Execution rate for {date} (0–100):', invalidRate:'Enter an integer from 0 to 100',
@@ -1488,6 +1495,15 @@
       })[ch]);
     }
 
+    function renderEvidenceLedger(d){
+      const ledger = d.evidence_ledger || {};
+      const observed = Array.isArray(ledger.observed) ? ledger.observed : [];
+      const unresolved = Array.isArray(ledger.unresolved) ? ledger.unresolved : [];
+      if(!d.coach_question && !observed.length && !unresolved.length) return '';
+      const row = (kind, label, values) => values.length ? `<div class="ledger-row ${kind}"><span class="ledger-label">${escapeHtml(label)}</span>${values.map(escapeHtml).join('<br>')}</div>` : '';
+      return `${d.coach_question ? `<div class="coach-question"><strong>${escapeHtml(tr('coachQuestionLabel'))}</strong>${escapeHtml(d.coach_question)}</div>` : ''}<div class="evidence-ledger">${row('observed', tr('observedLabel'), observed)}${row('unresolved', tr('unresolvedLabel'), unresolved)}</div>`;
+    }
+
     function renderCommentList(){
       focusPanel.innerHTML = focusDetails.map((d, i) => {
         const confPct = Math.round((d.confidence || 0) * 100);
@@ -1500,6 +1516,7 @@
             ${hasConf ? `<span class="death-confidence"><span class="bar"><span style="width:${confPct}%"></span></span><small>${confPct}%</small></span>` : ''}
           </summary>
           <div class="death-comment">
+            ${renderEvidenceLedger(d)}
             <div class="body">${escapeHtml(d.ai_comment || tr('noComment'))}</div>
             ${d.ts_seconds != null ? `<button class="watch-segment" type="button" data-watch="${i}">${tf('watchSegment', {seconds:REPLAY_LEAD_IN_SEC})}</button>` : ''}
             <div class="minimap-slot">${tr('minimapPlaceholder')}</div>
