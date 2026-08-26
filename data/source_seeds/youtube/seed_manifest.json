@@ -29,13 +29,24 @@
       "metadata_status": "oembed-verified",
       "hero": "海月",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "series": "神奇宝贝TV",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1200,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_002",
@@ -59,7 +70,14 @@
       "coverage_status": "usable-seed",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_003",
@@ -83,7 +101,14 @@
       "coverage_status": "usable-seed",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_004",
@@ -107,7 +132,14 @@
       "coverage_status": "usable-seed",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_005",
@@ -131,7 +163,14 @@
       "coverage_status": "usable-seed",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_006",
@@ -149,13 +188,25 @@
       "metadata_status": "oembed-verified",
       "hero": "小乔",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": {
+          "label": "百星",
+          "value": 100,
+          "unit": "stars",
+          "evidence": "title-cue"
+        },
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_007",
@@ -179,7 +230,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_008",
@@ -203,7 +261,14 @@
       "coverage_status": "needs-verification",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_009",
@@ -227,7 +292,19 @@
       "coverage_status": "needs-verification",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": {
+          "label": "铂金",
+          "value": null,
+          "unit": "tier",
+          "evidence": "title-cue"
+        },
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_010",
@@ -251,7 +328,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_011",
@@ -275,7 +359,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_012",
@@ -299,7 +390,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_013",
@@ -323,7 +421,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_014",
@@ -341,13 +446,24 @@
       "metadata_status": "oembed-verified",
       "hero": "花木兰",
       "role": "对抗",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1400,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_015",
@@ -371,7 +487,14 @@
       "coverage_status": "needs-verification",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_016",
@@ -389,13 +512,20 @@
       "metadata_status": "oembed-verified",
       "hero": "裴擒虎",
       "role": "打野",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_017",
@@ -413,13 +543,24 @@
       "metadata_status": "oembed-verified",
       "hero": "裴擒虎",
       "role": "打野",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "series": "神奇宝贝TV",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1200,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_018",
@@ -443,7 +584,14 @@
       "coverage_status": "needs-verification",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_019",
@@ -467,7 +615,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_020",
@@ -485,13 +640,24 @@
       "metadata_status": "oembed-verified",
       "hero": "朵莉亚",
       "role": "辅助",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1200,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_021",
@@ -515,7 +681,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_022",
@@ -539,7 +712,14 @@
       "coverage_status": "needs-verification",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_023",
@@ -563,7 +743,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_024",
@@ -587,7 +774,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_025",
@@ -611,7 +805,14 @@
       "coverage_status": "usable-seed",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_026",
@@ -635,7 +836,14 @@
       "coverage_status": "needs-verification",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_027",
@@ -659,7 +867,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_028",
@@ -683,7 +898,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_029",
@@ -707,7 +929,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_030",
@@ -731,7 +960,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_031",
@@ -749,13 +985,20 @@
       "metadata_status": "oembed-verified",
       "hero": "小乔",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_032",
@@ -779,7 +1022,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_033",
@@ -803,7 +1053,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_034",
@@ -821,13 +1078,24 @@
       "metadata_status": "oembed-verified",
       "hero": "小乔",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1100,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_035",
@@ -845,13 +1113,20 @@
       "metadata_status": "oembed-verified",
       "hero": "韩信",
       "role": "打野",
-      "rank_stratum": "新手-低段位",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_036",
@@ -875,7 +1150,14 @@
       "coverage_status": "needs-verification",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_037",
@@ -899,7 +1181,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_038",
@@ -917,13 +1206,20 @@
       "metadata_status": "oembed-verified",
       "hero": "敖隐",
       "role": "射手",
-      "rank_stratum": "新手-低段位",
+      "rank_stratum": "中段位-高段位",
       "series": "神奇宝贝TV",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_039",
@@ -941,13 +1237,25 @@
       "metadata_status": "oembed-verified",
       "hero": "西施",
       "role": "法师",
-      "rank_stratum": "中段位-高段位",
+      "rank_stratum": "英雄战力-独立指标",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": {
+          "value": 7000,
+          "unit": "hero_power",
+          "hero": "西施",
+          "evidence": "title-cue"
+        }
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "英雄战力-独立指标"
     },
     {
       "seed_id": "hokclass_040",
@@ -971,7 +1279,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_041",
@@ -995,7 +1310,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_042",
@@ -1019,7 +1341,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_043",
@@ -1043,7 +1372,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_044",
@@ -1067,7 +1403,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_045",
@@ -1085,13 +1428,25 @@
       "metadata_status": "oembed-verified",
       "hero": "小乔",
       "role": "法师",
-      "rank_stratum": "中段位-高段位",
+      "rank_stratum": "新手-低段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": {
+          "label": "荣耀王者",
+          "value": null,
+          "unit": "tier",
+          "evidence": "title-cue"
+        },
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_046",
@@ -1115,7 +1470,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_047",
@@ -1139,7 +1501,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_048",
@@ -1163,7 +1532,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_049",
@@ -1187,7 +1563,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_050",
@@ -1211,7 +1594,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_051",
@@ -1235,7 +1625,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_052",
@@ -1259,7 +1656,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_053",
@@ -1277,13 +1681,25 @@
       "metadata_status": "oembed-verified",
       "hero": "高渐离",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "英雄战力-独立指标",
       "series": "神奇宝贝TV",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": {
+          "value": 13000,
+          "unit": "hero_power",
+          "hero": "高渐离",
+          "evidence": "title-cue"
+        }
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "英雄战力-独立指标"
     },
     {
       "seed_id": "hokclass_054",
@@ -1301,13 +1717,24 @@
       "metadata_status": "oembed-verified",
       "hero": "西施",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1600,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_055",
@@ -1331,7 +1758,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_056",
@@ -1349,13 +1783,25 @@
       "metadata_status": "oembed-verified",
       "hero": "西施",
       "role": "法师",
-      "rank_stratum": "中段位-高段位",
+      "rank_stratum": "新手-低段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": {
+          "label": "百星",
+          "value": 100,
+          "unit": "stars",
+          "evidence": "title-cue"
+        },
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_057",
@@ -1379,7 +1825,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_058",
@@ -1403,7 +1856,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_059",
@@ -1421,13 +1881,24 @@
       "metadata_status": "oembed-verified",
       "hero": "雅典娜",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1500,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_060",
@@ -1445,13 +1916,24 @@
       "metadata_status": "oembed-verified",
       "hero": "小乔",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1200,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_061",
@@ -1475,7 +1957,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_062",
@@ -1499,7 +1988,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_063",
@@ -1523,7 +2019,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_064",
@@ -1547,7 +2050,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_065",
@@ -1571,7 +2081,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_066",
@@ -1589,13 +2106,20 @@
       "metadata_status": "oembed-verified",
       "hero": "奕星",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_067",
@@ -1619,7 +2143,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_068",
@@ -1637,13 +2168,20 @@
       "metadata_status": "oembed-verified",
       "hero": "安琪拉",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_069",
@@ -1667,7 +2205,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_070",
@@ -1691,7 +2236,18 @@
       "coverage_status": "needs-verification",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 2100,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_071",
@@ -1709,13 +2265,29 @@
       "metadata_status": "oembed-verified",
       "hero": "小乔",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": {
+          "label": "百星",
+          "value": 100,
+          "unit": "stars",
+          "evidence": "title-cue"
+        },
+        "peak_score": {
+          "value": 1200,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_072",
@@ -1739,7 +2311,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_073",
@@ -1763,7 +2342,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_074",
@@ -1787,7 +2373,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_075",
@@ -1811,7 +2404,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_076",
@@ -1835,7 +2435,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_077",
@@ -1859,7 +2466,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_078",
@@ -1883,7 +2497,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_079",
@@ -1901,13 +2522,24 @@
       "metadata_status": "oembed-verified",
       "hero": "小乔",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1400,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_080",
@@ -1925,13 +2557,24 @@
       "metadata_status": "oembed-verified",
       "hero": "女娲",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "神奇宝贝TV",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1500,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_081",
@@ -1949,13 +2592,25 @@
       "metadata_status": "oembed-verified",
       "hero": "西施",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "英雄战力-独立指标",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": {
+          "value": 12000,
+          "unit": "hero_power",
+          "hero": "西施",
+          "evidence": "title-cue"
+        }
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "英雄战力-独立指标"
     },
     {
       "seed_id": "hokclass_082",
@@ -1973,13 +2628,24 @@
       "metadata_status": "oembed-verified",
       "hero": "玄策",
       "role": "打野",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1700,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_083",
@@ -2003,7 +2669,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_084",
@@ -2027,7 +2700,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_085",
@@ -2051,7 +2731,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_086",
@@ -2075,7 +2762,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_087",
@@ -2099,7 +2793,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_088",
@@ -2123,7 +2824,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_089",
@@ -2147,7 +2855,14 @@
       "coverage_status": "needs-verification",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_090",
@@ -2171,7 +2886,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_091",
@@ -2195,7 +2917,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_092",
@@ -2213,13 +2942,25 @@
       "metadata_status": "oembed-verified",
       "hero": "海诺",
       "role": "法师",
-      "rank_stratum": "中段位-高段位",
+      "rank_stratum": "英雄战力-独立指标",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": {
+          "value": 6000,
+          "unit": "hero_power",
+          "hero": "海诺",
+          "evidence": "title-cue"
+        }
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "英雄战力-独立指标"
     },
     {
       "seed_id": "hokclass_093",
@@ -2243,7 +2984,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_094",
@@ -2267,7 +3015,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_095",
@@ -2285,13 +3040,25 @@
       "metadata_status": "oembed-verified",
       "hero": "小乔",
       "role": "法师",
-      "rank_stratum": "中段位-高段位",
+      "rank_stratum": "英雄战力-独立指标",
       "series": "神奇宝贝TV",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": {
+          "value": 5000,
+          "unit": "hero_power",
+          "hero": "小乔",
+          "evidence": "title-cue"
+        }
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "英雄战力-独立指标"
     },
     {
       "seed_id": "hokclass_096",
@@ -2315,7 +3082,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_097",
@@ -2339,7 +3113,14 @@
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_098",
@@ -2357,13 +3138,20 @@
       "metadata_status": "oembed-verified",
       "hero": "马超",
       "role": "对抗",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_099",
@@ -2387,7 +3175,14 @@
       "coverage_status": "needs-verification",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_100",
@@ -2405,13 +3200,20 @@
       "metadata_status": "oembed-verified",
       "hero": "诸葛亮",
       "role": "法师",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "series": "其他",
       "rank_evidence": "title-cue",
       "coverage_status": "usable-seed",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_101",
@@ -2435,7 +3237,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_102",
@@ -2459,7 +3268,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_103",
@@ -2476,14 +3292,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "needs-verification",
       "author_name": "小二游戏解说",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_104",
@@ -2500,14 +3323,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "needs-verification",
       "author_name": "小二游戏解说",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_105",
@@ -2531,7 +3361,14 @@
       "author_name": "KAISER巅峰攻略",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_106",
@@ -2554,7 +3391,14 @@
       "coverage_status": "needs-verification",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "待确认"
     },
     {
       "seed_id": "hokclass_107",
@@ -2577,7 +3421,14 @@
       "coverage_status": "needs-verification",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "待确认"
     },
     {
       "seed_id": "hokclass_108",
@@ -2600,7 +3451,14 @@
       "coverage_status": "needs-verification",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "待确认"
     },
     {
       "seed_id": "hokclass_109",
@@ -2623,7 +3481,14 @@
       "coverage_status": "needs-verification",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "待确认"
     },
     {
       "seed_id": "hokclass_110",
@@ -2647,7 +3512,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_111",
@@ -2671,7 +3543,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_112",
@@ -2695,7 +3574,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_113",
@@ -2719,7 +3605,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_114",
@@ -2736,14 +3629,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "usable-seed",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_115",
@@ -2767,7 +3667,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_116",
@@ -2791,7 +3698,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_117",
@@ -2808,14 +3722,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "needs-verification",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_118",
@@ -2839,7 +3760,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_119",
@@ -2856,14 +3784,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "usable-seed",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_120",
@@ -2887,7 +3822,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_121",
@@ -2911,7 +3853,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_122",
@@ -2935,7 +3884,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_123",
@@ -2959,7 +3915,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_124",
@@ -2983,7 +3946,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_125",
@@ -3000,14 +3970,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "新手-低段位",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "usable-seed",
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_126",
@@ -3031,7 +4008,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_127",
@@ -3055,7 +4039,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_128",
@@ -3079,7 +4070,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_129",
@@ -3103,7 +4101,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_130",
@@ -3127,7 +4132,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_131",
@@ -3151,7 +4163,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_132",
@@ -3175,7 +4194,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_133",
@@ -3199,7 +4225,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_134",
@@ -3223,7 +4256,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_135",
@@ -3247,7 +4287,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_136",
@@ -3264,14 +4311,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "usable-seed",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_137",
@@ -3288,14 +4342,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "needs-verification",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_138",
@@ -3319,7 +4380,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_139",
@@ -3336,14 +4404,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "needs-verification",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_140",
@@ -3367,7 +4442,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_141",
@@ -3384,14 +4466,25 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "新手-低段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "needs-verification",
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 700,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_142",
@@ -3415,7 +4508,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_143",
@@ -3439,7 +4539,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_144",
@@ -3456,14 +4563,25 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "needs-verification",
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1897,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_145",
@@ -3487,7 +4605,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "新手-低段位"
     },
     {
       "seed_id": "hokclass_146",
@@ -3504,14 +4629,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "usable-seed",
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_147",
@@ -3528,14 +4660,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "usable-seed",
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_148",
@@ -3559,7 +4698,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_149",
@@ -3576,14 +4722,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "usable-seed",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_150",
@@ -3607,7 +4760,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_151",
@@ -3631,7 +4791,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_152",
@@ -3655,7 +4822,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_153",
@@ -3679,7 +4853,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "高端巅峰/职业"
     },
     {
       "seed_id": "hokclass_154",
@@ -3703,7 +4884,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_155",
@@ -3727,7 +4915,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_156",
@@ -3744,14 +4939,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "needs-verification",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_157",
@@ -3768,14 +4970,25 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "usable-seed",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": {
+          "value": 1800,
+          "unit": "peak_score",
+          "evidence": "title-cue"
+        },
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_158",
@@ -3792,14 +5005,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "usable-seed",
       "author_name": "HonorofKings王者提升班",
       "content_type": "full-game-or-replay-review",
       "seed_eligibility": "eligible-seed",
-      "full_game_evidence": "title-cue"
+      "full_game_evidence": "title-cue",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_159",
@@ -3823,7 +5043,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_160",
@@ -3840,14 +5067,21 @@
       "download_status": "pending",
       "metadata_status": "oembed-verified",
       "evidence_quality": "search-verified",
-      "rank_stratum": "高端巅峰/职业",
+      "rank_stratum": "中段位-高段位",
       "rank_evidence": "title-cue",
       "series": "其他",
       "coverage_status": "needs-verification",
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     },
     {
       "seed_id": "hokclass_161",
@@ -3871,7 +5105,14 @@
       "author_name": "HonorofKings王者提升班",
       "content_type": "strategy-or-format-adjacent",
       "seed_eligibility": "context-only",
-      "full_game_evidence": "weak"
+      "full_game_evidence": "weak",
+      "rank_profile": {
+        "regular_rank": null,
+        "peak_score": null,
+        "hero_power": null
+      },
+      "rank_schema_version": "typed-v1",
+      "rank_stratum_legacy": "中段位-高段位"
     }
   ],
   "rank_counts": {
@@ -3934,5 +5175,10 @@
     "待确认": 9
   },
   "eligible_count": 100,
-  "context_only_count": 61
+  "context_only_count": 61,
+  "typed_rank_counts": {
+    "regular_rank": 5,
+    "peak_score": 16,
+    "hero_power": 5
+  }
 }

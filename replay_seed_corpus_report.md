@@ -19,12 +19,12 @@ The seed set is anchored in a 175-video神奇宝贝TV playlist and expanded with
 | Context-only records | 61 | Retained for strategic knowledge but excluded from the initial replay-evaluation set |
 | YouTube metadata-verified | 157 | Titles/authors resolved through public metadata enrichment |
 | 神奇宝贝TV records | 23 | Required similarity subset from the channel’s fan-review series |
-| High-end/职业 cues | 51 | 1900+, 2000+, 2100+, 2200+, 2300+, 巅峰, 国服, KPL, pro, top-ranked, or MMR cues |
-| Mid-to-high rank cues | 95 | 王者/1500–1800 and equivalent high-rank cues |
-| 新手/low-rank cues | 11 | 新手, 青铜–铂金, 1000–1400, low-elo, or similar cues |
-| Rank unresolved | 4 | Must remain unclaimed until transcript/thumbnail/game-screen verification |
+| Regular排位段位 evidence | 5 | Explicit regular ranked cues such as百星、荣耀王者, or tier language tied to排位/赛季; never inferred from generic“王者荣耀” text |
+| 巅峰分数 evidence | 16 | Explicit巅峰/巅峰赛 numeric cues such as1200、1500、1800、2100; these are peak scores, not regular段位 or英雄战力 |
+| 英雄战力 evidence | 5 | Explicit战力/省标/国标/combat-power cues such as7000战力、1.3w战力; these are hero-specific and independent of巅峰分数 |
+| Regular/peak/power unresolved | Remaining records | No typed rank claim is made until transcript, thumbnail, or game-screen evidence resolves the dimension |
 
-The rank counts overlap because the corpus is deliberately cataloged rather than forced into a single balanced 100-record subset at this stage. There are 161 total records and 100 replay-eligible records; the rank labels are title-derived evidence labels, not claims that every source’s exact in-game rank has been independently verified.
+The typed-rank counts are intentionally independent and may overlap. There are 161 total records and 100 replay-eligible records. A numeric value is never copied between段位、巅峰分数 and英雄战力: for example, `2000巅峰分` is stored only as `peak_score=2000`, while `2000英雄战力` is stored only as `hero_power=2000` with an associated hero. All labels remain title-cued until transcript, thumbnail, or in-game-screen verification.
 
 | Role | Cataloged records | Coverage assessment |
 |---|---:|---|
@@ -35,16 +35,16 @@ The rank counts overlap because the corpus is deliberately cataloged rather than
 | 对抗 | 8 | Includes花木兰、狂铁、项羽、吕布、司空震、马超等 |
 | Role unresolved | 12 | Retained but excluded from role-balance claims until metadata or visual verification |
 
-## Rank-stratified extraction policy
+## Typed rank extraction policy
 
-The downstream extraction job should preserve the following minimum strata rather than simply taking the first 100 URLs:
+The downstream extraction job must preserve three independent dimensions rather than simply taking the first 100 URLs. A single record may have more than one dimension, for example regular排位百星 plus巅峰1200 plus西施7000战力.
 
-| Required stratum | Minimum retained seeds | Preferred source types |
+| Required dimension | Minimum retained seeds | Interpretation |
 |---|---:|---|
-| 新手/低段位 | 15 | 神奇宝贝TV, low-elo, 铂金/钻石, 1000–1400, low-power fan reviews |
-| 中段位/高段位 | 35 | 1500–1800, 王者, ordinary peak-rank fan reviews |
-| 高端巅峰/职业 | 35 | 1900–2300, 国服, 全国前百, KPL, professional or top-ranked POV reviews |
-| 神奇宝贝TV similarity subset | 20 | Prefer low-to-mid-rank fan reviews across at least 8 heroes |
+| Regular排位段位 | 15 | Regular ranked ladder evidence, such as铂金、钻石、星耀、王者、百星; do not treat a peak-score number as段位 |
+| 巅峰分数 | 35 | Peak-tournament score evidence, such as巅峰1200、巅峰1500、巅峰2100; do not treat hero power as peak score |
+| 英雄战力 | 20 | Hero-specific evidence, such as7000战力、1.3w战力、万战; store the associated hero |
+| 神奇宝贝TV similarity subset | 20 | Prefer low-to-mid-rank fan reviews across at least 8 heroes and preserve all three typed fields when present |
 | Role diversity reserve | 15 | Additional对抗、打野、射手、辅助 records, used when a role falls below quota after download validation |
 
 The current catalog meets the神奇宝贝TV target with 23 records and exceeds the high-end target with 51 title-cued records. It has 11 explicit low-rank records, so the extraction selector should promote at least four additional low-rank or low-elo records from the four currently unresolved rank cases or from the 61 context-only records if later inspection confirms full-game footage.
