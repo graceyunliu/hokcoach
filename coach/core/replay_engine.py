@@ -192,6 +192,7 @@ def build_replay_from_video(video_path: str,
             "near_brush": event.get("near_brush"),
             "visible_enemy_engagement": event.get("visible_enemy_engagement"),
             "anomalous_displacement": event.get("anomalous_displacement"),
+            "pushing_wave": event.get("pushing_wave"),
             "self_attribution": None,
         }
         cls = classify_death(evidence, llm=llm, lang=lang)
@@ -211,6 +212,7 @@ def build_replay_from_video(video_path: str,
             "solo_in_enemy_half": event.get("solo_in_enemy_half"),
             "anomalous_displacement": event.get("anomalous_displacement"),
             "anomalous_displacements": event.get("anomalous_displacements", []),
+            "pushing_wave": event.get("pushing_wave"),
             "audio_context": audio_context,
             "self_attribution": None,
             "ai_comment": None,  # orchestrator填充

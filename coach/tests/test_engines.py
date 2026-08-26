@@ -290,6 +290,15 @@ class TestReplayEngine(unittest.TestCase):
         unknown_text = replay_engine._format_death_location({})
         self.assertIn("未知", unknown_text)
 
+    def test_build_replay_from_video_carries_pushing_wave_signal(self):
+        events = [{"ts": 30.0, "location": "上路一塔", "pushing_wave": True}]
+        replay = replay_engine.build_replay_from_video(
+            "dummy.mp4", events, [None], llm=None)
+        detail = replay["death_analysis"]["details"][0]
+        self.assertTrue(detail["pushing_wave"])
+        self.assertEqual(detail["type"], "贪线死")
+        self.assertIn("推线/收线", detail["classify_reason"])
+
     def test_build_replay_from_video_carries_location_source(self):
         events = [{"ts": 30.0, "location": "河道草丛",
                    "location_source": "minimap_x_marker", "kill_traded": False,
