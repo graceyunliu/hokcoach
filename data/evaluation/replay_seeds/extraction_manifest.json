@@ -1,0 +1,1920 @@
+{
+  "source_manifest": "data/source_seeds/youtube/seed_manifest.json",
+  "requested": 100,
+  "results": [
+    {
+      "seed_id": "hokclass_001",
+      "video_id": "QK9QwHo1RhY",
+      "url": "https://www.youtube.com/watch?v=QK9QwHo1RhY",
+      "title": "｜王者荣耀｜Hok｜神奇宝贝TV｜14000海月在巅峰1200翻车第一视角复盘讲解｜",
+      "role": "法师",
+      "hero": "海月",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=QK9QwHo1RhY\n[youtube] QK9QwHo1RhY: Downloading webpage\n[youtube] QK9QwHo1RhY: Downloading initial data API JSON\n[youtube] QK9QwHo1RhY: Downloading visionos player API JSON\nERROR: [youtube] QK9QwHo1RhY: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=QK9QwHo1RhY\n[youtube] QK9QwHo1RhY: Downloading webpage\n[youtube] QK9QwHo1RhY: Downloading initial data API JSON\n[youtube] QK9QwHo1RhY: Downloading visionos player API JSON\nERROR: [youtube] QK9QwHo1RhY: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_006",
+      "video_id": "7_JF8s0S4x0",
+      "url": "https://www.youtube.com/watch?v=7_JF8s0S4x0",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜排位百星被1200巅峰赛打成5-14｜还敢不知道原因在哪里？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=7_JF8s0S4x0\n[youtube] 7_JF8s0S4x0: Downloading webpage\n[youtube] 7_JF8s0S4x0: Downloading visionos player API JSON\nERROR: [youtube] 7_JF8s0S4x0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=7_JF8s0S4x0\n[youtube] 7_JF8s0S4x0: Downloading webpage\n[youtube] 7_JF8s0S4x0: Downloading initial data API JSON\n[youtube] 7_JF8s0S4x0: Downloading visionos player API JSON\nERROR: [youtube] 7_JF8s0S4x0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_007",
+      "video_id": "Tq5eD3ECpyw",
+      "url": "https://www.youtube.com/watch?v=Tq5eD3ECpyw",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘海月｜新赛季的海月很强了｜你能死15次？让粉丝宝子们评价吧｜",
+      "role": "法师",
+      "hero": "海月",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Tq5eD3ECpyw\n[youtube] Tq5eD3ECpyw: Downloading webpage\n[youtube] Tq5eD3ECpyw: Downloading initial data API JSON\n[youtube] Tq5eD3ECpyw: Downloading visionos player API JSON\nERROR: [youtube] Tq5eD3ECpyw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Tq5eD3ECpyw\n[youtube] Tq5eD3ECpyw: Downloading webpage\n[youtube] Tq5eD3ECpyw: Downloading visionos player API JSON\nERROR: [youtube] Tq5eD3ECpyw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_008",
+      "video_id": "KkFUSKztLBA",
+      "url": "https://www.youtube.com/watch?v=KkFUSKztLBA",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘安琪瞎｜1160我还以为是排名｜结果是巅峰分｜",
+      "role": "待确认",
+      "hero": "待确认",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=KkFUSKztLBA\n[youtube] KkFUSKztLBA: Downloading webpage\n[youtube] KkFUSKztLBA: Downloading visionos player API JSON\nERROR: [youtube] KkFUSKztLBA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=KkFUSKztLBA\n[youtube] KkFUSKztLBA: Downloading webpage\n[youtube] KkFUSKztLBA: Downloading visionos player API JSON\nERROR: [youtube] KkFUSKztLBA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_010",
+      "video_id": "PoLZ5hSlywU",
+      "url": "https://www.youtube.com/watch?v=PoLZ5hSlywU",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘海月｜第一视角复盘长沙TES.A七海月1-8超鬼战绩！馋哭了！这应该叫什么｜职业神奇宝贝｜",
+      "role": "法师",
+      "hero": "海月",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=PoLZ5hSlywU\n[youtube] PoLZ5hSlywU: Downloading webpage\n[youtube] PoLZ5hSlywU: Downloading visionos player API JSON\nERROR: [youtube] PoLZ5hSlywU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=PoLZ5hSlywU\n[youtube] PoLZ5hSlywU: Downloading webpage\n[youtube] PoLZ5hSlywU: Downloading initial data API JSON\n[youtube] PoLZ5hSlywU: Downloading visionos player API JSON\nERROR: [youtube] PoLZ5hSlywU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_011",
+      "video_id": "JA-X8ZNWkb4",
+      "url": "https://www.youtube.com/watch?v=JA-X8ZNWkb4",
+      "title": "｜王者荣耀｜Hok｜神奇宝贝复盘小乔｜经常被人喊神奇宝贝｜实在受不了了｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=JA-X8ZNWkb4\n[youtube] JA-X8ZNWkb4: Downloading webpage\n[youtube] JA-X8ZNWkb4: Downloading visionos player API JSON\nERROR: [youtube] JA-X8ZNWkb4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=JA-X8ZNWkb4\n[youtube] JA-X8ZNWkb4: Downloading webpage\n[youtube] JA-X8ZNWkb4: Downloading visionos player API JSON\nERROR: [youtube] JA-X8ZNWkb4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_012",
+      "video_id": "np9YhFP5pKA",
+      "url": "https://www.youtube.com/watch?v=np9YhFP5pKA",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜线条小猪神奇宝贝｜有时候真替匹配到他的队友感到惋惜｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=np9YhFP5pKA\n[youtube] np9YhFP5pKA: Downloading webpage\n[youtube] np9YhFP5pKA: Downloading visionos player API JSON\nERROR: [youtube] np9YhFP5pKA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=np9YhFP5pKA\n[youtube] np9YhFP5pKA: Downloading webpage\n[youtube] np9YhFP5pKA: Downloading visionos player API JSON\nERROR: [youtube] np9YhFP5pKA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_013",
+      "video_id": "gVVK_598zM0",
+      "url": "https://www.youtube.com/watch?v=gVVK_598zM0",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘大司命｜1100分这种中低分段打野就玩野核｜别碰蓝领｜",
+      "role": "打野",
+      "hero": "大司命",
+      "rank_stratum": "新手-低段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=gVVK_598zM0\n[youtube] gVVK_598zM0: Downloading webpage\n[youtube] gVVK_598zM0: Downloading initial data API JSON\n[youtube] gVVK_598zM0: Downloading visionos player API JSON\nERROR: [youtube] gVVK_598zM0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=gVVK_598zM0\n[youtube] gVVK_598zM0: Downloading webpage\n[youtube] gVVK_598zM0: Downloading visionos player API JSON\nERROR: [youtube] gVVK_598zM0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_014",
+      "video_id": "tisYvla3eJQ",
+      "url": "https://www.youtube.com/watch?v=tisYvla3eJQ",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘花木兰｜历史小国花木兰｜巅峰1400被打成2-10｜毋庸置疑必须是宝贝｜",
+      "role": "对抗",
+      "hero": "花木兰",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=tisYvla3eJQ\n[youtube] tisYvla3eJQ: Downloading webpage\n[youtube] tisYvla3eJQ: Downloading visionos player API JSON\nERROR: [youtube] tisYvla3eJQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=tisYvla3eJQ\n[youtube] tisYvla3eJQ: Downloading webpage\n[youtube] tisYvla3eJQ: Downloading visionos player API JSON\nERROR: [youtube] tisYvla3eJQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_017",
+      "video_id": "O8rOf8jL4ug",
+      "url": "https://www.youtube.com/watch?v=O8rOf8jL4ug",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘裴擒虎｜打野位神奇宝贝卡巅峰1200一个月｜神奇宝贝算不上｜最多是个草里虫｜",
+      "role": "打野",
+      "hero": "裴擒虎",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=O8rOf8jL4ug\n[youtube] O8rOf8jL4ug: Downloading webpage\n[youtube] O8rOf8jL4ug: Downloading visionos player API JSON\nERROR: [youtube] O8rOf8jL4ug: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=O8rOf8jL4ug\n[youtube] O8rOf8jL4ug: Downloading webpage\n[youtube] O8rOf8jL4ug: Downloading visionos player API JSON\nERROR: [youtube] O8rOf8jL4ug: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_019",
+      "video_id": "Me8dOgL5Umc",
+      "url": "https://www.youtube.com/watch?v=Me8dOgL5Umc",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜上次复盘1000分小乔｜现在卡在1300分了｜可能还有下降空间",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "新手-低段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Me8dOgL5Umc\n[youtube] Me8dOgL5Umc: Downloading webpage\n[youtube] Me8dOgL5Umc: Downloading initial data API JSON\n[youtube] Me8dOgL5Umc: Downloading visionos player API JSON\nERROR: [youtube] Me8dOgL5Umc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Me8dOgL5Umc\n[youtube] Me8dOgL5Umc: Downloading webpage\n[youtube] Me8dOgL5Umc: Downloading initial data API JSON\n[youtube] Me8dOgL5Umc: Downloading visionos player API JSON\nERROR: [youtube] Me8dOgL5Umc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_020",
+      "video_id": "a2825JMe__A",
+      "url": "https://www.youtube.com/watch?v=a2825JMe__A",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘朵莉亚｜130把卡在巅峰1200｜却在百🌟排位赛游龙？",
+      "role": "辅助",
+      "hero": "朵莉亚",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=a2825JMe__A\n[youtube] a2825JMe__A: Downloading webpage\n[youtube] a2825JMe__A: Downloading initial data API JSON\n[youtube] a2825JMe__A: Downloading visionos player API JSON\nERROR: [youtube] a2825JMe__A: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=a2825JMe__A\n[youtube] a2825JMe__A: Downloading webpage\n[youtube] a2825JMe__A: Downloading visionos player API JSON\nERROR: [youtube] a2825JMe__A: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_021",
+      "video_id": "lgDL2cwhGys",
+      "url": "https://www.youtube.com/watch?v=lgDL2cwhGys",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘安琪拉｜4-15的安琪拉5.2评分的神奇宝贝第一视角｜",
+      "role": "法师",
+      "hero": "安琪拉",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=lgDL2cwhGys\n[youtube] lgDL2cwhGys: Downloading webpage\n[youtube] lgDL2cwhGys: Downloading visionos player API JSON\nERROR: [youtube] lgDL2cwhGys: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=lgDL2cwhGys\n[youtube] lgDL2cwhGys: Downloading webpage\n[youtube] lgDL2cwhGys: Downloading initial data API JSON\n[youtube] lgDL2cwhGys: Downloading visionos player API JSON\nERROR: [youtube] lgDL2cwhGys: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_022",
+      "video_id": "gFIr8lXF6P8",
+      "url": "https://www.youtube.com/watch?v=gFIr8lXF6P8",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘张良｜前期节奏确实是张良带起来｜后期呢简直就是2个神奇宝贝｜",
+      "role": "待确认",
+      "hero": "待确认",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=gFIr8lXF6P8\n[youtube] gFIr8lXF6P8: Downloading webpage\n[youtube] gFIr8lXF6P8: Downloading initial data API JSON\n[youtube] gFIr8lXF6P8: Downloading visionos player API JSON\nERROR: [youtube] gFIr8lXF6P8: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=gFIr8lXF6P8\n[youtube] gFIr8lXF6P8: Downloading webpage\n[youtube] gFIr8lXF6P8: Downloading initial data API JSON\n[youtube] gFIr8lXF6P8: Downloading visionos player API JSON\nERROR: [youtube] gFIr8lXF6P8: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_023",
+      "video_id": "l1lWuJ79oa0",
+      "url": "https://www.youtube.com/watch?v=l1lWuJ79oa0",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜又找我背锅是吗？不照照自己问题？看我之前1970现在1100徘徊？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "新手-低段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=l1lWuJ79oa0\n[youtube] l1lWuJ79oa0: Downloading webpage\n[youtube] l1lWuJ79oa0: Downloading initial data API JSON\n[youtube] l1lWuJ79oa0: Downloading visionos player API JSON\nERROR: [youtube] l1lWuJ79oa0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=l1lWuJ79oa0\n[youtube] l1lWuJ79oa0: Downloading webpage\n[youtube] l1lWuJ79oa0: Downloading initial data API JSON\n[youtube] l1lWuJ79oa0: Downloading visionos player API JSON\nERROR: [youtube] l1lWuJ79oa0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_024",
+      "video_id": "HXzCHwKOjo4",
+      "url": "https://www.youtube.com/watch?v=HXzCHwKOjo4",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘钟馗｜宝子们期待的神奇宝贝钟馗来了｜0-10的战绩｜居然跟我说是认真玩？",
+      "role": "辅助",
+      "hero": "钟馗",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=HXzCHwKOjo4\n[youtube] HXzCHwKOjo4: Downloading webpage\n[youtube] HXzCHwKOjo4: Downloading initial data API JSON\n[youtube] HXzCHwKOjo4: Downloading visionos player API JSON\nERROR: [youtube] HXzCHwKOjo4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=HXzCHwKOjo4\n[youtube] HXzCHwKOjo4: Downloading webpage\n[youtube] HXzCHwKOjo4: Downloading visionos player API JSON\nERROR: [youtube] HXzCHwKOjo4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_027",
+      "video_id": "6Se0ljaFkpE",
+      "url": "https://www.youtube.com/watch?v=6Se0ljaFkpE",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘司空震｜以雷霆击碎黑暗｜2-15是怎么个事｜",
+      "role": "对抗",
+      "hero": "司空震",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=6Se0ljaFkpE\n[youtube] 6Se0ljaFkpE: Downloading webpage\n[youtube] 6Se0ljaFkpE: Downloading initial data API JSON\n[youtube] 6Se0ljaFkpE: Downloading visionos player API JSON\nERROR: [youtube] 6Se0ljaFkpE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=6Se0ljaFkpE\n[youtube] 6Se0ljaFkpE: Downloading webpage\n[youtube] 6Se0ljaFkpE: Downloading initial data API JSON\n[youtube] 6Se0ljaFkpE: Downloading visionos player API JSON\nERROR: [youtube] 6Se0ljaFkpE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_028",
+      "video_id": "MI6BsbJ0tkY",
+      "url": "https://www.youtube.com/watch?v=MI6BsbJ0tkY",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜Hellokitty连跪18把｜都会不知道什么原因吗？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=MI6BsbJ0tkY\n[youtube] MI6BsbJ0tkY: Downloading webpage\n[youtube] MI6BsbJ0tkY: Downloading initial data API JSON\n[youtube] MI6BsbJ0tkY: Downloading visionos player API JSON\nERROR: [youtube] MI6BsbJ0tkY: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=MI6BsbJ0tkY\n[youtube] MI6BsbJ0tkY: Downloading webpage\n[youtube] MI6BsbJ0tkY: Downloading visionos player API JSON\nERROR: [youtube] MI6BsbJ0tkY: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_029",
+      "video_id": "JQfr9NFpGJw",
+      "url": "https://www.youtube.com/watch?v=JQfr9NFpGJw",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜神奇宝贝历史1800？有1400把｜前中期都开不出节奏｜我是不信这个分数｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "新手-低段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=JQfr9NFpGJw\n[youtube] JQfr9NFpGJw: Downloading webpage\n[youtube] JQfr9NFpGJw: Downloading visionos player API JSON\nERROR: [youtube] JQfr9NFpGJw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=JQfr9NFpGJw\n[youtube] JQfr9NFpGJw: Downloading webpage\n[youtube] JQfr9NFpGJw: Downloading visionos player API JSON\nERROR: [youtube] JQfr9NFpGJw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_030",
+      "video_id": "smmRnveR6Ck",
+      "url": "https://www.youtube.com/watch?v=smmRnveR6Ck",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘海诺｜我跟往期海诺不一样？我不坑队友｜都是被队友坑？",
+      "role": "法师",
+      "hero": "海诺",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=smmRnveR6Ck\n[youtube] smmRnveR6Ck: Downloading webpage\n[youtube] smmRnveR6Ck: Downloading visionos player API JSON\nERROR: [youtube] smmRnveR6Ck: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=smmRnveR6Ck\n[youtube] smmRnveR6Ck: Downloading webpage\n[youtube] smmRnveR6Ck: Downloading visionos player API JSON\nERROR: [youtube] smmRnveR6Ck: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_031",
+      "video_id": "lvSG7I6V-UA",
+      "url": "https://www.youtube.com/watch?v=lvSG7I6V-UA",
+      "title": "｜王者荣耀｜Hok｜这应该是最有争议的小乔复盘｜1900分整局下来问题不大｜为什么赢不了呢？真的是匹配机制吗？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=lvSG7I6V-UA\n[youtube] lvSG7I6V-UA: Downloading webpage\n[youtube] lvSG7I6V-UA: Downloading visionos player API JSON\nERROR: [youtube] lvSG7I6V-UA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=lvSG7I6V-UA\n[youtube] lvSG7I6V-UA: Downloading webpage\n[youtube] lvSG7I6V-UA: Downloading initial data API JSON\n[youtube] lvSG7I6V-UA: Downloading visionos player API JSON\nERROR: [youtube] lvSG7I6V-UA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_032",
+      "video_id": "7uDdsaEUCG4",
+      "url": "https://www.youtube.com/watch?v=7uDdsaEUCG4",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘马可波罗｜被队友坑成神奇宝贝？确实如此？还是本质就是呢？",
+      "role": "射手",
+      "hero": "马可波罗",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=7uDdsaEUCG4\n[youtube] 7uDdsaEUCG4: Downloading webpage\n[youtube] 7uDdsaEUCG4: Downloading visionos player API JSON\nERROR: [youtube] 7uDdsaEUCG4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=7uDdsaEUCG4\n[youtube] 7uDdsaEUCG4: Downloading webpage\n[youtube] 7uDdsaEUCG4: Downloading visionos player API JSON\nERROR: [youtube] 7uDdsaEUCG4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_033",
+      "video_id": "utJ5z9lrn2Y",
+      "url": "https://www.youtube.com/watch?v=utJ5z9lrn2Y",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘安琪拉｜安琪拉变安琪瞎｜空技能成我最小的缺点了｜",
+      "role": "法师",
+      "hero": "安琪拉",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=utJ5z9lrn2Y\n[youtube] utJ5z9lrn2Y: Downloading webpage\n[youtube] utJ5z9lrn2Y: Downloading visionos player API JSON\nERROR: [youtube] utJ5z9lrn2Y: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=utJ5z9lrn2Y\n[youtube] utJ5z9lrn2Y: Downloading webpage\n[youtube] utJ5z9lrn2Y: Downloading visionos player API JSON\nERROR: [youtube] utJ5z9lrn2Y: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_034",
+      "video_id": "uethrSMFNcI",
+      "url": "https://www.youtube.com/watch?v=uethrSMFNcI",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜我的小乔卡在巅峰1100一个星期了都是队友的问题？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=uethrSMFNcI\n[youtube] uethrSMFNcI: Downloading webpage\n[youtube] uethrSMFNcI: Downloading visionos player API JSON\nERROR: [youtube] uethrSMFNcI: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=uethrSMFNcI\n[youtube] uethrSMFNcI: Downloading webpage\n[youtube] uethrSMFNcI: Downloading initial data API JSON\n[youtube] uethrSMFNcI: Downloading visionos player API JSON\nERROR: [youtube] uethrSMFNcI: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_036",
+      "video_id": "5CapktR8R7s",
+      "url": "https://www.youtube.com/watch?v=5CapktR8R7s",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘元法｜新赛季增强的法师都能变神奇宝贝｜你永远想不到他会以什么方式出现｜",
+      "role": "法师",
+      "hero": "待确认",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=5CapktR8R7s\n[youtube] 5CapktR8R7s: Downloading webpage\n[youtube] 5CapktR8R7s: Downloading visionos player API JSON\nERROR: [youtube] 5CapktR8R7s: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=5CapktR8R7s\n[youtube] 5CapktR8R7s: Downloading webpage\n[youtube] 5CapktR8R7s: Downloading visionos player API JSON\nERROR: [youtube] 5CapktR8R7s: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_037",
+      "video_id": "9py-AMsSwEg",
+      "url": "https://www.youtube.com/watch?v=9py-AMsSwEg",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜1-7的小乔都王者了｜大家不会还没到王者吧？｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=9py-AMsSwEg\n[youtube] 9py-AMsSwEg: Downloading webpage\n[youtube] 9py-AMsSwEg: Downloading visionos player API JSON\nERROR: [youtube] 9py-AMsSwEg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=9py-AMsSwEg\n[youtube] 9py-AMsSwEg: Downloading webpage\n[youtube] 9py-AMsSwEg: Downloading initial data API JSON\n[youtube] 9py-AMsSwEg: Downloading visionos player API JSON\nERROR: [youtube] 9py-AMsSwEg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_038",
+      "video_id": "bpSXo6Xt8Nc",
+      "url": "https://www.youtube.com/watch?v=bpSXo6Xt8Nc",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘敖隐｜今天算是为终于抓到了神奇宝贝了｜10分钟了一个大招没用过｜44%胜率卡在1400｜一点原因你自己找不到吗？你开局就屏蔽队友？我算是懂了｜",
+      "role": "射手",
+      "hero": "敖隐",
+      "rank_stratum": "新手-低段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=bpSXo6Xt8Nc\n[youtube] bpSXo6Xt8Nc: Downloading webpage\n[youtube] bpSXo6Xt8Nc: Downloading initial data API JSON\n[youtube] bpSXo6Xt8Nc: Downloading visionos player API JSON\nERROR: [youtube] bpSXo6Xt8Nc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=bpSXo6Xt8Nc\n[youtube] bpSXo6Xt8Nc: Downloading webpage\n[youtube] bpSXo6Xt8Nc: Downloading visionos player API JSON\nERROR: [youtube] bpSXo6Xt8Nc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_039",
+      "video_id": "0vF6F-FACuc",
+      "url": "https://www.youtube.com/watch?v=0vF6F-FACuc",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘西施｜省标是你的目标？这7000战力感觉一半是场次堆的｜",
+      "role": "法师",
+      "hero": "西施",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=0vF6F-FACuc\n[youtube] 0vF6F-FACuc: Downloading webpage\n[youtube] 0vF6F-FACuc: Downloading initial data API JSON\n[youtube] 0vF6F-FACuc: Downloading visionos player API JSON\nERROR: [youtube] 0vF6F-FACuc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=0vF6F-FACuc\n[youtube] 0vF6F-FACuc: Downloading webpage\n[youtube] 0vF6F-FACuc: Downloading visionos player API JSON\nERROR: [youtube] 0vF6F-FACuc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_040",
+      "video_id": "vPAry3NshS4",
+      "url": "https://www.youtube.com/watch?v=vPAry3NshS4",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘女娲｜女娲优点你是字句不提｜句句都是缺点｜",
+      "role": "法师",
+      "hero": "女娲",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=vPAry3NshS4\n[youtube] vPAry3NshS4: Downloading webpage\n[youtube] vPAry3NshS4: Downloading initial data API JSON\n[youtube] vPAry3NshS4: Downloading visionos player API JSON\nERROR: [youtube] vPAry3NshS4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=vPAry3NshS4\n[youtube] vPAry3NshS4: Downloading webpage\n[youtube] vPAry3NshS4: Downloading visionos player API JSON\nERROR: [youtube] vPAry3NshS4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_041",
+      "video_id": "A590C8EjoFM",
+      "url": "https://www.youtube.com/watch?v=A590C8EjoFM",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘安琪拉｜又找我背锅是吗｜跟我玩的没有区别是吗｜我玩10年王者也没有3-11战绩吧？",
+      "role": "法师",
+      "hero": "安琪拉",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=A590C8EjoFM\n[youtube] A590C8EjoFM: Downloading webpage\n[youtube] A590C8EjoFM: Downloading initial data API JSON\n[youtube] A590C8EjoFM: Downloading visionos player API JSON\nERROR: [youtube] A590C8EjoFM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=A590C8EjoFM\n[youtube] A590C8EjoFM: Downloading webpage\n[youtube] A590C8EjoFM: Downloading visionos player API JSON\nERROR: [youtube] A590C8EjoFM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_042",
+      "video_id": "UEp9UPhkOp8",
+      "url": "https://www.youtube.com/watch?v=UEp9UPhkOp8",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜从1600到2000分邪修流小乔｜各位宝子们如果上不了记得来骂他｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=UEp9UPhkOp8\n[youtube] UEp9UPhkOp8: Downloading webpage\n[youtube] UEp9UPhkOp8: Downloading initial data API JSON\n[youtube] UEp9UPhkOp8: Downloading visionos player API JSON\nERROR: [youtube] UEp9UPhkOp8: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=UEp9UPhkOp8\n[youtube] UEp9UPhkOp8: Downloading webpage\n[youtube] UEp9UPhkOp8: Downloading initial data API JSON\n[youtube] UEp9UPhkOp8: Downloading visionos player API JSON\nERROR: [youtube] UEp9UPhkOp8: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_043",
+      "video_id": "yhCgNjZo_ts",
+      "url": "https://www.youtube.com/watch?v=yhCgNjZo_ts",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘奕星｜3-13，5.7评分我觉得够了｜累死累活一整局？",
+      "role": "法师",
+      "hero": "奕星",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=yhCgNjZo_ts\n[youtube] yhCgNjZo_ts: Downloading webpage\n[youtube] yhCgNjZo_ts: Downloading visionos player API JSON\nERROR: [youtube] yhCgNjZo_ts: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=yhCgNjZo_ts\n[youtube] yhCgNjZo_ts: Downloading webpage\n[youtube] yhCgNjZo_ts: Downloading visionos player API JSON\nERROR: [youtube] yhCgNjZo_ts: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_044",
+      "video_id": "i6G_DbwK8Mw",
+      "url": "https://www.youtube.com/watch?v=i6G_DbwK8Mw",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜一分钟一个人头｜你是吕德华粉丝吧？肯定不是跟我学的｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=i6G_DbwK8Mw\n[youtube] i6G_DbwK8Mw: Downloading webpage\n[youtube] i6G_DbwK8Mw: Downloading visionos player API JSON\nERROR: [youtube] i6G_DbwK8Mw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=i6G_DbwK8Mw\n[youtube] i6G_DbwK8Mw: Downloading webpage\n[youtube] i6G_DbwK8Mw: Downloading visionos player API JSON\nERROR: [youtube] i6G_DbwK8Mw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_045",
+      "video_id": "6T8jVasdSMw",
+      "url": "https://www.youtube.com/watch?v=6T8jVasdSMw",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜上赛季荣耀王者｜新赛季打星耀吃力｜我要验牌｜我们看看怎么个事｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=6T8jVasdSMw\n[youtube] 6T8jVasdSMw: Downloading webpage\n[youtube] 6T8jVasdSMw: Downloading initial data API JSON\n[youtube] 6T8jVasdSMw: Downloading visionos player API JSON\nERROR: [youtube] 6T8jVasdSMw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=6T8jVasdSMw\n[youtube] 6T8jVasdSMw: Downloading webpage\n[youtube] 6T8jVasdSMw: Downloading visionos player API JSON\nERROR: [youtube] 6T8jVasdSMw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_046",
+      "video_id": "w0V6X6TluV4",
+      "url": "https://www.youtube.com/watch?v=w0V6X6TluV4",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘王昭君｜定榜1500失败｜我以为是全国排名｜结果是巅峰分｜我要验牌｜",
+      "role": "法师",
+      "hero": "王昭君",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=w0V6X6TluV4\n[youtube] w0V6X6TluV4: Downloading webpage\n[youtube] w0V6X6TluV4: Downloading initial data API JSON\n[youtube] w0V6X6TluV4: Downloading visionos player API JSON\nERROR: [youtube] w0V6X6TluV4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=w0V6X6TluV4\n[youtube] w0V6X6TluV4: Downloading webpage\n[youtube] w0V6X6TluV4: Downloading initial data API JSON\n[youtube] w0V6X6TluV4: Downloading visionos player API JSON\nERROR: [youtube] w0V6X6TluV4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_047",
+      "video_id": "dHu5hR0Cy6A",
+      "url": "https://www.youtube.com/watch?v=dHu5hR0Cy6A",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘扁鹊｜换英雄就能上2100？却卡在1500｜各位宝子觉得是这样吗？",
+      "role": "法师",
+      "hero": "扁鹊",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=dHu5hR0Cy6A\n[youtube] dHu5hR0Cy6A: Downloading webpage\n[youtube] dHu5hR0Cy6A: Downloading initial data API JSON\n[youtube] dHu5hR0Cy6A: Downloading visionos player API JSON\nERROR: [youtube] dHu5hR0Cy6A: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=dHu5hR0Cy6A\n[youtube] dHu5hR0Cy6A: Downloading webpage\n[youtube] dHu5hR0Cy6A: Downloading visionos player API JSON\nERROR: [youtube] dHu5hR0Cy6A: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_048",
+      "video_id": "sq0yFs0nvFE",
+      "url": "https://www.youtube.com/watch?v=sq0yFs0nvFE",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘少司缘｜挺有意思来就发个冠军奖牌｜这是什么有没有人知道｜反正打得好我们表扬鼓励｜打的不好直接电⚡️｜",
+      "role": "辅助",
+      "hero": "少司缘",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=sq0yFs0nvFE\n[youtube] sq0yFs0nvFE: Downloading webpage\n[youtube] sq0yFs0nvFE: Downloading initial data API JSON\n[youtube] sq0yFs0nvFE: Downloading visionos player API JSON\nERROR: [youtube] sq0yFs0nvFE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=sq0yFs0nvFE\n[youtube] sq0yFs0nvFE: Downloading webpage\n[youtube] sq0yFs0nvFE: Downloading visionos player API JSON\nERROR: [youtube] sq0yFs0nvFE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_049",
+      "video_id": "b1QCk5cIO9w",
+      "url": "https://www.youtube.com/watch?v=b1QCk5cIO9w",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜线条小猪已经成神奇宝贝专属｜前期节奏堪比教科书？后期玩不来？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=b1QCk5cIO9w\n[youtube] b1QCk5cIO9w: Downloading webpage\n[youtube] b1QCk5cIO9w: Downloading visionos player API JSON\nERROR: [youtube] b1QCk5cIO9w: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=b1QCk5cIO9w\n[youtube] b1QCk5cIO9w: Downloading webpage\n[youtube] b1QCk5cIO9w: Downloading visionos player API JSON\nERROR: [youtube] b1QCk5cIO9w: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_050",
+      "video_id": "D8hXADxqcJs",
+      "url": "https://www.youtube.com/watch?v=D8hXADxqcJs",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘安琪拉｜什么？1-12？｜你确定你不是来折磨我的吗？宝贝｜",
+      "role": "法师",
+      "hero": "安琪拉",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=D8hXADxqcJs\n[youtube] D8hXADxqcJs: Downloading webpage\n[youtube] D8hXADxqcJs: Downloading initial data API JSON\n[youtube] D8hXADxqcJs: Downloading visionos player API JSON\nERROR: [youtube] D8hXADxqcJs: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=D8hXADxqcJs\n[youtube] D8hXADxqcJs: Downloading webpage\n[youtube] D8hXADxqcJs: Downloading visionos player API JSON\nERROR: [youtube] D8hXADxqcJs: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_051",
+      "video_id": "1d_ed5Ujblc",
+      "url": "https://www.youtube.com/watch?v=1d_ed5Ujblc",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘安琪拉｜3000场“绝活”安琪拉卡在1600｜直到我看完后才知道你是什么“绝活”｜",
+      "role": "法师",
+      "hero": "安琪拉",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=1d_ed5Ujblc\n[youtube] 1d_ed5Ujblc: Downloading webpage\n[youtube] 1d_ed5Ujblc: Downloading visionos player API JSON\nERROR: [youtube] 1d_ed5Ujblc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=1d_ed5Ujblc\n[youtube] 1d_ed5Ujblc: Downloading webpage\n[youtube] 1d_ed5Ujblc: Downloading visionos player API JSON\nERROR: [youtube] 1d_ed5Ujblc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_052",
+      "video_id": "nSZpBHDRJM4",
+      "url": "https://www.youtube.com/watch?v=nSZpBHDRJM4",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜看我视频有成长是对的｜但我没教你骂人还开着变声器骂｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=nSZpBHDRJM4\n[youtube] nSZpBHDRJM4: Downloading webpage\n[youtube] nSZpBHDRJM4: Downloading initial data API JSON\n[youtube] nSZpBHDRJM4: Downloading visionos player API JSON\nERROR: [youtube] nSZpBHDRJM4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=nSZpBHDRJM4\n[youtube] nSZpBHDRJM4: Downloading webpage\n[youtube] nSZpBHDRJM4: Downloading visionos player API JSON\nERROR: [youtube] nSZpBHDRJM4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_054",
+      "video_id": "0tU33nSqV0w",
+      "url": "https://www.youtube.com/watch?v=0tU33nSqV0w",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之西施｜卡在巅峰1600一年｜想突破万战西施｜死11次还能翻盘｜",
+      "role": "法师",
+      "hero": "西施",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=0tU33nSqV0w\n[youtube] 0tU33nSqV0w: Downloading webpage\n[youtube] 0tU33nSqV0w: Downloading initial data API JSON\n[youtube] 0tU33nSqV0w: Downloading visionos player API JSON\nERROR: [youtube] 0tU33nSqV0w: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=0tU33nSqV0w\n[youtube] 0tU33nSqV0w: Downloading webpage\n[youtube] 0tU33nSqV0w: Downloading visionos player API JSON\nERROR: [youtube] 0tU33nSqV0w: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_055",
+      "video_id": "1Ccy3DLoRdk",
+      "url": "https://www.youtube.com/watch?v=1Ccy3DLoRdk",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之甄姬｜神秘冰冻女子乐子大赏｜总会有意想不到出节奏的方式｜",
+      "role": "法师",
+      "hero": "甄姬",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=1Ccy3DLoRdk\n[youtube] 1Ccy3DLoRdk: Downloading webpage\n[youtube] 1Ccy3DLoRdk: Downloading visionos player API JSON\nERROR: [youtube] 1Ccy3DLoRdk: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=1Ccy3DLoRdk\n[youtube] 1Ccy3DLoRdk: Downloading webpage\n[youtube] 1Ccy3DLoRdk: Downloading initial data API JSON\n[youtube] 1Ccy3DLoRdk: Downloading visionos player API JSON\nERROR: [youtube] 1Ccy3DLoRdk: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_056",
+      "video_id": "lX6FkBEmQuk",
+      "url": "https://www.youtube.com/watch?v=lX6FkBEmQuk",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜每日造神计划｜今日造神西施｜排位百星卡在1500分？",
+      "role": "法师",
+      "hero": "西施",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=lX6FkBEmQuk\n[youtube] lX6FkBEmQuk: Downloading webpage\n[youtube] lX6FkBEmQuk: Downloading visionos player API JSON\nERROR: [youtube] lX6FkBEmQuk: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=lX6FkBEmQuk\n[youtube] lX6FkBEmQuk: Downloading webpage\n[youtube] lX6FkBEmQuk: Downloading visionos player API JSON\nERROR: [youtube] lX6FkBEmQuk: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_057",
+      "video_id": "g9uBghmDQBw",
+      "url": "https://www.youtube.com/watch?v=g9uBghmDQBw",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之貂蝉｜貂蝉大招疏散人群｜打不出伤害｜你劣势还要1v5｜不是纯纯犟种吗？",
+      "role": "法师",
+      "hero": "貂蝉",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=g9uBghmDQBw\n[youtube] g9uBghmDQBw: Downloading webpage\n[youtube] g9uBghmDQBw: Downloading visionos player API JSON\nERROR: [youtube] g9uBghmDQBw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=g9uBghmDQBw\n[youtube] g9uBghmDQBw: Downloading webpage\n[youtube] g9uBghmDQBw: Downloading visionos player API JSON\nERROR: [youtube] g9uBghmDQBw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_058",
+      "video_id": "Xj9fKUrDkBM",
+      "url": "https://www.youtube.com/watch?v=Xj9fKUrDkBM",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之甄姬｜找机会堪比2300选手｜但是卡在1400｜我倒是不会信｜你们觉得呢？",
+      "role": "法师",
+      "hero": "甄姬",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Xj9fKUrDkBM\n[youtube] Xj9fKUrDkBM: Downloading webpage\n[youtube] Xj9fKUrDkBM: Downloading initial data API JSON\n[youtube] Xj9fKUrDkBM: Downloading visionos player API JSON\nERROR: [youtube] Xj9fKUrDkBM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Xj9fKUrDkBM\n[youtube] Xj9fKUrDkBM: Downloading webpage\n[youtube] Xj9fKUrDkBM: Downloading initial data API JSON\n[youtube] Xj9fKUrDkBM: Downloading visionos player API JSON\nERROR: [youtube] Xj9fKUrDkBM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_059",
+      "video_id": "mdXs3Z32LyA",
+      "url": "https://www.youtube.com/watch?v=mdXs3Z32LyA",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之奕星雅典娜合集｜奕星巅峰1500多难打？我要想把你们逻辑理顺了丝毫不亚于考研｜雅典娜献祭流记清楚了一定要带惩戒｜",
+      "role": "法师",
+      "hero": "雅典娜",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=mdXs3Z32LyA\n[youtube] mdXs3Z32LyA: Downloading webpage\n[youtube] mdXs3Z32LyA: Downloading initial data API JSON\n[youtube] mdXs3Z32LyA: Downloading visionos player API JSON\nERROR: [youtube] mdXs3Z32LyA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=mdXs3Z32LyA\n[youtube] mdXs3Z32LyA: Downloading webpage\n[youtube] mdXs3Z32LyA: Downloading visionos player API JSON\nERROR: [youtube] mdXs3Z32LyA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_060",
+      "video_id": "oqpi1uv89_E",
+      "url": "https://www.youtube.com/watch?v=oqpi1uv89_E",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔虞姬合集｜巅峰赛1200小乔｜战绩从来没有正过｜10年老兵5年扛枪虞姬｜就这样还能一号位经济？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=oqpi1uv89_E\n[youtube] oqpi1uv89_E: Downloading webpage\n[youtube] oqpi1uv89_E: Downloading visionos player API JSON\nERROR: [youtube] oqpi1uv89_E: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=oqpi1uv89_E\n[youtube] oqpi1uv89_E: Downloading webpage\n[youtube] oqpi1uv89_E: Downloading visionos player API JSON\nERROR: [youtube] oqpi1uv89_E: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_061",
+      "video_id": "Ss_pv3OpTTQ",
+      "url": "https://www.youtube.com/watch?v=Ss_pv3OpTTQ",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜又来喊我背锅是吗？跟我学的？｜我从来没有打过7.8的评分小乔",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Ss_pv3OpTTQ\n[youtube] Ss_pv3OpTTQ: Downloading webpage\n[youtube] Ss_pv3OpTTQ: Downloading visionos player API JSON\nERROR: [youtube] Ss_pv3OpTTQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Ss_pv3OpTTQ\n[youtube] Ss_pv3OpTTQ: Downloading webpage\n[youtube] Ss_pv3OpTTQ: Downloading initial data API JSON\n[youtube] Ss_pv3OpTTQ: Downloading visionos player API JSON\nERROR: [youtube] Ss_pv3OpTTQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_062",
+      "video_id": "vJHXbUl-9O0",
+      "url": "https://www.youtube.com/watch?v=vJHXbUl-9O0",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜咱家粉丝长脸了呀｜复盘对面诸葛亮｜还说是神奇宝贝｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=vJHXbUl-9O0\n[youtube] vJHXbUl-9O0: Downloading webpage\n[youtube] vJHXbUl-9O0: Downloading initial data API JSON\n[youtube] vJHXbUl-9O0: Downloading visionos player API JSON\nERROR: [youtube] vJHXbUl-9O0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=vJHXbUl-9O0\n[youtube] vJHXbUl-9O0: Downloading webpage\n[youtube] vJHXbUl-9O0: Downloading initial data API JSON\n[youtube] vJHXbUl-9O0: Downloading visionos player API JSON\nERROR: [youtube] vJHXbUl-9O0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_063",
+      "video_id": "yORCRDUJ6PI",
+      "url": "https://www.youtube.com/watch?v=yORCRDUJ6PI",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之安琪拉｜熟悉的皮肤不一样的台词｜神奇宝贝嗷呜嗷呜｜",
+      "role": "法师",
+      "hero": "安琪拉",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=yORCRDUJ6PI\n[youtube] yORCRDUJ6PI: Downloading webpage\n[youtube] yORCRDUJ6PI: Downloading visionos player API JSON\nERROR: [youtube] yORCRDUJ6PI: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=yORCRDUJ6PI\n[youtube] yORCRDUJ6PI: Downloading webpage\n[youtube] yORCRDUJ6PI: Downloading visionos player API JSON\nERROR: [youtube] yORCRDUJ6PI: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_064",
+      "video_id": "1e4gzwNhDxo",
+      "url": "https://www.youtube.com/watch?v=1e4gzwNhDxo",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘后羿西施合集｜1700分发育路不会抗压｜有什么资格委屈？｜1800分惊现斩杀西施｜不得不说是真的秀｜",
+      "role": "射手",
+      "hero": "西施",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=1e4gzwNhDxo\n[youtube] 1e4gzwNhDxo: Downloading webpage\n[youtube] 1e4gzwNhDxo: Downloading visionos player API JSON\nERROR: [youtube] 1e4gzwNhDxo: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=1e4gzwNhDxo\n[youtube] 1e4gzwNhDxo: Downloading webpage\n[youtube] 1e4gzwNhDxo: Downloading initial data API JSON\n[youtube] 1e4gzwNhDxo: Downloading visionos player API JSON\nERROR: [youtube] 1e4gzwNhDxo: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_065",
+      "video_id": "TcPNUG4b6GE",
+      "url": "https://www.youtube.com/watch?v=TcPNUG4b6GE",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之西施｜场均死10次吗？｜那确实很贪睡了｜一起来看看怎么个事｜",
+      "role": "法师",
+      "hero": "西施",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=TcPNUG4b6GE\n[youtube] TcPNUG4b6GE: Downloading webpage\n[youtube] TcPNUG4b6GE: Downloading visionos player API JSON\nERROR: [youtube] TcPNUG4b6GE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=TcPNUG4b6GE\n[youtube] TcPNUG4b6GE: Downloading webpage\n[youtube] TcPNUG4b6GE: Downloading visionos player API JSON\nERROR: [youtube] TcPNUG4b6GE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_066",
+      "video_id": "jJnLU7g34F0",
+      "url": "https://www.youtube.com/watch?v=jJnLU7g34F0",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之奕星｜是谁把我家粉丝打哭了？排位和巅峰赛都输｜",
+      "role": "法师",
+      "hero": "奕星",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=jJnLU7g34F0\n[youtube] jJnLU7g34F0: Downloading webpage\n[youtube] jJnLU7g34F0: Downloading visionos player API JSON\nERROR: [youtube] jJnLU7g34F0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=jJnLU7g34F0\n[youtube] jJnLU7g34F0: Downloading webpage\n[youtube] jJnLU7g34F0: Downloading visionos player API JSON\nERROR: [youtube] jJnLU7g34F0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_067",
+      "video_id": "volTKpEn8EU",
+      "url": "https://www.youtube.com/watch?v=volTKpEn8EU",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜玩小乔死亡率太高了？｜死亡率过高就是很大的问题｜还敢说找不到原因",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=volTKpEn8EU\n[youtube] volTKpEn8EU: Downloading webpage\n[youtube] volTKpEn8EU: Downloading visionos player API JSON\nERROR: [youtube] volTKpEn8EU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=volTKpEn8EU\n[youtube] volTKpEn8EU: Downloading webpage\n[youtube] volTKpEn8EU: Downloading visionos player API JSON\nERROR: [youtube] volTKpEn8EU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_068",
+      "video_id": "5K-eaq3xiEo",
+      "url": "https://www.youtube.com/watch?v=5K-eaq3xiEo",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之安琪拉｜一天打7个小时巅峰赛｜够努力是够努力｜不如改下思路呢？",
+      "role": "法师",
+      "hero": "安琪拉",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=5K-eaq3xiEo\n[youtube] 5K-eaq3xiEo: Downloading webpage\n[youtube] 5K-eaq3xiEo: Downloading visionos player API JSON\nERROR: [youtube] 5K-eaq3xiEo: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=5K-eaq3xiEo\n[youtube] 5K-eaq3xiEo: Downloading webpage\n[youtube] 5K-eaq3xiEo: Downloading initial data API JSON\n[youtube] 5K-eaq3xiEo: Downloading visionos player API JSON\nERROR: [youtube] 5K-eaq3xiEo: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_069",
+      "video_id": "QRFvhVH9Qgc",
+      "url": "https://www.youtube.com/watch?v=QRFvhVH9Qgc",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜1-10的战绩3.2评分｜你别说是你朋友｜我怀疑就是你自己",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=QRFvhVH9Qgc\n[youtube] QRFvhVH9Qgc: Downloading webpage\n[youtube] QRFvhVH9Qgc: Downloading visionos player API JSON\nERROR: [youtube] QRFvhVH9Qgc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=QRFvhVH9Qgc\n[youtube] QRFvhVH9Qgc: Downloading webpage\n[youtube] QRFvhVH9Qgc: Downloading initial data API JSON\n[youtube] QRFvhVH9Qgc: Downloading visionos player API JSON\nERROR: [youtube] QRFvhVH9Qgc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_071",
+      "video_id": "C447HrpEU4Q",
+      "url": "https://www.youtube.com/watch?v=C447HrpEU4Q",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜排位百星来打巅峰赛1200被4个队友说不会玩｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=C447HrpEU4Q\n[youtube] C447HrpEU4Q: Downloading webpage\n[youtube] C447HrpEU4Q: Downloading visionos player API JSON\nERROR: [youtube] C447HrpEU4Q: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=C447HrpEU4Q\n[youtube] C447HrpEU4Q: Downloading webpage\n[youtube] C447HrpEU4Q: Downloading visionos player API JSON\nERROR: [youtube] C447HrpEU4Q: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_072",
+      "video_id": "oH18CeAVZOM",
+      "url": "https://www.youtube.com/watch?v=oH18CeAVZOM",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜前期套公式化不错｜传送飞脸上后就一直迷茫了｜天赋型选手｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=oH18CeAVZOM\n[youtube] oH18CeAVZOM: Downloading webpage\n[youtube] oH18CeAVZOM: Downloading visionos player API JSON\nERROR: [youtube] oH18CeAVZOM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=oH18CeAVZOM\n[youtube] oH18CeAVZOM: Downloading webpage\n[youtube] oH18CeAVZOM: Downloading initial data API JSON\n[youtube] oH18CeAVZOM: Downloading visionos player API JSON\nERROR: [youtube] oH18CeAVZOM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_073",
+      "video_id": "WD_4pE6QLYE",
+      "url": "https://www.youtube.com/watch?v=WD_4pE6QLYE",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜这个1900分段小乔确实是神奇宝贝大队长｜中期是换人玩了吗｜还是我看走眼了？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=WD_4pE6QLYE\n[youtube] WD_4pE6QLYE: Downloading webpage\n[youtube] WD_4pE6QLYE: Downloading initial data API JSON\n[youtube] WD_4pE6QLYE: Downloading visionos player API JSON\nERROR: [youtube] WD_4pE6QLYE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=WD_4pE6QLYE\n[youtube] WD_4pE6QLYE: Downloading webpage\n[youtube] WD_4pE6QLYE: Downloading visionos player API JSON\nERROR: [youtube] WD_4pE6QLYE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_074",
+      "video_id": "zSaux01NGpw",
+      "url": "https://www.youtube.com/watch?v=zSaux01NGpw",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之云缨｜还状告对抗路发育路｜10分钟时间就蹭了9分钟不科学的线｜打野基本功太差",
+      "role": "对抗",
+      "hero": "云缨",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=zSaux01NGpw\n[youtube] zSaux01NGpw: Downloading webpage\n[youtube] zSaux01NGpw: Downloading initial data API JSON\n[youtube] zSaux01NGpw: Downloading visionos player API JSON\nERROR: [youtube] zSaux01NGpw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=zSaux01NGpw\n[youtube] zSaux01NGpw: Downloading webpage\n[youtube] zSaux01NGpw: Downloading initial data API JSON\n[youtube] zSaux01NGpw: Downloading visionos player API JSON\nERROR: [youtube] zSaux01NGpw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_075",
+      "video_id": "T-li07WH5Gk",
+      "url": "https://www.youtube.com/watch?v=T-li07WH5Gk",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之海月｜海月弱吗，不会弱到4分钟中塔掉吧？",
+      "role": "法师",
+      "hero": "海月",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=T-li07WH5Gk\n[youtube] T-li07WH5Gk: Downloading webpage\n[youtube] T-li07WH5Gk: Downloading initial data API JSON\n[youtube] T-li07WH5Gk: Downloading visionos player API JSON\nERROR: [youtube] T-li07WH5Gk: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=T-li07WH5Gk\n[youtube] T-li07WH5Gk: Downloading webpage\n[youtube] T-li07WH5Gk: Downloading visionos player API JSON\nERROR: [youtube] T-li07WH5Gk: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_076",
+      "video_id": "d3Iq97Kiz6s",
+      "url": "https://www.youtube.com/watch?v=d3Iq97Kiz6s",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之西施｜600把徘徊在1600？｜现在这分段都这么抽象的吗｜",
+      "role": "法师",
+      "hero": "西施",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=d3Iq97Kiz6s\n[youtube] d3Iq97Kiz6s: Downloading webpage\n[youtube] d3Iq97Kiz6s: Downloading initial data API JSON\n[youtube] d3Iq97Kiz6s: Downloading visionos player API JSON\nERROR: [youtube] d3Iq97Kiz6s: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=d3Iq97Kiz6s\n[youtube] d3Iq97Kiz6s: Downloading webpage\n[youtube] d3Iq97Kiz6s: Downloading visionos player API JSON\nERROR: [youtube] d3Iq97Kiz6s: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_077",
+      "video_id": "uRxk83IYV8k",
+      "url": "https://www.youtube.com/watch?v=uRxk83IYV8k",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜不是啊姐妹，你这1700多大水分？｜我觉得只值1200｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "新手-低段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=uRxk83IYV8k\n[youtube] uRxk83IYV8k: Downloading webpage\n[youtube] uRxk83IYV8k: Downloading visionos player API JSON\nERROR: [youtube] uRxk83IYV8k: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=uRxk83IYV8k\n[youtube] uRxk83IYV8k: Downloading webpage\n[youtube] uRxk83IYV8k: Downloading initial data API JSON\n[youtube] uRxk83IYV8k: Downloading visionos player API JSON\nERROR: [youtube] uRxk83IYV8k: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_078",
+      "video_id": "Gu1ejVnDtYY",
+      "url": "https://www.youtube.com/watch?v=Gu1ejVnDtYY",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之海月｜不是你被队友坑的想哭吧？｜应该是队友被你坑的想哭才对｜",
+      "role": "法师",
+      "hero": "海月",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Gu1ejVnDtYY\n[youtube] Gu1ejVnDtYY: Downloading webpage\n[youtube] Gu1ejVnDtYY: Downloading visionos player API JSON\nERROR: [youtube] Gu1ejVnDtYY: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Gu1ejVnDtYY\n[youtube] Gu1ejVnDtYY: Downloading webpage\n[youtube] Gu1ejVnDtYY: Downloading initial data API JSON\n[youtube] Gu1ejVnDtYY: Downloading visionos player API JSON\nERROR: [youtube] Gu1ejVnDtYY: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_079",
+      "video_id": "CbFOkf9wllc",
+      "url": "https://www.youtube.com/watch?v=CbFOkf9wllc",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜3600把小乔卡在巅峰1400｜场次比巅峰分还高｜还敢说不是hellopig｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=CbFOkf9wllc\n[youtube] CbFOkf9wllc: Downloading webpage\n[youtube] CbFOkf9wllc: Downloading visionos player API JSON\nERROR: [youtube] CbFOkf9wllc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=CbFOkf9wllc\n[youtube] CbFOkf9wllc: Downloading webpage\n[youtube] CbFOkf9wllc: Downloading visionos player API JSON\nERROR: [youtube] CbFOkf9wllc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_080",
+      "video_id": "j7S5m2Qu6Lk",
+      "url": "https://www.youtube.com/watch?v=j7S5m2Qu6Lk",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之女娲｜女娲创世神卡在巅峰1500｜这操作堪比神奇宝贝｜",
+      "role": "法师",
+      "hero": "女娲",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=j7S5m2Qu6Lk\n[youtube] j7S5m2Qu6Lk: Downloading webpage\n[youtube] j7S5m2Qu6Lk: Downloading visionos player API JSON\nERROR: [youtube] j7S5m2Qu6Lk: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=j7S5m2Qu6Lk\n[youtube] j7S5m2Qu6Lk: Downloading webpage\n[youtube] j7S5m2Qu6Lk: Downloading initial data API JSON\n[youtube] j7S5m2Qu6Lk: Downloading visionos player API JSON\nERROR: [youtube] j7S5m2Qu6Lk: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_081",
+      "video_id": "Hxwi4dOVkKA",
+      "url": "https://www.youtube.com/watch?v=Hxwi4dOVkKA",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之西施｜卡12000战力上不去｜连空1技能4次又连中1技能4次？",
+      "role": "法师",
+      "hero": "西施",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Hxwi4dOVkKA\n[youtube] Hxwi4dOVkKA: Downloading webpage\n[youtube] Hxwi4dOVkKA: Downloading initial data API JSON\n[youtube] Hxwi4dOVkKA: Downloading visionos player API JSON\nERROR: [youtube] Hxwi4dOVkKA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=Hxwi4dOVkKA\n[youtube] Hxwi4dOVkKA: Downloading webpage\n[youtube] Hxwi4dOVkKA: Downloading initial data API JSON\n[youtube] Hxwi4dOVkKA: Downloading visionos player API JSON\nERROR: [youtube] Hxwi4dOVkKA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_082",
+      "video_id": "e2i78s1mxsY",
+      "url": "https://www.youtube.com/watch?v=e2i78s1mxsY",
+      "title": "｜王者荣耀｜Hok｜巅峰赛1700分打野玄策｜10分钟领先对面3000经济｜被翻了还找不出自己问题？",
+      "role": "打野",
+      "hero": "玄策",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=e2i78s1mxsY\n[youtube] e2i78s1mxsY: Downloading webpage\n[youtube] e2i78s1mxsY: Downloading visionos player API JSON\nERROR: [youtube] e2i78s1mxsY: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=e2i78s1mxsY\n[youtube] e2i78s1mxsY: Downloading webpage\n[youtube] e2i78s1mxsY: Downloading visionos player API JSON\nERROR: [youtube] e2i78s1mxsY: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_083",
+      "video_id": "ejfXzRbxbUs",
+      "url": "https://www.youtube.com/watch?v=ejfXzRbxbUs",
+      "title": "｜王者荣耀｜Hok｜粉丝复盘之妲己｜5.0评分1-14妲己｜这个斩杀是那个up主教的？",
+      "role": "法师",
+      "hero": "妲己",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=ejfXzRbxbUs\n[youtube] ejfXzRbxbUs: Downloading webpage\n[youtube] ejfXzRbxbUs: Downloading initial data API JSON\n[youtube] ejfXzRbxbUs: Downloading visionos player API JSON\nERROR: [youtube] ejfXzRbxbUs: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=ejfXzRbxbUs\n[youtube] ejfXzRbxbUs: Downloading webpage\n[youtube] ejfXzRbxbUs: Downloading visionos player API JSON\nERROR: [youtube] ejfXzRbxbUs: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_084",
+      "video_id": "qseqYh26Ark",
+      "url": "https://www.youtube.com/watch?v=qseqYh26Ark",
+      "title": "｜王者荣耀｜粉丝复盘之安琪拉｜王者十年最委屈的一把安琪拉｜你委不委屈我不知道｜你这把信誉分应该不保了｜",
+      "role": "法师",
+      "hero": "安琪拉",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=qseqYh26Ark\n[youtube] qseqYh26Ark: Downloading webpage\n[youtube] qseqYh26Ark: Downloading visionos player API JSON\nERROR: [youtube] qseqYh26Ark: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=qseqYh26Ark\n[youtube] qseqYh26Ark: Downloading webpage\n[youtube] qseqYh26Ark: Downloading visionos player API JSON\nERROR: [youtube] qseqYh26Ark: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_085",
+      "video_id": "8WrzV1M1vD0",
+      "url": "https://www.youtube.com/watch?v=8WrzV1M1vD0",
+      "title": "｜王者荣耀｜粉丝复盘之小乔｜玩小乔就被针对？关键还找不到原因？我来看看怎么个事｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=8WrzV1M1vD0\n[youtube] 8WrzV1M1vD0: Downloading webpage\n[youtube] 8WrzV1M1vD0: Downloading initial data API JSON\n[youtube] 8WrzV1M1vD0: Downloading visionos player API JSON\nERROR: [youtube] 8WrzV1M1vD0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=8WrzV1M1vD0\n[youtube] 8WrzV1M1vD0: Downloading webpage\n[youtube] 8WrzV1M1vD0: Downloading visionos player API JSON\nERROR: [youtube] 8WrzV1M1vD0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_086",
+      "video_id": "JDQ5lSLERZI",
+      "url": "https://www.youtube.com/watch?v=JDQ5lSLERZI",
+      "title": "｜王者荣耀｜粉丝复盘之小乔｜Hellokitty今天来砸场子｜小乔能打出2闪？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=JDQ5lSLERZI\n[youtube] JDQ5lSLERZI: Downloading webpage\n[youtube] JDQ5lSLERZI: Downloading visionos player API JSON\nERROR: [youtube] JDQ5lSLERZI: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=JDQ5lSLERZI\n[youtube] JDQ5lSLERZI: Downloading webpage\n[youtube] JDQ5lSLERZI: Downloading visionos player API JSON\nERROR: [youtube] JDQ5lSLERZI: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_087",
+      "video_id": "euj4NlAknOs",
+      "url": "https://www.youtube.com/watch?v=euj4NlAknOs",
+      "title": "｜王者荣耀｜粉丝复盘之貂蝉｜玩貂蝉总想一打五｜嗷呜...谁不想一打五呢？｜",
+      "role": "法师",
+      "hero": "貂蝉",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=euj4NlAknOs\n[youtube] euj4NlAknOs: Downloading webpage\n[youtube] euj4NlAknOs: Downloading visionos player API JSON\nERROR: [youtube] euj4NlAknOs: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=euj4NlAknOs\n[youtube] euj4NlAknOs: Downloading webpage\n[youtube] euj4NlAknOs: Downloading initial data API JSON\n[youtube] euj4NlAknOs: Downloading visionos player API JSON\nERROR: [youtube] euj4NlAknOs: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_088",
+      "video_id": "huajmeIBDnE",
+      "url": "https://www.youtube.com/watch?v=huajmeIBDnE",
+      "title": "｜王者荣耀｜粉丝复盘之不知火舞｜终于不是跟我学的中路找我复盘了｜必须是天赋型选手｜",
+      "role": "法师",
+      "hero": "不知火舞",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=huajmeIBDnE\n[youtube] huajmeIBDnE: Downloading webpage\n[youtube] huajmeIBDnE: Downloading initial data API JSON\n[youtube] huajmeIBDnE: Downloading visionos player API JSON\nERROR: [youtube] huajmeIBDnE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=huajmeIBDnE\n[youtube] huajmeIBDnE: Downloading webpage\n[youtube] huajmeIBDnE: Downloading visionos player API JSON\nERROR: [youtube] huajmeIBDnE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_090",
+      "video_id": "jDwgrNF_HNc",
+      "url": "https://www.youtube.com/watch?v=jDwgrNF_HNc",
+      "title": "｜王者荣耀｜粉丝复盘之安琪拉｜12连跪被匹配机制制裁｜这是匹配机制黑的最惨的一次｜",
+      "role": "法师",
+      "hero": "安琪拉",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=jDwgrNF_HNc\n[youtube] jDwgrNF_HNc: Downloading webpage\n[youtube] jDwgrNF_HNc: Downloading visionos player API JSON\nERROR: [youtube] jDwgrNF_HNc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=jDwgrNF_HNc\n[youtube] jDwgrNF_HNc: Downloading webpage\n[youtube] jDwgrNF_HNc: Downloading visionos player API JSON\nERROR: [youtube] jDwgrNF_HNc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_091",
+      "video_id": "8ZR4OD_Cm4o",
+      "url": "https://www.youtube.com/watch?v=8ZR4OD_Cm4o",
+      "title": "｜王者荣耀｜粉丝复盘之西施｜800把纯法西施都玩不明白｜玩不了就改半肉玩呀｜",
+      "role": "法师",
+      "hero": "西施",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=8ZR4OD_Cm4o\n[youtube] 8ZR4OD_Cm4o: Downloading webpage\n[youtube] 8ZR4OD_Cm4o: Downloading visionos player API JSON\nERROR: [youtube] 8ZR4OD_Cm4o: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=8ZR4OD_Cm4o\n[youtube] 8ZR4OD_Cm4o: Downloading webpage\n[youtube] 8ZR4OD_Cm4o: Downloading initial data API JSON\n[youtube] 8ZR4OD_Cm4o: Downloading visionos player API JSON\nERROR: [youtube] 8ZR4OD_Cm4o: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_092",
+      "video_id": "DLpx0jWCSFU",
+      "url": "https://www.youtube.com/watch?v=DLpx0jWCSFU",
+      "title": "｜王者荣耀｜粉丝复盘之海诺｜500把海诺卡在6000战力｜你和上次海诺不一样？",
+      "role": "法师",
+      "hero": "海诺",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=DLpx0jWCSFU\n[youtube] DLpx0jWCSFU: Downloading webpage\n[youtube] DLpx0jWCSFU: Downloading visionos player API JSON\nERROR: [youtube] DLpx0jWCSFU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=DLpx0jWCSFU\n[youtube] DLpx0jWCSFU: Downloading webpage\n[youtube] DLpx0jWCSFU: Downloading initial data API JSON\n[youtube] DLpx0jWCSFU: Downloading visionos player API JSON\nERROR: [youtube] DLpx0jWCSFU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_093",
+      "video_id": "H8AG0jBpRFA",
+      "url": "https://www.youtube.com/watch?v=H8AG0jBpRFA",
+      "title": "｜王者荣耀｜粉丝复盘之小乔｜0-7就0-7还高价值掉点｜你还简直精的很｜把自己包装成高手是吧？",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=H8AG0jBpRFA\n[youtube] H8AG0jBpRFA: Downloading webpage\n[youtube] H8AG0jBpRFA: Downloading visionos player API JSON\nERROR: [youtube] H8AG0jBpRFA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=H8AG0jBpRFA\n[youtube] H8AG0jBpRFA: Downloading webpage\n[youtube] H8AG0jBpRFA: Downloading visionos player API JSON\nERROR: [youtube] H8AG0jBpRFA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_094",
+      "video_id": "x_NjbecxSAE",
+      "url": "https://www.youtube.com/watch?v=x_NjbecxSAE",
+      "title": "｜王者荣耀｜粉丝复盘之貂蝉｜2-12的貂蝉肯定没有失误｜有问题的是我｜毕竟大过年的｜",
+      "role": "法师",
+      "hero": "貂蝉",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=x_NjbecxSAE\n[youtube] x_NjbecxSAE: Downloading webpage\n[youtube] x_NjbecxSAE: Downloading initial data API JSON\n[youtube] x_NjbecxSAE: Downloading visionos player API JSON\nERROR: [youtube] x_NjbecxSAE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=x_NjbecxSAE\n[youtube] x_NjbecxSAE: Downloading webpage\n[youtube] x_NjbecxSAE: Downloading visionos player API JSON\nERROR: [youtube] x_NjbecxSAE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_095",
+      "video_id": "mjJ8s5cIMSQ",
+      "url": "https://www.youtube.com/watch?v=mjJ8s5cIMSQ",
+      "title": "｜王者荣耀｜粉丝复盘之小乔｜4000场5000战力什么水平｜最少是个神奇宝贝大队长级别了｜",
+      "role": "法师",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "神奇宝贝TV",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=mjJ8s5cIMSQ\n[youtube] mjJ8s5cIMSQ: Downloading webpage\n[youtube] mjJ8s5cIMSQ: Downloading visionos player API JSON\nERROR: [youtube] mjJ8s5cIMSQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=mjJ8s5cIMSQ\n[youtube] mjJ8s5cIMSQ: Downloading webpage\n[youtube] mjJ8s5cIMSQ: Downloading initial data API JSON\n[youtube] mjJ8s5cIMSQ: Downloading visionos player API JSON\nERROR: [youtube] mjJ8s5cIMSQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_096",
+      "video_id": "TgvASe7Py7M",
+      "url": "https://www.youtube.com/watch?v=TgvASe7Py7M",
+      "title": "｜王者荣耀｜粉丝复盘之海诺｜你这种玩法是把队友燃尽了｜根本赢不了一点｜",
+      "role": "法师",
+      "hero": "海诺",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=TgvASe7Py7M\n[youtube] TgvASe7Py7M: Downloading webpage\n[youtube] TgvASe7Py7M: Downloading visionos player API JSON\nERROR: [youtube] TgvASe7Py7M: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=TgvASe7Py7M\n[youtube] TgvASe7Py7M: Downloading webpage\n[youtube] TgvASe7Py7M: Downloading initial data API JSON\n[youtube] TgvASe7Py7M: Downloading visionos player API JSON\nERROR: [youtube] TgvASe7Py7M: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_097",
+      "video_id": "61VGebTCAbg",
+      "url": "https://www.youtube.com/watch?v=61VGebTCAbg",
+      "title": "｜王者荣耀｜粉丝复盘之宫本｜7年宫本卡在1100分｜你确定你不是来搞节目的吗｜",
+      "role": "打野",
+      "hero": "宫本武藏",
+      "rank_stratum": "新手-低段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=61VGebTCAbg\n[youtube] 61VGebTCAbg: Downloading webpage\n[youtube] 61VGebTCAbg: Downloading visionos player API JSON\nERROR: [youtube] 61VGebTCAbg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=61VGebTCAbg\n[youtube] 61VGebTCAbg: Downloading webpage\n[youtube] 61VGebTCAbg: Downloading visionos player API JSON\nERROR: [youtube] 61VGebTCAbg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_099",
+      "video_id": "QHVOZlII7VE",
+      "url": "https://www.youtube.com/watch?v=QHVOZlII7VE",
+      "title": "峰赛1770分打野第一视角复盘教学全局讲解#王者荣耀 #传说对决  #折纸",
+      "role": "打野",
+      "hero": "待确认",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=QHVOZlII7VE\n[youtube] QHVOZlII7VE: Downloading webpage\n[youtube] QHVOZlII7VE: Downloading initial data API JSON\n[youtube] QHVOZlII7VE: Downloading visionos player API JSON\nERROR: [youtube] QHVOZlII7VE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=QHVOZlII7VE\n[youtube] QHVOZlII7VE: Downloading webpage\n[youtube] QHVOZlII7VE: Downloading visionos player API JSON\nERROR: [youtube] QHVOZlII7VE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_100",
+      "video_id": "UMdrheux9yo",
+      "url": "https://www.youtube.com/watch?v=UMdrheux9yo",
+      "title": "｜王者荣耀｜Hok｜粉丝投稿巅峰赛全国中单分榜第一晋级赛传送诸葛第一视角复盘教学全局讲解｜",
+      "role": "法师",
+      "hero": "诸葛亮",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=UMdrheux9yo\n[youtube] UMdrheux9yo: Downloading webpage\n[youtube] UMdrheux9yo: Downloading visionos player API JSON\nERROR: [youtube] UMdrheux9yo: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=UMdrheux9yo\n[youtube] UMdrheux9yo: Downloading webpage\n[youtube] UMdrheux9yo: Downloading visionos player API JSON\nERROR: [youtube] UMdrheux9yo: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_101",
+      "video_id": "fqiUm2azky0",
+      "url": "https://www.youtube.com/watch?v=fqiUm2azky0",
+      "title": "｜王者荣耀｜Hok｜当对抗路来玩射手时有多敢打？｜包输的对局被后羿翻盘｜对手想不到，队友不敢想｜",
+      "role": "对抗",
+      "hero": "后羿",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=fqiUm2azky0\n[youtube] fqiUm2azky0: Downloading webpage\n[youtube] fqiUm2azky0: Downloading initial data API JSON\n[youtube] fqiUm2azky0: Downloading visionos player API JSON\nERROR: [youtube] fqiUm2azky0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=fqiUm2azky0\n[youtube] fqiUm2azky0: Downloading webpage\n[youtube] fqiUm2azky0: Downloading visionos player API JSON\nERROR: [youtube] fqiUm2azky0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_103",
+      "video_id": "AiFsjrFFZ8A",
+      "url": "https://www.youtube.com/watch?v=AiFsjrFFZ8A",
+      "title": "【王者荣耀】国服武则天挂边全局思路，连胜技巧出装打法分享 #武则天教学 #武则天出装 #巅峰赛 #游戏解说 #王者上分技巧 #honorofkings",
+      "role": "待确认",
+      "hero": "待确认",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=AiFsjrFFZ8A\n[youtube] AiFsjrFFZ8A: Downloading webpage\n[youtube] AiFsjrFFZ8A: Downloading visionos player API JSON\nERROR: [youtube] AiFsjrFFZ8A: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=AiFsjrFFZ8A\n[youtube] AiFsjrFFZ8A: Downloading webpage\n[youtube] AiFsjrFFZ8A: Downloading visionos player API JSON\nERROR: [youtube] AiFsjrFFZ8A: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_104",
+      "video_id": "MADe7o_U5xE",
+      "url": "https://www.youtube.com/watch?v=MADe7o_U5xE",
+      "title": "【王者荣耀】149段发育路卢雅娜第一视角：组合技能用对，才能打出爆炸伤害 #巅峰赛 #游戏解说 #王者上分技巧 #honorofkings",
+      "role": "待确认",
+      "hero": "待确认",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=MADe7o_U5xE\n[youtube] MADe7o_U5xE: Downloading webpage\n[youtube] MADe7o_U5xE: Downloading initial data API JSON\n[youtube] MADe7o_U5xE: Downloading visionos player API JSON\nERROR: [youtube] MADe7o_U5xE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=MADe7o_U5xE\n[youtube] MADe7o_U5xE: Downloading webpage\n[youtube] MADe7o_U5xE: Downloading initial data API JSON\n[youtube] MADe7o_U5xE: Downloading visionos player API JSON\nERROR: [youtube] MADe7o_U5xE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_108",
+      "video_id": "BV1Ph4y1N7Cu",
+      "url": "https://www.bilibili.com/video/BV1Ph4y1N7Cu/",
+      "title": "白姨寂然后续：复盘与打野/对抗路打法思路",
+      "role": "对抗",
+      "hero": "待确认",
+      "rank_stratum": "待确认",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1Ph4y1N7Cu/\n[BiliBili] 1Ph4y1N7Cu: Downloading webpage\nERROR: [BiliBili] 1Ph4y1N7Cu: Unable to download webpage: HTTP Error 412: Precondition Failed (caused by <HTTPError 412: Precondition Failed>)\n",
+        "[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1Ph4y1N7Cu/\n[BiliBili] 1Ph4y1N7Cu: Downloading webpage\nERROR: [BiliBili] 1Ph4y1N7Cu: Unable to download webpage: HTTP Error 412: Precondition Failed (caused by <HTTPError 412: Precondition Failed>)\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_122",
+      "video_id": "4Tz9AiZ510M",
+      "url": "https://www.youtube.com/watch?v=4Tz9AiZ510M",
+      "title": "｜王者荣耀｜Hok｜辅助大乔运营一整局结果5打2，风暴龙王被小乔抢了！辅助如何逆转大局极限翻盘？",
+      "role": "辅助",
+      "hero": "小乔",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=4Tz9AiZ510M\n[youtube] 4Tz9AiZ510M: Downloading webpage\n[youtube] 4Tz9AiZ510M: Downloading visionos player API JSON\nERROR: [youtube] 4Tz9AiZ510M: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=4Tz9AiZ510M\n[youtube] 4Tz9AiZ510M: Downloading webpage\n[youtube] 4Tz9AiZ510M: Downloading visionos player API JSON\nERROR: [youtube] 4Tz9AiZ510M: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_125",
+      "video_id": "xSkMAIdqUjw",
+      "url": "https://www.youtube.com/watch?v=xSkMAIdqUjw",
+      "title": "【王者荣耀】孙膑高分句里的超标辅助，为什么在低分段却被人各种嫌弃今天一期视频带你真正了解孙膑明白到底如何玩好这个英雄#孙膑#辅助#王者荣耀 #HonorofKings #hok",
+      "role": "辅助",
+      "hero": "孙膑",
+      "rank_stratum": "新手-低段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=xSkMAIdqUjw\n[youtube] xSkMAIdqUjw: Downloading webpage\n[youtube] xSkMAIdqUjw: Downloading visionos player API JSON\nERROR: [youtube] xSkMAIdqUjw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=xSkMAIdqUjw\n[youtube] xSkMAIdqUjw: Downloading webpage\n[youtube] xSkMAIdqUjw: Downloading initial data API JSON\n[youtube] xSkMAIdqUjw: Downloading visionos player API JSON\nERROR: [youtube] xSkMAIdqUjw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_134",
+      "video_id": "jD9NcP8e5Ls",
+      "url": "https://www.youtube.com/watch?v=jD9NcP8e5Ls",
+      "title": "【王者荣耀】7分钟人头2-17射手狄仁杰逆风局思路详解#逆风局#射手#狄仁杰#王者荣耀 #HonorofKings #hok",
+      "role": "射手",
+      "hero": "狄仁杰",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=jD9NcP8e5Ls\n[youtube] jD9NcP8e5Ls: Downloading webpage\n[youtube] jD9NcP8e5Ls: Downloading visionos player API JSON\nERROR: [youtube] jD9NcP8e5Ls: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=jD9NcP8e5Ls\n[youtube] jD9NcP8e5Ls: Downloading webpage\n[youtube] jD9NcP8e5Ls: Downloading visionos player API JSON\nERROR: [youtube] jD9NcP8e5Ls: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_141",
+      "video_id": "UOWtFPj-35A",
+      "url": "https://www.youtube.com/watch?v=UOWtFPj-35A",
+      "title": "【王者荣耀】如果你想练习一名保值的射手那么孙尚香绝对是不二之选这把巅峰700对线国二伽罗全局精讲轻松好学#射手教学#巅峰赛#王者荣耀 #HonorofKings #hok",
+      "role": "射手",
+      "hero": "待确认",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=UOWtFPj-35A\n[youtube] UOWtFPj-35A: Downloading webpage\n[youtube] UOWtFPj-35A: Downloading initial data API JSON\n[youtube] UOWtFPj-35A: Downloading visionos player API JSON\nERROR: [youtube] UOWtFPj-35A: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=UOWtFPj-35A\n[youtube] UOWtFPj-35A: Downloading webpage\n[youtube] UOWtFPj-35A: Downloading initial data API JSON\n[youtube] UOWtFPj-35A: Downloading visionos player API JSON\nERROR: [youtube] UOWtFPj-35A: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_142",
+      "video_id": "j6V2tFR1am0",
+      "url": "https://www.youtube.com/watch?v=j6V2tFR1am0",
+      "title": "｜王者荣耀｜当中路85段法王玩射手时｜那就是高地规划大师｜排位赛",
+      "role": "射手",
+      "hero": "澜",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=j6V2tFR1am0\n[youtube] j6V2tFR1am0: Downloading webpage\n[youtube] j6V2tFR1am0: Downloading visionos player API JSON\nERROR: [youtube] j6V2tFR1am0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=j6V2tFR1am0\n[youtube] j6V2tFR1am0: Downloading webpage\n[youtube] j6V2tFR1am0: Downloading initial data API JSON\n[youtube] j6V2tFR1am0: Downloading visionos player API JSON\nERROR: [youtube] j6V2tFR1am0: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_144",
+      "video_id": "_Hx2nRuGhpI",
+      "url": "https://www.youtube.com/watch?v=_Hx2nRuGhpI",
+      "title": "｜王者荣耀｜巅峰赛1897的射手在钻石局翻车？｜不管你有多厉害在永恒钻石都得低调一点｜不要小看钻石局的报复心｜",
+      "role": "射手",
+      "hero": "待确认",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=_Hx2nRuGhpI\n[youtube] _Hx2nRuGhpI: Downloading webpage\n[youtube] _Hx2nRuGhpI: Downloading initial data API JSON\n[youtube] _Hx2nRuGhpI: Downloading visionos player API JSON\nERROR: [youtube] _Hx2nRuGhpI: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=_Hx2nRuGhpI\n[youtube] _Hx2nRuGhpI: Downloading webpage\n[youtube] _Hx2nRuGhpI: Downloading initial data API JSON\n[youtube] _Hx2nRuGhpI: Downloading visionos player API JSON\nERROR: [youtube] _Hx2nRuGhpI: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_146",
+      "video_id": "HhJbqZH6vZ8",
+      "url": "https://www.youtube.com/watch?v=HhJbqZH6vZ8",
+      "title": "｜王者荣耀｜区区70段射手就想突破星耀｜赛季初百段单排射手排位赛都不一定笑着出来｜后羿｜发育路｜巅峰赛｜",
+      "role": "射手",
+      "hero": "后羿",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=HhJbqZH6vZ8\n[youtube] HhJbqZH6vZ8: Downloading webpage\n[youtube] HhJbqZH6vZ8: Downloading visionos player API JSON\nERROR: [youtube] HhJbqZH6vZ8: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=HhJbqZH6vZ8\n[youtube] HhJbqZH6vZ8: Downloading webpage\n[youtube] HhJbqZH6vZ8: Downloading visionos player API JSON\nERROR: [youtube] HhJbqZH6vZ8: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_147",
+      "video_id": "wLlmQH9MyaQ",
+      "url": "https://www.youtube.com/watch?v=wLlmQH9MyaQ",
+      "title": "【王者荣耀】中辅不管射手顶级打团思路，自身存在问题还是要直视面对的#鲁班#巅峰赛#王者荣耀 #HonorofKings #hok",
+      "role": "射手",
+      "hero": "鲁班七号",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=wLlmQH9MyaQ\n[youtube] wLlmQH9MyaQ: Downloading webpage\n[youtube] wLlmQH9MyaQ: Downloading visionos player API JSON\nERROR: [youtube] wLlmQH9MyaQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=wLlmQH9MyaQ\n[youtube] wLlmQH9MyaQ: Downloading webpage\n[youtube] wLlmQH9MyaQ: Downloading visionos player API JSON\nERROR: [youtube] wLlmQH9MyaQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_148",
+      "video_id": "OWkKGu_I6KM",
+      "url": "https://www.youtube.com/watch?v=OWkKGu_I6KM",
+      "title": "｜王者荣耀｜Hok｜90评分49胜率的射手｜有伸冤，有复盘，有吐槽的｜就没见过有叫我驱邪的｜",
+      "role": "射手",
+      "hero": "待确认",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=OWkKGu_I6KM\n[youtube] OWkKGu_I6KM: Downloading webpage\n[youtube] OWkKGu_I6KM: Downloading visionos player API JSON\nERROR: [youtube] OWkKGu_I6KM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=OWkKGu_I6KM\n[youtube] OWkKGu_I6KM: Downloading webpage\n[youtube] OWkKGu_I6KM: Downloading visionos player API JSON\nERROR: [youtube] OWkKGu_I6KM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_154",
+      "video_id": "aRTUp7kRrgg",
+      "url": "https://www.youtube.com/watch?v=aRTUp7kRrgg",
+      "title": "【王者荣耀】伽罗是翻盘率最高的射手日常排位#伽罗#王者#逆风翻盘#王者荣耀 #HonorofKings",
+      "role": "射手",
+      "hero": "待确认",
+      "rank_stratum": "中段位-高段位",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=aRTUp7kRrgg\n[youtube] aRTUp7kRrgg: Downloading webpage\n[youtube] aRTUp7kRrgg: Downloading initial data API JSON\n[youtube] aRTUp7kRrgg: Downloading visionos player API JSON\nERROR: [youtube] aRTUp7kRrgg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=aRTUp7kRrgg\n[youtube] aRTUp7kRrgg: Downloading webpage\n[youtube] aRTUp7kRrgg: Downloading visionos player API JSON\nERROR: [youtube] aRTUp7kRrgg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    },
+    {
+      "seed_id": "hokclass_158",
+      "video_id": "l4K7AmkaCFU",
+      "url": "https://www.youtube.com/watch?v=l4K7AmkaCFU",
+      "title": "【王者荣耀】射手到底逆风该不该放塔，1800分巅峰赛告诉你答案#鲁班#巅峰赛#王者荣耀 #HonorofKings",
+      "role": "射手",
+      "hero": "鲁班七号",
+      "rank_stratum": "高端巅峰/职业",
+      "series": "其他",
+      "caption_status": "access-failed",
+      "audio_status": "access-failed",
+      "stt_status": "not_run",
+      "files": [],
+      "errors": [
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=l4K7AmkaCFU\n[youtube] l4K7AmkaCFU: Downloading webpage\n[youtube] l4K7AmkaCFU: Downloading visionos player API JSON\nERROR: [youtube] l4K7AmkaCFU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n",
+        "[youtube] Extracting URL: https://www.youtube.com/watch?v=l4K7AmkaCFU\n[youtube] l4K7AmkaCFU: Downloading webpage\n[youtube] l4K7AmkaCFU: Downloading visionos player API JSON\nERROR: [youtube] l4K7AmkaCFU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+      ],
+      "extraction_outcome": "unavailable"
+    }
+  ],
+  "summary": {
+    "caption_status": {
+      "access-failed": 100
+    },
+    "audio_status": {
+      "access-failed": 100
+    },
+    "stt_status": {
+      "not_run": 100
+    },
+    "extraction_outcome": {
+      "unavailable": 100
+    }
+  }
+}

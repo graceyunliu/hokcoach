@@ -1,0 +1,29 @@
+Starting video analysis...
+Submitting video analysis task...
+Task submitted (ID: video-analysis-36eb04f8-54cd-4ba2-8f14-9c019bed7e5a)
+[9s] Status: Analyzing video content with AI...
+[32s] Status: Analysis completed
+[32s] Analysis completed!
+Full analysis result saved to: /home/ubuntu/hokcoach/video_WD_4pE6QLYE_analysis_20260826_120055.md
+Note: This tool performs AI-based visual and audio analysis, not verbatim transcription. For detailed speech transcription, use `manus-speech-to-text` instead.
+Analysis result:
+
+Based on the visual and audio analysis of the provided Xiao Qiao replay review, here is the structured evaluation:
+
+| Timestamp Start | Timestamp End | Coach's Claim / Critique | Gameplay Event | Category | Evidence (Visual/Audio) | Recommended Action | Confidence |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 00:21 | 00:30 | Use information about the enemy jungler's absence to play more aggressively. | Xiao Qiao notices the enemy jungler isn't in the blue zone. | Vision / Macro | Audio: "Blue zone has no enemy jungler... 100% red start." | Track jungler starts to dictate early lane pressure. | High |
+| 00:30 | 00:41 | Pressure the enemy mid-laner (Chang'e) when minions are low, especially with support help. | Xiao Qiao moves forward to zone Chang'e from the front-line minions. | Wave Resource / Mechanics | Visual: Xiao Qiao standing near enemy minions to poke. | Use minion health as a bait to force trades. | High |
+| 00:41 | 00:53 | Critiques a failed mechanical execution of the 2-Skill + Flash combo. | Xiao Qiao attempts a 2-Flash combo but misses the target. | Mechanics | Audio: "You also show me a 2-Flash... judged as Pokémon (insult)." | Practice the timing of skill-buffering with Flash in training mode. | High |
+| 00:53 | 01:05 | Prioritize side-lane resource control after clearing mid if a 2v1 push is stalled. | Xiao Qiao rotates to the side lane to contest a red armor minion. | Macro / Wave Resource | Visual: Xiao Qiao moving to the river/side lane after clearing wave. | Rotate to neutral resources when mid-lane pressure is capped. | High |
+| 01:05 | 01:23 | Praise for predicting and intercepting the enemy mid-laner's rotation path. | Xiao Qiao waits in the river bush to ambush Chang'e returning to lane. | Vision / Macro | Audio: "Stuck the position of the opposite Chang'e loop." | Use river bushes to cut off enemy rotations instead of just following them. | High |
+| 01:23 | 01:41 | Recover lost lane economy by taking jungle camps if a wave is missed. | Xiao Qiao farms small jungle creeps after losing a minion wave. | Wave Resource | Audio: "Missed a minion, must make it up... brush the wild Ono." | Supplement lane income with jungle camps during downtime. | High |
+| 01:47 | 02:02 | Maintain vision control in the river when side-lane teammates are weak. | Xiao Qiao clears the wave and immediately checks river vision. | Vision | Audio: "Control the walnut (river) vision every time." | Don't just farm; use the time between waves to secure vision for the team. | High |
+| 02:02 | 02:27 | Critiques failing to secure a kill on a low-health target due to poor skill follow-up. | Xiao Qiao hits a combo but fails to kill Chang'e, then misses a 2-skill. | Mechanics | Visual: Chang'e escapes with sliver of health; Xiao Qiao misses follow-up. | Calmly aim follow-up skills rather than panic-casting on low-health targets. | High |
+| 02:58 | 03:12 | Decisively abandon a mid-wave to punish overextended enemies in side lanes. | Xiao Qiao ignores the mid-wave to wrap around and kill the enemy marksman. | Macro / Teamfight | Audio: "Mid line... must be decisively let go... wrap up opposite combination." | Recognize when a kill/objective in a side lane is worth more than one mid-wave. | High |
+| 03:28 | 03:42 | Praise for high efficiency in farming while maintaining map presence. | Xiao Qiao reaches a high gold lead through continuous rotation and farming. | Wave Resource | Audio: "Xiao Qiao's economic ability is still very good... 90 points." | Maintain a high farm-per-minute (GPM) to reach power spikes early. | High |
+| 03:42 | 03:59 | Mentality check: Give up lost towers to avoid unnecessary deaths when outnumbered. | Xiao Qiao retreats and lets a tower fall instead of defending 1v3. | Mentality / Macro | Audio: "Put away the tower that should be put away... don't get knocked out again." | Avoid "hero plays" when defending a lost objective; stay alive for the next fight. | High |
+| 04:38 | 04:53 | Use "hidden vision" to set up ambushes in high-traffic jungle areas. | Xiao Qiao hides in a bush near the blue buff to catch the enemy jungler. | Vision / Macro | Visual: Xiao Qiao waiting in fog of war for the enemy to face-check. | Predict enemy farm paths and wait in fog to initiate. | High |
+| 04:53 | 05:06 | Praise for resource management: Giving farm to teammates who need to catch up. | Xiao Qiao leaves a top-lane wave for the struggling Sun Quan. | Mentality / Macro | Audio: "Directly give up the route to Sun Quan... he needs to develop." | Share resources with behind teammates once you have reached your core items. | High |
+| 05:23 | 05:43 | Critiques a "bad trade": Trading your life for an enemy when you are the team's carry. | Xiao Qiao flashes in to kill a low-health Chang'e but dies in the process. | Mentality / Macro | Audio: "You are the highest level... cannot be dropping... trade definitely not worth." | As the primary carry, your survival is more important than a 1-for-1 trade. | High |
+| 05:43 | 06:08 | Game-losing mistake: Attempting a solo ambush against four enemies while the jungler is dead. | Xiao Qiao tries to bush-camp 4 enemies in the river, dies, and the game ends. | Mentality / Macro | Visual: Xiao Qiao 1v4 in river; Audio: "One person squats to four people... then you find you can't beat it." | Play defensively and wait for teammates to respawn rather than taking high-risk solo fights. | High |

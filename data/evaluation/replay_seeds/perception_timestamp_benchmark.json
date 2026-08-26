@@ -1,0 +1,41 @@
+{
+  "benchmark_version": "perception-timestamp-v1",
+  "dataset": "data/evaluation/replay_seeds/labeled_evaluation_set.json",
+  "seed_coverage": {
+    "requested": 100,
+    "remote_analysis_completed": 99,
+    "labeled_with_parseable_events": 95,
+    "coverage_rate": 0.95
+  },
+  "label_ingestion_benchmark": {
+    "events": 920,
+    "valid_interval_rate": 1.0,
+    "invalid_interval_count": 0,
+    "timestamp_parser_status": "pass"
+  },
+  "perception_benchmark": {
+    "status": "not_computable",
+    "reason": "The raw replay videos/audio were blocked by YouTube bot protection, and remote multimodal outputs are silver annotations rather than independent ground truth. Comparing a detector to these same annotations would be circular.",
+    "required_for_true_benchmark": [
+      "raw video or audio for each seed",
+      "independent event ground truth or dual annotator agreement",
+      "detector predictions"
+    ],
+    "current_coverage": "Remote multimodal analysis provides timestamped silver labels for 99 seeds; one Bilibili source was unsupported by the remote analyzer."
+  },
+  "timestamp_error_benchmark": {
+    "status": "not_computable_against_ground_truth",
+    "available_proxy": {
+      "valid_interval_rate": 1.0,
+      "median_event_duration_sec": 19.0,
+      "non_monotonic_event_count": 0
+    },
+    "reason": "No independent event timestamp ground truth is available; silver annotation timestamps cannot be used as their own ground truth."
+  },
+  "typed_rank_fields_used": true,
+  "typed_rank_dimension_coverage": {
+    "regular_rank": 4,
+    "peak_score": 14,
+    "hero_power": 4
+  }
+}
