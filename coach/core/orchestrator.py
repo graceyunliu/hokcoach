@@ -91,6 +91,7 @@ def build_evidence_ledger(detail: dict[str, Any], lang: str = "zh") -> dict[str,
     english = (lang or "zh").lower() == "en"
     observed: list[str] = []
     unresolved: list[str] = []
+    object_evidence = detail.get("minimap_object_evidence") or {}
 
     if detail.get("location"):
         source = detail.get("location_source")
@@ -115,11 +116,27 @@ def build_evidence_ledger(detail: dict[str, Any], lang: str = "zh") -> dict[str,
         value = detail.get(key)
         if value is True:
             observed.append(en_text if english else zh_text)
-        elif value is None:
+        elif value is None and not (key == "pushing_wave" and object_evidence):
             unresolved.append(
                 f"Replay signal unavailable: {key}." if english
                 else f"回放信号不可用：{key}。"
             )
+
+    if object_evidence:
+        decision = object_evidence.get("decision")
+        coverage = object_evidence.get("coverage")
+        if decision is True or decision == "true":
+            observed.append("Minimap object evidence supports pushing the wave." if english else "小地图对象证据支持正在推线/收线。")
+        elif decision is False or decision == "false":
+            observed.append("Minimap object evidence does not support pushing the wave." if english else "小地图对象证据不支持正在推线/收线。")
+        else:
+            unresolved.append(
+                f"Minimap wave/tower evidence is inconclusive (coverage {coverage})." if english
+                else f"小地图兵线/防御塔证据暂不能定论（覆盖率{coverage}）。"
+            )
+        for reason in object_evidence.get("reason_codes") or []:
+            if reason == "mixed_combat_and_wave":
+                unresolved.append("Team fight and wave-clearing signals overlap; do not label this greedily." if english else "团战与清线信号重叠，不能直接归为贪线。")
 
     audio = detail.get("audio_context")
     if audio:

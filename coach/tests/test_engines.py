@@ -290,6 +290,20 @@ class TestReplayEngine(unittest.TestCase):
         unknown_text = replay_engine._format_death_location({})
         self.assertIn("未知", unknown_text)
 
+    def test_build_replay_from_video_carries_minimap_object_evidence(self):
+        object_evidence = {
+            "decision": "unknown",
+            "reason_codes": ["mixed_combat_and_wave"],
+            "coverage": 0.78,
+            "wave_candidates": [{"lane": "mid", "confidence": 0.72}],
+        }
+        events = [{"ts": 30.0, "location": "中路二塔前",
+                   "minimap_object_evidence": object_evidence}]
+        replay = replay_engine.build_replay_from_video(
+            "dummy.mp4", events, [None], llm=None)
+        detail = replay["death_analysis"]["details"][0]
+        self.assertEqual(detail["minimap_object_evidence"], object_evidence)
+
     def test_build_replay_from_video_carries_pushing_wave_signal(self):
         events = [{"ts": 30.0, "location": "上路一塔", "pushing_wave": True}]
         replay = replay_engine.build_replay_from_video(
@@ -697,6 +711,21 @@ class TestOrchestratorStructuredReview(unittest.TestCase):
             for i in range(n)
         ]
         return replay
+
+    def test_evidence_ledger_reports_mixed_combat_wave_uncertainty(self):
+        from core.orchestrator import build_evidence_ledger
+
+        ledger = build_evidence_ledger({
+            "visible_enemy_engagement": True,
+            "pushing_wave": None,
+            "minimap_object_evidence": {
+                "decision": "unknown", "coverage": 0.78,
+                "reason_codes": ["mixed_combat_and_wave"],
+            },
+        })
+        self.assertTrue(any("暂不能定论" in item for item in ledger["unresolved"]))
+        self.assertTrue(any("不能直接归为贪线" in item for item in ledger["unresolved"]))
+        self.assertFalse(any("回放信号不可用：pushing_wave" in item for item in ledger["unresolved"]))
 
     def test_evidence_ledger_is_conservative_and_bilingual(self):
         from core.orchestrator import build_evidence_ledger

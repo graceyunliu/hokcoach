@@ -213,6 +213,7 @@ def build_replay_from_video(video_path: str,
             "anomalous_displacement": event.get("anomalous_displacement"),
             "anomalous_displacements": event.get("anomalous_displacements", []),
             "pushing_wave": event.get("pushing_wave"),
+            "minimap_object_evidence": event.get("minimap_object_evidence"),
             "audio_context": audio_context,
             "self_attribution": None,
             "ai_comment": None,  # orchestrator填充
