@@ -1,38 +1,23 @@
 {
   "schema_version": "handoff-corpus-v4",
-  "generator_version": "claim-model-v3-stable-corpus",
+  "generator_version": "claim-model-v4-bootstrap-canonical",
   "eligible_seed_count": 100,
   "bootstrap": {
     "english_ai_paraphrases": 920,
-    "candidate_windows": 920
+    "candidate_windows": 920,
+    "chinese_windowed_caption_hints": 242,
+    "chinese_context_only_hints": 4
   },
   "canonical": {
-    "chinese_ocr_observations": 242,
-    "chinese_commentary_segments": 238,
-    "claims": 238,
-    "reviewer_observations": 238,
-    "event_fixtures": 111
+    "chinese_ocr_observations": 0,
+    "chinese_commentary_segments": 0,
+    "claims": 0,
+    "reviewer_observations": 0,
+    "event_fixtures": 0
   },
-  "canonical_context_only_intervals": 4,
   "canonical_language": "zh",
   "bootstrap_language": "en",
-  "source_segment_model": "one_canonical_source_segment_to_one_reviewer_observation_to_one_or_more_child_claims",
+  "canonical_promotion_policy": "Only deterministic OCR/STT or fused verified intervals may enter canonical aggregates",
   "gameplay_time_policy": "unknown_until_gameplay_reference_alignment",
-  "stage_semantics": {
-    "bootstrap_labels": "silver only",
-    "speech_to_text": "pending",
-    "caption_ocr": "pending",
-    "ocr_stt_alignment": "pending",
-    "gameplay_reference_alignment": "pending"
-  },
-  "capability_fixture_counts": {
-    "deaths": 22,
-    "towers": 13,
-    "waves": 16,
-    "cooldowns": 35,
-    "minimap_positions": 9,
-    "teamfights": 6,
-    "objectives": 7,
-    "items_economy": 3
-  }
+  "capability_fixture_counts": {}
 }
