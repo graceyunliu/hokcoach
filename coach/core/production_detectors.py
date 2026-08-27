@@ -167,19 +167,89 @@ class CooldownReadinessDetector:
     version = "cooldowns-v1"
     dependencies = ("hud", "teamfight_episodes")
 
+    @staticmethod
+    def _provenance(item: Observation, context: DetectorContext) -> tuple[str, str]:
+        """Return source/layout identity carried by a raw cooldown evidence ref."""
+        source = context.media_hash or context.source_id
+        layout = "unknown"
+        for reference in item.evidence_refs:
+            for part in str(reference).split("|"):
+                if part.startswith("source_sha256=") or part.startswith("source="):
+                    source = part.split("=", 1)[1]
+                elif part.startswith("layout="):
+                    layout = part.split("=", 1)[1]
+        if isinstance(item.value, dict):
+            if item.value.get("source_media_sha256") or item.value.get("source_hash"):
+                source = str(item.value.get("source_media_sha256") or item.value.get("source_hash"))
+            if item.value.get("layout_profile"):
+                layout = str(item.value["layout_profile"])
+        if context.config.get("layout_profile"):
+            layout = str(context.config["layout_profile"])
+        return str(source), str(layout)
+
     def run(self, context: DetectorContext) -> DetectorResult:
-        states = _selected(context, {"cooldown_ui", "cooldown_transition"}); out: list[Observation] = []; previous: dict[tuple[str, str], str] = {}
+        states = _selected(context, {"cooldown_ui"})
+        out: list[Observation] = []
+        # The key includes source and layout so a new replay or incompatible
+        # HUD cannot inherit a prior state from another provenance domain.
+        previous: dict[tuple[str, str, str, str], Observation | None] = {}
+        max_gap = float(context.config.get("max_transition_gap_sec", 120.0))
+        if max_gap < 0:
+            max_gap = 0.0
         if not states:
-            return DetectorResult(self.name, self.version, [_obs(self.name, "cooldown_readiness", 0.0, context.duration_sec or 0.0, {"state": "unknown"}, subject="player", confidence=0.0, status="unknown")])
+            return DetectorResult(
+                self.name,
+                self.version,
+                [_obs(self.name, "cooldown_readiness", 0.0, context.duration_sec or 0.0, {"state": "unknown"}, subject="player", confidence=0.0, status="unknown")],
+            )
+        valid_states = {"ready", "on_cooldown"}
         for item in states:
             value = dict(item.value) if isinstance(item.value, dict) else {"state": item.value}
-            skill = str(value.get("skill", item.subject or "unknown_skill")); state = value.get("state", "unknown")
-            out.append(_obs(self.name, "cooldown_readiness", item.start_sec, item.end_sec, {"skill": skill, "state": state}, subject=item.subject or "player", confidence=item.confidence if item.status == "observed" else 0.0, refs=[item.observation_id], status=item.status, deps=[item.observation_id]))
-            key = (item.subject, skill)
-            if key in previous and previous[key] != state:
-                transition = "became_ready" if state == "ready" else "used_transition" if state == "on_cooldown" else "unknown"
-                out.append(_obs(self.name, "cooldown_transition", item.start_sec, item.end_sec, {"skill": skill, "transition": transition, "from": previous[key], "to": state}, subject=item.subject or "player", confidence=item.confidence, refs=[item.observation_id], deps=[item.observation_id]))
-            previous[key] = state
+            skill = str(value.get("skill", item.subject or "unknown_skill"))
+            state = str(value.get("state", "unknown"))
+            subject = item.subject or "player"
+            source, layout = self._provenance(item, context)
+            key = (subject, skill, source, layout)
+            current_is_observed = item.status == "observed" and state in valid_states
+            out.append(
+                _obs(
+                    self.name,
+                    "cooldown_readiness",
+                    item.start_sec,
+                    item.end_sec,
+                    {"skill": skill, "state": state},
+                    subject=subject,
+                    confidence=item.confidence if current_is_observed else 0.0,
+                    refs=[item.observation_id],
+                    status=item.status,
+                    deps=[item.observation_id],
+                )
+            )
+            prior = previous.get(key)
+            if current_is_observed and prior is not None:
+                prior_value = prior.value if isinstance(prior.value, dict) else {}
+                prior_state = str(prior_value.get("state", "unknown"))
+                ordered = item.start_sec >= prior.end_sec and item.start_sec > prior.start_sec
+                gap = item.start_sec - prior.end_sec
+                if prior.status == "observed" and prior_state in valid_states and ordered and 0.0 <= gap <= max_gap and prior_state != state:
+                    transition = "became_ready" if state == "ready" else "used_transition"
+                    refs = [prior.observation_id, item.observation_id]
+                    out.append(
+                        _obs(
+                            self.name,
+                            "cooldown_transition",
+                            item.start_sec,
+                            item.end_sec,
+                            {"skill": skill, "transition": transition, "from": prior_state, "to": state},
+                            subject=subject,
+                            confidence=min(prior.confidence or 0.0, item.confidence or 0.0),
+                            refs=refs,
+                            deps=refs,
+                        )
+                    )
+            # Unknown/unreadable evidence is a hard boundary. A valid current
+            # state starts a new series; it never skips over an abstention.
+            previous[key] = item if current_is_observed else None
         return DetectorResult(self.name, self.version, out).ordered()
 
 

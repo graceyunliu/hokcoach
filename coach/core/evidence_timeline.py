@@ -54,4 +54,13 @@ class EvidenceTimeline:
         return timeline
 
     def metrics(self) -> dict[str, int | float]:
-        return {"observation_count": len(self.observations), "observed_count": sum(o.status == "observed" for o in self.observations), "unknown_count": sum(o.status == "unknown" for o in self.observations), "unreadable_count": sum(o.status == "unreadable" for o in self.observations), "detector_count": len({o.detector for o in self.observations})}
+        return {
+            "observation_count": len(self.observations),
+            "observed_count": sum(o.status == "observed" for o in self.observations),
+            "unknown_count": sum(o.status == "unknown" for o in self.observations),
+            "unreadable_count": sum(o.status == "unreadable" for o in self.observations),
+            "detector_count": len({o.detector for o in self.observations}),
+            "cooldown_ui_count": sum(o.type == "cooldown_ui" for o in self.observations),
+            "cooldown_readiness_count": sum(o.type == "cooldown_readiness" for o in self.observations),
+            "cooldown_transition_count": sum(o.type == "cooldown_transition" for o in self.observations),
+        }

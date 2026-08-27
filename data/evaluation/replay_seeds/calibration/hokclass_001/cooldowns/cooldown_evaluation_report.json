@@ -1,0 +1,131 @@
+{
+  "total": 6,
+  "classified": 5,
+  "classified_correct": 5,
+  "classified_accuracy": 1.0,
+  "abstentions": 1,
+  "coverage": 0.8333333333333334,
+  "abstention_correct": 1,
+  "expected_behavior_agreement": 6,
+  "expected_behavior_agreement_rate": 1.0,
+  "confusion": {
+    "on_cooldown": {
+      "on_cooldown": 2
+    },
+    "unreadable": {
+      "abstain": 1
+    },
+    "ready": {
+      "ready": 3
+    }
+  },
+  "predictions": [
+    {
+      "image": "data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/evaluation/flash_174_on_cooldown.png",
+      "slot": "summoner_flash",
+      "label": "on_cooldown",
+      "expected_prediction": "on_cooldown",
+      "prediction": "on_cooldown",
+      "score_error": 0.12031250447034836,
+      "margin": 0.03598535805940628,
+      "status": "observed"
+    },
+    {
+      "image": "data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/evaluation/flash_195_on_cooldown.png",
+      "slot": "summoner_flash",
+      "label": "on_cooldown",
+      "expected_prediction": "on_cooldown",
+      "prediction": "on_cooldown",
+      "score_error": 0.11007295548915863,
+      "margin": 0.0815831869840622,
+      "status": "observed"
+    },
+    {
+      "image": "data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/evaluation/flash_260_unknown.png",
+      "slot": "summoner_flash",
+      "label": "unreadable",
+      "expected_prediction": "abstain",
+      "prediction": "abstain",
+      "score_error": 0.18256646394729614,
+      "margin": 0.04544652998447418,
+      "status": "unknown"
+    },
+    {
+      "image": "data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/evaluation/ultimate_174_ready.png",
+      "slot": "ultimate",
+      "label": "ready",
+      "expected_prediction": "ready",
+      "prediction": "ready",
+      "score_error": 0.1497405469417572,
+      "margin": 0.18742242455482483,
+      "status": "observed"
+    },
+    {
+      "image": "data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/evaluation/ultimate_195_ready.png",
+      "slot": "ultimate",
+      "label": "ready",
+      "expected_prediction": "ready",
+      "prediction": "ready",
+      "score_error": 0.12468884140253067,
+      "margin": 0.21797164529561996,
+      "status": "observed"
+    },
+    {
+      "image": "data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/evaluation/ultimate_250_ready.png",
+      "slot": "ultimate",
+      "label": "ready",
+      "expected_prediction": "ready",
+      "prediction": "ready",
+      "score_error": 0.14957299828529358,
+      "margin": 0.11992475390434265,
+      "status": "observed"
+    }
+  ],
+  "detector_version": "cooldown-template-v1:ef46b3c286853d5a",
+  "calibration_fingerprint": "ef46b3c286853d5a",
+  "schema_version": "pilot-cooldown-evaluation-v1",
+  "seed_id": "hokclass_001",
+  "video_id": "QK9QwHo1RhY",
+  "source_media_sha256": "d01e7764fbbc67ac348bfb116ce0bda895120e0a802713acdcc8c8f53354d13d",
+  "tuning_policy": "frame-level disjoint tuning/evaluation timestamps from shared manifest",
+  "tuning_timestamps": [
+    37,
+    63,
+    153,
+    238
+  ],
+  "evaluation_timestamps": [
+    174,
+    195,
+    250,
+    260
+  ],
+  "roi_profiles": {
+    "summoner_flash": {
+      "x": 800,
+      "y": 475,
+      "w": 85,
+      "h": 90
+    },
+    "ultimate": {
+      "x": 1040,
+      "y": 450,
+      "w": 120,
+      "h": 120
+    }
+  },
+  "threshold_policy": {
+    "max_error": 0.28,
+    "min_margin": 0.005,
+    "min_mean_by_slot": {
+      "summoner_flash": 65.0,
+      "ultimate": 45.0
+    }
+  },
+  "runtime": {
+    "recognition_seconds": 0.0036603749999999935,
+    "crop_extraction_seconds": 0.280141042,
+    "source_minutes": 6.512133333333334,
+    "processing_seconds_per_source_minute": 0.043580406369648446
+  }
+}

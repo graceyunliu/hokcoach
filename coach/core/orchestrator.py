@@ -26,6 +26,9 @@ from core.detector_stage import DetectorCache, DetectorContext, DetectorResult, 
 from core.evidence_timeline import EvidenceTimeline
 from core.observations import Observation
 from core.production_detectors import PRODUCTION_DETECTORS
+from core.raw_video_extractors import extract_raw_video_observations
+from core.tower_recognizer import TowerTemplateRecognizer
+from core.cooldown_recognizer import CooldownConfigurationError, CooldownTemplateRecognizer, load_cooldown_manifest
 from core.timeline_adapters import audio_events_to_observations, death_events_to_observations
 from core.llm_client import LLMClient, LLMError, VisionClient
 from utils import config_utils, data_utils
@@ -33,6 +36,98 @@ from utils import config_utils, data_utils
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROMPTS_DIR = BASE_DIR / "prompts"
 SUPPORTED_LANGS = {"zh", "en"}
+
+
+def _tower_recognizer_from_config(tower_cfg: dict[str, Any]) -> TowerTemplateRecognizer:
+    raw_templates = tower_cfg.get("tower_templates") or {}
+    if not raw_templates:
+        raise ValueError("tower_templates mapping is required for production recognition")
+    resolved_templates: dict[str, dict[str, Any]] = {}
+    for tower_id, raw_template in raw_templates.items():
+        if not isinstance(raw_template, dict):
+            raise ValueError(f"invalid tower template config for {tower_id}")
+        resolved_templates[str(tower_id)] = {
+            **raw_template,
+            "present_template": str(BASE_DIR / str(raw_template["present_template"])),
+            "destroyed_template": str(BASE_DIR / str(raw_template["destroyed_template"])),
+        }
+    expected = tower_cfg.get("expected_minimap_size")
+    expected_size = tuple(int(value) for value in expected) if expected is not None else None
+    return TowerTemplateRecognizer(tower_templates=resolved_templates, layout_profile=str(tower_cfg.get("layout_profile", "unversioned")), expected_minimap_size=expected_size, max_error=float(tower_cfg.get("max_error", 0.16)), min_margin=float(tower_cfg.get("min_margin", 0.03)))
+
+
+def _resolve_project_path(path: str) -> Path:
+    candidate = Path(path)
+    if candidate.is_absolute():
+        return candidate
+    for root in (BASE_DIR, BASE_DIR.parent):
+        resolved = root / candidate
+        if resolved.exists():
+            return resolved
+    return BASE_DIR / candidate
+
+
+def _cooldown_recognizer_from_config(cooldown_cfg: dict[str, Any]) -> tuple[CooldownTemplateRecognizer, dict[str, dict[str, int]]]:
+    """Build a cooldown recognizer only from a complete, validated calibration."""
+    if not isinstance(cooldown_cfg, dict):
+        raise CooldownConfigurationError("cooldown configuration must be an object")
+    required = ("enabled", "implementation_version", "layout_profile", "expected_source_dimensions", "source_compatibility", "max_error", "min_margin", "min_mean_by_slot", "candidate_window_only")
+    missing = [key for key in required if key not in cooldown_cfg]
+    if missing:
+        raise CooldownConfigurationError(f"cooldown configuration is missing: {', '.join(missing)}")
+    if cooldown_cfg.get("candidate_window_only") is not True:
+        raise CooldownConfigurationError("cooldown recognition must be candidate-window-only")
+    expected = cooldown_cfg.get("expected_source_dimensions")
+    if not isinstance(expected, (list, tuple)) or len(expected) != 2 or any(isinstance(value, bool) or not isinstance(value, int) or value <= 0 for value in expected):
+        raise CooldownConfigurationError("expected_source_dimensions must contain exactly two positive integers")
+    source_compatibility = cooldown_cfg.get("source_compatibility")
+    if not isinstance(source_compatibility, dict):
+        raise CooldownConfigurationError("source_compatibility rules are required")
+
+    manifest_path: Path | None = None
+    manifest_data: dict[str, Any] = {}
+    if cooldown_cfg.get("calibration_manifest"):
+        manifest_path = _resolve_project_path(str(cooldown_cfg["calibration_manifest"]))
+        manifest_data = load_cooldown_manifest(manifest_path)
+    raw_templates = manifest_data.get("templates") or cooldown_cfg.get("templates") or {}
+    if not isinstance(raw_templates, dict) or not raw_templates:
+        raise CooldownConfigurationError("cooldown templates mapping is required")
+    templates: dict[str, dict[str, Path]] = {}
+    for skill, states in raw_templates.items():
+        if not isinstance(states, dict):
+            raise CooldownConfigurationError(f"invalid cooldown template config for {skill}")
+        resolved: dict[str, Path] = {}
+        for state, path in states.items():
+            candidate = Path(str(path))
+            if not candidate.is_absolute() and manifest_path is not None:
+                candidate = manifest_path.parent / candidate
+            resolved[str(state)] = candidate if candidate.is_absolute() else _resolve_project_path(str(candidate))
+        templates[str(skill)] = resolved
+
+    raw_rois = manifest_data.get("roi_profiles") or cooldown_cfg.get("rois") or {}
+    if "ultimate_roi" in cooldown_cfg:
+        raw_rois = {**raw_rois, "ultimate": cooldown_cfg["ultimate_roi"]}
+    for slot, roi in (cooldown_cfg.get("summoner_skill_rois") or {}).items():
+        raw_rois = {**raw_rois, str(slot): roi}
+    if not isinstance(raw_rois, dict) or not raw_rois:
+        raise CooldownConfigurationError("cooldown ROI mapping is required")
+    rois = {str(skill): dict(roi) for skill, roi in raw_rois.items()}
+    if set(templates) != set(rois):
+        raise CooldownConfigurationError("cooldown templates and rois must cover the same skills")
+
+    threshold_policy = manifest_data.get("threshold_policy") or {}
+    recognizer = CooldownTemplateRecognizer(
+        templates,
+        max_error=float(threshold_policy.get("max_error", cooldown_cfg["max_error"])),
+        min_margin=float(threshold_policy.get("min_margin", cooldown_cfg["min_margin"])),
+        min_mean_by_slot={str(k): float(v) for k, v in (threshold_policy.get("min_mean_by_slot") or cooldown_cfg.get("min_mean_by_slot") or {}).items()},
+        version=str(cooldown_cfg.get("implementation_version")),
+        layout_profile=str(cooldown_cfg.get("layout_profile")),
+        expected_source_dimensions=tuple(expected),
+        source_compatibility=source_compatibility,
+        rois=rois,
+    )
+    return recognizer, rois
 
 
 class OrchestratorError(Exception):
@@ -647,9 +742,70 @@ class Orchestrator:
         # through the detector-independent timeline.
         atomic: list[Observation] = death_events_to_observations(events)
         atomic.extend(audio_events_to_observations(audio_timeline or []))
+        raw_cfg = self.config.get("raw_video") or {}
+        raw_metrics: dict[str, Any] = {"enabled": bool(raw_cfg.get("enabled", False)), "cooldown_enabled": False}
+        raw_duration: float | None = None
+        raw_windows: list[tuple[float, float]] = []
+        if raw_cfg.get("enabled", False):
+            seed_windows = [tuple(event["window"]) for event in events if event.get("window")]
+            configured_windows = raw_cfg.get("candidate_windows") or []
+            seed_windows.extend(tuple(window) for window in configured_windows if isinstance(window, (list, tuple)) and len(window) == 2)
+            tower_recognizer = None
+            cooldown_recognizer = None
+            cooldown_rois = None
+            cooldown_cfg = raw_cfg.get("cooldown_recognizer") or {}
+            cooldown_config_error: str | None = None
+            if cooldown_cfg.get("enabled", False):
+                try:
+                    cooldown_recognizer, cooldown_rois = _cooldown_recognizer_from_config(cooldown_cfg)
+                    raw_metrics["cooldown_enabled"] = True
+                    raw_metrics["cooldown_detector_version"] = cooldown_recognizer.version
+                    raw_metrics["cooldown_calibration_fingerprint"] = cooldown_recognizer.calibration_fingerprint
+                except (KeyError, OSError, TypeError, ValueError) as err:
+                    cooldown_config_error = str(err)
+                    raw_metrics["cooldown_config_error"] = cooldown_config_error
+                    logging.warning("[cooldown recognizer unavailable] %s", err)
+            tower_cfg = raw_cfg.get("tower_recognizer") or {}
+            if tower_cfg.get("enabled", False):
+                try:
+                    tower_recognizer = _tower_recognizer_from_config(tower_cfg)
+                except (KeyError, OSError, ValueError) as err:
+                    logging.warning("[tower recognizer unavailable] %s", err)
+            seed_windows.extend((float(event.get("ts", 0.0)), float(event.get("ts", 0.0))) for event in (audio_timeline or []) if event.get("ts") is not None)
+            try:
+                raw_observations, metrics, raw_windows = extract_raw_video_observations(
+                    str(video_path),
+                    seed_windows=seed_windows,
+                    sample_interval_sec=float(raw_cfg.get("sample_interval_sec", 30.0)),
+                    retain_crops=bool(raw_cfg.get("retain_crops", False)),
+                    retain_dir=(BASE_DIR / str(raw_cfg.get("retain_dir"))) if raw_cfg.get("retain_crops") and raw_cfg.get("retain_dir") else None,
+                    max_candidate_windows=int(raw_cfg.get("max_candidate_windows", 120)),
+                    tower_recognizer=tower_recognizer,
+                    cooldown_recognizer=cooldown_recognizer,
+                    cooldown_rois=cooldown_rois,
+                    calibration_debug=bool(raw_cfg.get("calibration_debug", False)),
+                    window_padding_sec=float(cooldown_cfg.get("window_padding_sec", raw_cfg.get("window_padding_sec", 3.0))),
+                    samples_before=int(cooldown_cfg.get("samples_before", raw_cfg.get("samples_before", 1))),
+                    samples_during=int(cooldown_cfg.get("samples_during", raw_cfg.get("samples_during", 3))),
+                    samples_after=int(cooldown_cfg.get("samples_after", raw_cfg.get("samples_after", 1))),
+                    before_sec=float(cooldown_cfg.get("before_sec", raw_cfg.get("before_sec", 2.0))),
+                    after_sec=float(cooldown_cfg.get("after_sec", raw_cfg.get("after_sec", 2.0))),
+                    emit_cooldown_placeholders=False,
+                )
+                atomic.extend(raw_observations)
+                raw_metrics.update(metrics.to_dict())
+                if cooldown_recognizer is not None:
+                    raw_metrics["cooldown_enabled"] = True
+                    raw_metrics["cooldown_detector_version"] = cooldown_recognizer.version
+                    raw_metrics["cooldown_calibration_fingerprint"] = cooldown_recognizer.calibration_fingerprint
+                raw_duration = metrics.duration_sec
+            except (OSError, RuntimeError, ValueError, subprocess.CalledProcessError) as err:
+                logging.warning("[raw video extraction unavailable] %s", err)
+                raw_metrics["error"] = str(err)
+        replay["raw_video_extraction_metrics"] = raw_metrics
         timeline_cfg = self.config.get("evidence_timeline") or {}
         if timeline_cfg.get("enabled", True):
-            timeline, detector_results = self.build_match_timeline(str(video_path), atomic, duration_sec=None, config={})
+            timeline, detector_results = self.build_match_timeline(str(video_path), atomic, duration_sec=raw_duration, windows=raw_windows, config={})
             replay["evidence_timeline"] = [item.to_dict() for item in timeline.observations]
             replay["evidence_timeline_metrics"] = timeline.metrics()
             replay["detector_stage_results"] = {name: result.to_dict() for name, result in detector_results.items()}

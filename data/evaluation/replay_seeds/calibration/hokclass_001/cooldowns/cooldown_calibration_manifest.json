@@ -1,0 +1,51 @@
+{
+  "schema_version": "cooldown-calibration-v1",
+  "seed_id": "hokclass_001",
+  "video_id": "QK9QwHo1RhY",
+  "source_media_sha256": "d01e7764fbbc67ac348bfb116ce0bda895120e0a802713acdcc8c8f53354d13d",
+  "layout_profile": "hokcoach-hud-1280x582-v1",
+  "expected_source_dimensions": [1280, 582],
+  "source_compatibility": {
+    "allowed_media_sha256": ["d01e7764fbbc67ac348bfb116ce0bda895120e0a802713acdcc8c8f53354d13d"],
+    "allowed_source_dimensions": [[1280, 582]]
+  },
+  "roi_profiles": {
+    "summoner_flash": {"x": 800, "y": 475, "w": 85, "h": 90},
+    "ultimate": {"x": 1040, "y": 450, "w": 120, "h": 120}
+  },
+  "threshold_policy": {
+    "max_error": 0.28,
+    "min_margin": 0.005,
+    "min_mean_by_slot": {"summoner_flash": 65.0, "ultimate": 45.0}
+  },
+  "templates": {
+    "summoner_flash": {
+      "ready": "tuning/flash_37_ready.png",
+      "on_cooldown": "tuning/flash_63_on_cooldown.png"
+    },
+    "ultimate": {
+      "ready": "tuning/ultimate_37_ready.png",
+      "on_cooldown": "tuning/ultimate_153_on_cooldown.png"
+    }
+  },
+  "candidate_window_only": true,
+  "sampling_policy": {
+    "samples_before": 1,
+    "samples_during": 3,
+    "samples_after": 1,
+    "before_sec": 2.0,
+    "after_sec": 2.0,
+    "window_padding_sec": 3.0,
+    "max_transition_gap_sec": 120.0
+  },
+  "tuning_timestamps_sec": [37, 63, 153, 238],
+  "evaluation_timestamps_sec": [174, 195, 250, 260],
+  "evaluation_cases": [
+    {"artifact": "evaluation/flash_174_on_cooldown.png", "slot": "summoner_flash", "label": "on_cooldown", "timestamp_sec": 174},
+    {"artifact": "evaluation/flash_195_on_cooldown.png", "slot": "summoner_flash", "label": "on_cooldown", "timestamp_sec": 195},
+    {"artifact": "evaluation/flash_260_unknown.png", "slot": "summoner_flash", "label": "unreadable", "expected_prediction": "abstain", "timestamp_sec": 260},
+    {"artifact": "evaluation/ultimate_174_ready.png", "slot": "ultimate", "label": "ready", "timestamp_sec": 174},
+    {"artifact": "evaluation/ultimate_195_ready.png", "slot": "ultimate", "label": "ready", "timestamp_sec": 195},
+    {"artifact": "evaluation/ultimate_250_ready.png", "slot": "ultimate", "label": "ready", "timestamp_sec": 250}
+  ]
+}

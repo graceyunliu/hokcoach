@@ -168,5 +168,63 @@ detectors:
   high_value_cooldowns:
     enabled: true
     implementation_version: cooldowns-v1
-    skills: [ultimate, summoner]
+    skills: [ultimate, summoner_flash]
     candidate_window_only: true
+    max_transition_gap_sec: 120
+
+# Upstream raw-video evidence extraction. Uncalibrated regions remain unreadable,
+# never guessed semantic positives.
+raw_video:
+  # Explicit calibration/debug mode; keep off until a layout recognizer is piloted.
+  enabled: false
+  sample_interval_sec: 30
+  max_candidate_windows: 120
+  retain_crops: false
+  retain_dir: data/evidence_timelines/raw_crops
+  cooldown_recognizer:
+    # Deliberately disabled until independent Video 2 validation exists.
+    enabled: false
+    implementation_version: cooldown-template-v1
+    calibration_manifest: data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/cooldown_calibration_manifest.json
+    layout_profile: hokcoach-hud-1280x582-v1
+    expected_source_dimensions: [1280, 582]
+    source_compatibility:
+      allowed_media_sha256: [d01e7764fbbc67ac348bfb116ce0bda895120e0a802713acdcc8c8f53354d13d]
+      allowed_source_dimensions: [[1280, 582]]
+    ultimate_roi: {x: 1040, y: 450, w: 120, h: 120}
+    summoner_skill_rois:
+      summoner_flash: {x: 800, y: 475, w: 85, h: 90}
+    rois:
+      summoner_flash: {x: 800, y: 475, w: 85, h: 90}
+      ultimate: {x: 1040, y: 450, w: 120, h: 120}
+    templates:
+      summoner_flash:
+        ready: data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/tuning/flash_37_ready.png
+        on_cooldown: data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/tuning/flash_63_on_cooldown.png
+      ultimate:
+        ready: data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/tuning/ultimate_37_ready.png
+        on_cooldown: data/evaluation/replay_seeds/calibration/hokclass_001/cooldowns/tuning/ultimate_153_on_cooldown.png
+    max_error: 0.28
+    min_margin: 0.005
+    min_mean_by_slot: {summoner_flash: 65.0, ultimate: 45.0}
+    candidate_window_only: true
+    max_transition_gap_sec: 120
+    window_padding_sec: 3
+    samples_before: 1
+    samples_during: 3
+    samples_after: 1
+    before_sec: 2
+    after_sec: 2
+  tower_recognizer:
+    # Production calibration is identity-specific: each tower has its own
+    # minimap ROI and same-layout present/destroyed reference crops.
+    enabled: false
+    layout_profile: hokcoach-minimap-1280x582-v1
+    expected_minimap_size: [420, 320]
+    max_error: 0.16
+    min_margin: 0.03
+    tower_templates:
+      ally_mid_outer:
+        roi: {x: 0, y: 0, w: 1, h: 1}
+        present_template: data/calibration/hokcoach-minimap-1280x582-v1/ally_mid_outer_present.png
+        destroyed_template: data/calibration/hokcoach-minimap-1280x582-v1/ally_mid_outer_destroyed.png
