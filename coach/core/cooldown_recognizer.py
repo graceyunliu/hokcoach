@@ -329,9 +329,32 @@ def load_cooldown_manifest(path: Path) -> dict[str, Any]:
     missing = [key for key in required if key not in data]
     if missing:
         raise CooldownConfigurationError(f"cooldown calibration manifest is missing: {', '.join(missing)}")
-    _validate_dimensions(data["expected_source_dimensions"], required=True)
+    if data["schema_version"] != "cooldown-calibration-v1":
+        raise CooldownConfigurationError("unsupported cooldown calibration manifest schema")
+    source_hash = str(data["source_media_sha256"])
+    if len(source_hash) != 64 or any(character not in "0123456789abcdef" for character in source_hash.lower()):
+        raise CooldownConfigurationError("source_media_sha256 must be a SHA-256 hex digest")
+    expected_dimensions = _validate_dimensions(data["expected_source_dimensions"], required=True)
+    if not isinstance(data["tuning_timestamps_sec"], list) or not isinstance(data["evaluation_timestamps_sec"], list):
+        raise CooldownConfigurationError("tuning and evaluation timestamps must be lists")
+    tuning = {round(float(value), 3) for value in data["tuning_timestamps_sec"]}
+    evaluation = {round(float(value), 3) for value in data["evaluation_timestamps_sec"]}
+    if tuning & evaluation:
+        raise CooldownConfigurationError("tuning and evaluation timestamps must not overlap")
     if not isinstance(data["source_compatibility"], dict):
         raise CooldownConfigurationError("manifest source_compatibility must be an object")
+    compatibility = data["source_compatibility"]
+    allowed_hashes = compatibility.get("allowed_media_sha256") or compatibility.get("source_media_sha256")
+    if isinstance(allowed_hashes, str):
+        allowed_hashes = [allowed_hashes]
+    if source_hash not in {str(value) for value in (allowed_hashes or [])}:
+        raise CooldownConfigurationError("manifest compatibility rules must include source_media_sha256")
+    allowed_dimensions = compatibility.get("allowed_source_dimensions") or []
+    if expected_dimensions not in {tuple(int(item) for item in dimensions) for dimensions in allowed_dimensions}:
+        raise CooldownConfigurationError("manifest compatibility rules must include expected_source_dimensions")
+    allowed_layouts = compatibility.get("allowed_layout_profiles") or []
+    if allowed_layouts and str(data["layout_profile"]) not in {str(value) for value in allowed_layouts}:
+        raise CooldownConfigurationError("manifest compatibility rules must include layout_profile")
     if not isinstance(data["roi_profiles"], dict) or not data["roi_profiles"]:
         raise CooldownConfigurationError("manifest roi_profiles are required")
     if not isinstance(data["templates"], dict) or set(data["templates"]) != set(data["roi_profiles"]):
@@ -344,6 +367,13 @@ def load_cooldown_manifest(path: Path) -> dict[str, Any]:
         raise CooldownConfigurationError("manifest cooldown recognition must be candidate-window-only")
     if not isinstance(data["evaluation_cases"], list):
         raise CooldownConfigurationError("manifest evaluation_cases must be a list")
+    for case in data["evaluation_cases"]:
+        if not isinstance(case, dict) or case.get("slot") not in data["templates"]:
+            raise CooldownConfigurationError("every evaluation case must reference a supported slot")
+        if case.get("label") not in {"ready", "on_cooldown", "unreadable"}:
+            raise CooldownConfigurationError("evaluation labels must be ready, on_cooldown, or unreadable")
+        if case.get("label") == "unreadable" and case.get("expected_prediction") != "abstain":
+            raise CooldownConfigurationError("unreadable evaluation cases must expect abstention")
     return data
 
 

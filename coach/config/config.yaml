@@ -171,6 +171,7 @@ detectors:
     skills: [ultimate, summoner_flash]
     candidate_window_only: true
     max_transition_gap_sec: 120
+    min_transition_gap_sec: 1.0
 
 # Upstream raw-video evidence extraction. Uncalibrated regions remain unreadable,
 # never guessed semantic positives.
@@ -191,6 +192,7 @@ raw_video:
     source_compatibility:
       allowed_media_sha256: [d01e7764fbbc67ac348bfb116ce0bda895120e0a802713acdcc8c8f53354d13d]
       allowed_source_dimensions: [[1280, 582]]
+      allowed_layout_profiles: [hokcoach-hud-1280x582-v1]
     ultimate_roi: {x: 1040, y: 450, w: 120, h: 120}
     summoner_skill_rois:
       summoner_flash: {x: 800, y: 475, w: 85, h: 90}

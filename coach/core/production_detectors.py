@@ -194,8 +194,11 @@ class CooldownReadinessDetector:
         # HUD cannot inherit a prior state from another provenance domain.
         previous: dict[tuple[str, str, str, str], Observation | None] = {}
         max_gap = float(context.config.get("max_transition_gap_sec", 120.0))
+        min_gap = float(context.config.get("min_transition_gap_sec", 1.0))
         if max_gap < 0:
             max_gap = 0.0
+        if min_gap < 0:
+            min_gap = 0.0
         if not states:
             return DetectorResult(
                 self.name,
@@ -231,7 +234,7 @@ class CooldownReadinessDetector:
                 prior_state = str(prior_value.get("state", "unknown"))
                 ordered = item.start_sec >= prior.end_sec and item.start_sec > prior.start_sec
                 gap = item.start_sec - prior.end_sec
-                if prior.status == "observed" and prior_state in valid_states and ordered and 0.0 <= gap <= max_gap and prior_state != state:
+                if prior.status == "observed" and prior_state in valid_states and ordered and min_gap <= gap <= max_gap and prior_state != state:
                     transition = "became_ready" if state == "ready" else "used_transition"
                     refs = [prior.observation_id, item.observation_id]
                     out.append(

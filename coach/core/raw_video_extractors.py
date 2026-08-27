@@ -440,12 +440,13 @@ def extract_raw_video_observations(
                             )
                             try:
                                 if not cooldown_source_compatible:
+                                    compatibility_reason = "unsupported_layout" if cooldown_dimensions and tuple(source_dimensions or ()) != tuple(cooldown_dimensions) else "unsupported_source"
                                     cooldown_observation = Observation.create(
                                         obs_type="cooldown_ui",
                                         start_sec=timestamp,
                                         end_sec=timestamp,
                                         subject="player",
-                                        value={"skill": str(skill), "state": "unknown"},
+                                        value={"skill": str(skill), "state": "unknown", "reason": compatibility_reason},
                                         confidence=0.0,
                                         detector="cooldown_visual",
                                         detector_version=cooldown_version,

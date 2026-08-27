@@ -81,8 +81,8 @@
       "status": "observed"
     }
   ],
-  "detector_version": "cooldown-template-v1:ef46b3c286853d5a",
-  "calibration_fingerprint": "ef46b3c286853d5a",
+  "detector_version": "cooldown-template-v1:5760f315e4591d1d",
+  "calibration_fingerprint": "5760f315e4591d1d",
   "schema_version": "pilot-cooldown-evaluation-v1",
   "seed_id": "hokclass_001",
   "video_id": "QK9QwHo1RhY",
@@ -123,9 +123,9 @@
     }
   },
   "runtime": {
-    "recognition_seconds": 0.0036603749999999935,
-    "crop_extraction_seconds": 0.280141042,
+    "recognition_seconds": 0.003619624999999904,
+    "crop_extraction_seconds": 0.28232187500000006,
     "source_minutes": 6.512133333333334,
-    "processing_seconds_per_source_minute": 0.043580406369648446
+    "processing_seconds_per_source_minute": 0.04390903646526483
   }
 }

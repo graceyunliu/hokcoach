@@ -29,6 +29,7 @@ from core.production_detectors import PRODUCTION_DETECTORS
 from core.raw_video_extractors import extract_raw_video_observations
 from core.tower_recognizer import TowerTemplateRecognizer
 from core.cooldown_recognizer import CooldownConfigurationError, CooldownTemplateRecognizer, load_cooldown_manifest
+from core.cooldown_messages import cooldown_messages
 from core.timeline_adapters import audio_events_to_observations, death_events_to_observations
 from core.llm_client import LLMClient, LLMError, VisionClient
 from utils import config_utils, data_utils
@@ -808,6 +809,7 @@ class Orchestrator:
             timeline, detector_results = self.build_match_timeline(str(video_path), atomic, duration_sec=raw_duration, windows=raw_windows, config={})
             replay["evidence_timeline"] = [item.to_dict() for item in timeline.observations]
             replay["evidence_timeline_metrics"] = timeline.metrics()
+            replay["cooldown_messages"] = cooldown_messages(timeline.observations)
             replay["detector_stage_results"] = {name: result.to_dict() for name, result in detector_results.items()}
             if timeline_cfg.get("persist_jsonl", False):
                 configured_dir = Path(timeline_cfg.get("output_dir") or "data/evidence_timelines")

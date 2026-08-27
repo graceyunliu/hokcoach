@@ -7,7 +7,8 @@
   "expected_source_dimensions": [1280, 582],
   "source_compatibility": {
     "allowed_media_sha256": ["d01e7764fbbc67ac348bfb116ce0bda895120e0a802713acdcc8c8f53354d13d"],
-    "allowed_source_dimensions": [[1280, 582]]
+    "allowed_source_dimensions": [[1280, 582]],
+    "allowed_layout_profiles": ["hokcoach-hud-1280x582-v1"]
   },
   "roi_profiles": {
     "summoner_flash": {"x": 800, "y": 475, "w": 85, "h": 90},
