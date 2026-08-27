@@ -42,6 +42,7 @@ const limit = Number(arg('--limit', '100'));
 const maxVideos = Number(arg('--max-videos', '1'));
 const startAt = Number(arg('--start-at', '0'));
 const dwell = Number(arg('--dwell-seconds', '0'));
+const reuseCurrent = has('--reuse-current');
 
 fs.mkdirSync(outDir, { recursive: true });
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
@@ -52,7 +53,7 @@ let state = fs.existsSync(statePath) ? JSON.parse(fs.readFileSync(statePath, 'ut
 async function attachBrowser() {
   if (cdp) return { browser: await chromium.connectOverCDP(cdp), owned: false };
   const context = await chromium.launchPersistentContext(path.resolve(profile), {
-    channel: 'chrome', headless: false, viewport: { width: 1440, height: 900 },
+    headless: true, viewport: { width: 1440, height: 900 },
     args: ['--autoplay-policy=no-user-gesture-required']
   });
   return { browser: context, context, owned: true };
@@ -70,8 +71,10 @@ async function captureSeed(page, seed) {
   const capture = path.join(outDir, `${base}.webm`);
   const transcript = path.join(outDir, `${base}.jsonl`);
   try {
-    await page.goto(seed.url, { waitUntil: 'domcontentloaded', timeout: 90000 });
-    await page.waitForTimeout(5000);
+    if (!(reuseCurrent && page.url().includes(seed.video_id))) {
+      await page.goto(seed.url, { waitUntil: 'domcontentloaded', timeout: 90000 });
+      await page.waitForTimeout(5000);
+    }
     const setup = await page.evaluate(() => {
       const video = document.querySelector('video');
       if (!video) return { ok: false, reason: 'video-element-not-found' };
@@ -83,8 +86,7 @@ async function captureSeed(page, seed) {
     const start = await page.evaluate(() => {
       const video = document.querySelector('video');
       const stream = video.captureStream();
-      const audioOnly = new MediaStream(stream.getAudioTracks());
-      const recorder = new MediaRecorder(audioOnly, { mimeType: 'audio/webm;codecs=opus' });
+      const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp8,opus' });
       const chunks = [];
       recorder.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
       recorder.start(1000);
@@ -112,13 +114,14 @@ async function captureSeed(page, seed) {
       const c = window.__hokCapture;
       if (!c) throw new Error('capture-state-missing');
       await new Promise(resolve => { c.recorder.onstop = resolve; c.recorder.stop(); });
-      const blob = new Blob(c.chunks, { type: 'audio/webm;codecs=opus' });
+      const blob = new Blob(c.chunks, { type: 'video/webm;codecs=vp8,opus' });
       const buffer = await blob.arrayBuffer();
       return Array.from(new Uint8Array(buffer));
     });
     fs.writeFileSync(capture, Buffer.from(payload));
     result.capture_file = path.relative(process.cwd(), capture);
     result.transcript_mode = result.captions.length ? 'caption-display-capture' : 'audio-pending-stt';
+    result.media_mode = 'video-and-audio';
     if (result.captions.length) {
       const dedup = []; const seen = new Set();
       for (const row of result.captions) { const k = `${row.start.toFixed(1)}|${row.text}`; if (!seen.has(k)) { seen.add(k); dedup.push(row); } }
@@ -136,7 +139,7 @@ async function captureSeed(page, seed) {
 (async () => {
   const attached = await attachBrowser();
   const context = attached.context || attached.browser.contexts()[0];
-  const page = await context.newPage();
+  const page = context.pages().find(p => /youtube\.com\/watch/.test(p.url())) || await context.newPage();
   let processed = 0;
   for (const seed of seeds) {
     if (processed >= maxVideos) break;
@@ -153,5 +156,3 @@ async function captureSeed(page, seed) {
   if (attached.owned) await attached.browser.close();
   console.log(`Wrote ${statePath}`);
 })().catch(e => { console.error(e.stack || e); process.exit(1); });
-EOF
-chmod +x /home/ubuntu/hokcoach/tools/browser_capture_replays.js
