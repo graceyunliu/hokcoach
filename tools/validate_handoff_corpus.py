@@ -13,6 +13,9 @@ report=json.loads((OUT/'corpus_report.json').read_text(encoding='utf-8'))
 assert report['schema_version']=='handoff-corpus-v3'
 manifests=jsonl(OUT/'manifests/source_manifest.jsonl'); segments=jsonl(OUT/'commentary_segments.jsonl'); claims=jsonl(OUT/'claims.jsonl'); obs=jsonl(OUT/'evidence_timeline.jsonl')
 fixtures={c:jsonl(OUT/f'fixtures/{c}.jsonl') for c in CAPS}; inventory=jsonl(OUT/'missing_capability_queue.jsonl')
+fixture_total=sum(len(rows) for rows in fixtures.values())
+assert report['event_fixtures'] == fixture_total
+assert fixture_total != len(fixtures)
 assert len(manifests)==100
 assert len(segments)==len(claims)==len(obs)
 assert report['routing_source_categories_preserved'] is True
@@ -28,6 +31,13 @@ for m in manifests:
 for c in claims:
     assert c['claim_id'].replace('_claim','') in {s['segment_id'] for s in segments}
     assert 'required_capabilities' in c
+for s in segments:
+    assert s['assertion_count'] >= 1
+    if s['assertion_count'] > 1:
+        assert s['assertion_index'] < s['assertion_count']
+for c in claims:
+    if c['atomicity_status'] == 'atomic_split_assertion':
+        assert c['text'].strip()
 for cap,rows in fixtures.items():
     for f in rows:
         assert f['source_claim_id'] in {c['claim_id'] for c in claims}

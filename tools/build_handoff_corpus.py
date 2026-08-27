@@ -78,6 +78,11 @@ def claim_type(text: str, category: str) -> str:
     if 'deaths' in caps: return 'death_reference'
     return 'reviewer_commentary'
 
+def split_assertions(text: str) -> list[str]:
+    """Split reviewer prose into atomic assertions without inventing gameplay timing."""
+    parts = [p.strip(' ，,') for p in re.split(r'[。！？!?；;]+', text or '') if p.strip(' ，,')]
+    return parts or ([text.strip()] if text and text.strip() else [])
+
 def probe_media(path: Path) -> dict[str, Any]:
     if not path.exists(): return {'status':'blocked_missing_media'}
     try:
@@ -85,7 +90,13 @@ def probe_media(path: Path) -> dict[str, Any]:
         data = json.loads(raw)
         streams = data.get('streams', [])
         fmt = data.get('format', {})
-        return {'status':'complete','duration_sec':float(fmt.get('duration')) if fmt.get('duration') else None,'stream_count':len(streams),'has_video':any(s.get('codec_type')=='video' for s in streams),'has_audio':any(s.get('codec_type')=='audio' for s in streams),'format_name':fmt.get('format_name')}
+        duration = float(fmt.get('duration') or 0)
+        has_video = any(s.get('codec_type') == 'video' for s in streams)
+        has_audio = any(s.get('codec_type') == 'audio' for s in streams)
+        base = {'duration_sec': duration, 'stream_count': len(streams), 'has_video': has_video, 'has_audio': has_audio, 'format_name': fmt.get('format_name')}
+        if not has_video: return {'status':'failed', 'error':'usable_video_stream_missing', **base}
+        if duration <= 0: return {'status':'failed', 'error':'positive_duration_missing', **base}
+        return {'status':'complete', **base}
     except Exception as exc:
         return {'status':'failed','error':str(exc)}
 
@@ -109,16 +120,19 @@ def main() -> None:
         manifest={'schema_version':'seed-source-v3','seed_id':sid,'video_id':vid,'url':src.get('url'),'title':src.get('title'),'hero':src.get('hero'),'role':src.get('role'),'series':src.get('series'),'rank_profile':src.get('rank_profile'),'artifact_path':str(media.relative_to(root)) if media.exists() else None,'artifact_sha256':sha256(media),'media_probe':probe,'capture_method':None,'timestamp_contract':{'captured_media_presentation_time':'unknown','normalized_derivative_time':'unknown','reviewer_speech_caption_time':'unknown','referenced_gameplay_time':'unknown'},'stage_status':stage,'terminal_status':'media_ready_transcript_pending' if media_ready else ('blocked_missing_media' if not media.exists() else 'media_probe_failed'),'errors':[]}
         manifests.append(manifest); dump(out/sid/'source_manifest.json',manifest)
         for i,seg in enumerate(raw_segments):
-            rid=f'{sid}_{i:04d}'; start=sec(seg.get('start_sec')); end=sec(seg.get('end_sec')) or start; text=seg.get('text') or ''; category=seg.get('category') or ''
-            caps=relevant_capabilities(text,category); ctype=claim_type(text,category); candidate={'start_sec':max(0,(start or 0)-15),'end_sec':(end or start or 0)+10}
-            segments.append({'segment_id':rid,'seed_id':sid,'video_id':vid,'source_category':category,'commentary_start_sec':start,'commentary_end_sec':end,'speech_text_raw':text if seg.get('source')=='remote_multimodal_commentary' else None,'ocr_text_raw':text if seg.get('source')=='windowed_multimodal_burned_caption' else None,'normalized_text':text,'alignment_method':'silver_bootstrap_only','alignment_confidence':seg.get('confidence'),'candidate_gameplay_window':candidate,'accepted_gameplay_window':None,'unresolved_reference':True,'label_tier':'silver'})
-            claim={'claim_id':rid+'_claim','claim_type':ctype,'claim_source':'reviewer','text':text,'source_category':category,'required_evidence_types':['reviewer_commentary']+caps,'required_capabilities':caps,'support_status':'unknown','supporting_observation_ids':[],'commentary_start_sec':start,'commentary_end_sec':end,'candidate_gameplay_window':candidate,'atomicity_status':'single_caption_assertion'}; claims.append(claim)
-            observations.append({'observation_id':rid+'_reviewer_commentary','video_id':vid,'type':'reviewer_commentary','start_sec':start,'end_sec':end,'subject':'reviewer','value':text,'confidence':seg.get('confidence'),'detector':'silver_bootstrap_remote_multimodal_v1','detector_config_version':'silver','evidence_refs':[f'seed:{sid}',f'commentary_segment:{rid}'],'status':'observed_silver'})
-            for cap in caps:
-                expected={'objectives':'objective_state','towers':'tower_state','waves':'wave_state','teamfights':'teamfight_episode','cooldowns':'skill_or_spell_state','items_economy':'item_economy_state','minimap_positions':'player_position_or_vision','deaths':'player_death','death_location':'death_location','audio':'audio_event'}.get(cap,cap)
-                exec_status='not_run_missing_detector' if CAPABILITIES[cap]=='capability_missing' else ('pending_execution' if media_ready else 'blocked_missing_media')
-                fixtures.append({'fixture_id':rid+'_'+cap,'seed_id':sid,'video_id':vid,'capability':cap,'source_commentary_segment_id':rid,'source_claim_id':claim['claim_id'],'source_window':candidate,'expected_observations':[{'type':expected,'subject':'unknown_or_player','time_range':None,'time_semantics':'unknown_gameplay_time','commentary_time_range':[start,end],'label_tier':'silver','verification_status':'unverified','source':'reviewer_assertion_not_gameplay_ground_truth'}],'current_predictions':[],'implementation_status':CAPABILITIES[cap],'execution_status':exec_status,'evaluation_status':'capability_missing' if CAPABILITIES[cap]=='capability_missing' else ('pending_execution' if media_ready else 'blocked_missing_media')})
-        dump_jsonl(out/sid/'commentary_segments.jsonl',[x for x in segments if x['seed_id']==sid]); dump_jsonl(out/sid/'claims.jsonl',[x for x in claims if x['claim_id'].startswith(sid+'_')])
+            original_text=seg.get('text') or ''; assertions=split_assertions(original_text)
+            for j,text in enumerate(assertions):
+                rid=f'{sid}_{i:04d}_{j:02d}'
+                start=sec(seg.get('start_sec')); end=sec(seg.get('end_sec')) or start; category=seg.get('category') or ''
+                caps=relevant_capabilities(text,category); ctype=claim_type(text,category); candidate={'start_sec':max(0,(start or 0)-15),'end_sec':(end or start or 0)+10}
+                segments.append({'segment_id':rid,'seed_id':sid,'video_id':vid,'source_category':category,'commentary_start_sec':start,'commentary_end_sec':end,'speech_text_raw':text if seg.get('source')=='remote_multimodal_commentary' else None,'ocr_text_raw':text if seg.get('source')=='windowed_multimodal_burned_caption' else None,'normalized_text':text,'alignment_method':'silver_bootstrap_only','alignment_confidence':seg.get('confidence'),'candidate_gameplay_window':candidate,'accepted_gameplay_window':None,'unresolved_reference':True,'label_tier':'silver','parent_source_segment_index':i,'assertion_index':j,'assertion_count':len(assertions)})
+                claim={'claim_id':rid+'_claim','claim_type':ctype,'claim_source':'reviewer','text':text,'source_category':category,'required_evidence_types':['reviewer_commentary']+caps,'required_capabilities':caps,'support_status':'unknown','supporting_observation_ids':[],'commentary_start_sec':start,'commentary_end_sec':end,'candidate_gameplay_window':candidate,'atomicity_status':'atomic_split_assertion' if len(assertions)>1 else 'single_caption_assertion'}; claims.append(claim)
+                observations.append({'observation_id':rid+'_reviewer_commentary','video_id':vid,'type':'reviewer_commentary','start_sec':start,'end_sec':end,'subject':'reviewer','value':text,'confidence':seg.get('confidence'),'detector':'silver_bootstrap_remote_multimodal_v1','detector_config_version':'silver','evidence_refs':[f'seed:{sid}',f'commentary_segment:{rid}'],'status':'observed_silver'})
+                for cap in caps:
+                    expected={'objectives':'objective_state','towers':'tower_state','waves':'wave_state','teamfights':'teamfight_episode','cooldowns':'skill_or_spell_state','items_economy':'item_economy_state','minimap_positions':'player_position_or_vision','deaths':'player_death','death_location':'death_location','audio':'audio_event'}.get(cap,cap)
+                    exec_status='not_run_missing_detector' if CAPABILITIES[cap]=='capability_missing' else ('pending_execution' if media_ready else 'blocked_missing_media')
+                    fixtures.append({'fixture_id':rid+'_'+cap,'seed_id':sid,'video_id':vid,'capability':cap,'source_commentary_segment_id':rid,'source_claim_id':claim['claim_id'],'source_window':candidate,'expected_observations':[{'type':expected,'subject':'unknown_or_player','time_range':None,'time_semantics':'unknown_gameplay_time','commentary_time_range':[start,end],'label_tier':'silver','verification_status':'unverified','source':'reviewer_assertion_not_gameplay_ground_truth'}],'current_predictions':[],'implementation_status':CAPABILITIES[cap],'execution_status':exec_status,'evaluation_status':'capability_missing' if CAPABILITIES[cap]=='capability_missing' else ('pending_execution' if media_ready else 'blocked_missing_media')})
+            dump_jsonl(out/sid/'commentary_segments.jsonl',[x for x in segments if x['seed_id']==sid]); dump_jsonl(out/sid/'claims.jsonl',[x for x in claims if x['claim_id'].startswith(sid+'_')])
     for cap in CAPABILITIES: dump_jsonl(out/f'fixtures/{cap}.jsonl',[f for f in fixtures if f['capability']==cap])
     for cap,status in CAPABILITIES.items():
         if status=='capability_missing': inventory.append({'capability':cap,'implementation_status':status,'execution_status':'not_run_missing_detector','fixture_count':sum(f['capability']==cap for f in fixtures),'reason':'No production detector is present; linked fixtures are retained for a separate detector project.'})
