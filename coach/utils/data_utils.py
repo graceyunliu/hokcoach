@@ -144,6 +144,11 @@ def default_replay(hero_played: str | None = None) -> dict[str, Any]:
             "details": [],
         },
         "decision_points": [],
+        # Optional match-wide evidence timeline. Legacy consumers can ignore
+        # these fields while new detector consumers use the normalized contract.
+        "evidence_timeline": [],
+        "evidence_timeline_metrics": {},
+        "detector_stage_results": {},
         # 证据门控的主播式教练卡片，由 replay_engine 填充。
         "coaching_feedback": [],
         "review_quality_self_score": None,

@@ -131,3 +131,42 @@ intake:
     api_key_env: "DEEPSEEK_API_KEY"
     timeout_sec: 180
   lookback_days: 14
+
+# Match-wide production evidence timeline and detector workstreams #4–9.
+# Inputs are atomic observations from media-specific extractors; missing visibility
+# remains unknown/unreadable and is never interpreted as a negative.
+evidence_timeline:
+  enabled: true
+  schema_version: observation-v1
+  persist_jsonl: true
+  output_dir: data/evidence_timelines
+  retain_sampling_frames: false
+
+detectors:
+  objective_tower_fusion:
+    enabled: true
+    implementation_version: objective-tower-v1
+    high_confidence_min: 0.80
+    temporal_merge_gap_sec: 4.0
+  player_lifecycle_recall:
+    enabled: true
+    implementation_version: lifecycle-recall-v1
+    transition_tolerance_sec: 2.0
+  economy_items:
+    enabled: true
+    implementation_version: economy-items-v1
+    max_snapshot_gap_sec: 180.0
+  coarse_wave_state:
+    enabled: true
+    implementation_version: coarse-wave-v1
+    candidate_window_only: true
+  teamfight_episodes:
+    enabled: true
+    implementation_version: teamfight-v1
+    episode_gap_sec: 8.0
+    boundary_uncertainty_sec: 2.0
+  high_value_cooldowns:
+    enabled: true
+    implementation_version: cooldowns-v1
+    skills: [ultimate, summoner]
+    candidate_window_only: true

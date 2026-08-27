@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import subprocess
 import sys
@@ -21,6 +22,11 @@ from pathlib import Path
 from typing import Any, Callable, Optional
 
 from core import constraints_engine, knowledge_engine, replay_engine, training_engine
+from core.detector_stage import DetectorCache, DetectorContext, DetectorResult, run_detector
+from core.evidence_timeline import EvidenceTimeline
+from core.observations import Observation
+from core.production_detectors import PRODUCTION_DETECTORS
+from core.timeline_adapters import audio_events_to_observations, death_events_to_observations
 from core.llm_client import LLMClient, LLMError, VisionClient
 from utils import config_utils, data_utils
 
@@ -636,7 +642,60 @@ class Orchestrator:
                 f"{ok/total:.0%}）：本次结果可能不可信，\"零死亡\"或死亡次数"
                 f"偏少很可能是读数失败而非真实战绩。若使用VLM读数器（默认"
                 f"config.yaml的video.kda_reader），建议切换为template。")
+        # Backward-compatible extension: legacy death analysis remains the source
+        # of its existing fields, while the same atomic outputs are also exposed
+        # through the detector-independent timeline.
+        atomic: list[Observation] = death_events_to_observations(events)
+        atomic.extend(audio_events_to_observations(audio_timeline or []))
+        timeline_cfg = self.config.get("evidence_timeline") or {}
+        if timeline_cfg.get("enabled", True):
+            timeline, detector_results = self.build_match_timeline(str(video_path), atomic, duration_sec=None, config={})
+            replay["evidence_timeline"] = [item.to_dict() for item in timeline.observations]
+            replay["evidence_timeline_metrics"] = timeline.metrics()
+            replay["detector_stage_results"] = {name: result.to_dict() for name, result in detector_results.items()}
+            if timeline_cfg.get("persist_jsonl", False):
+                configured_dir = Path(timeline_cfg.get("output_dir") or "data/evidence_timelines")
+                output_dir = configured_dir if configured_dir.is_absolute() else BASE_DIR / configured_dir
+                source_token = hashlib.sha256(str(Path(video_path).resolve()).encode("utf-8")).hexdigest()[:16]
+                timeline.save(output_dir / f"{Path(video_path).stem}_{source_token}.jsonl")
+        else:
+            replay["evidence_timeline"] = []
+            replay["evidence_timeline_metrics"] = {"disabled": True}
+            replay["detector_stage_results"] = {}
         return replay
+
+    def run_detector_stage(self, detector_name: str, source_id: str, observations: list[Observation] | tuple[Observation, ...] = (), *, media_hash: str | None = None, duration_sec: float | None = None, windows: list[tuple[float, float]] | tuple[tuple[float, float], ...] = (), config: dict[str, Any] | None = None, model_version: str | None = None, upstream: list[Any] | tuple[Any, ...] = (), cache_dir: Path | None = None) -> DetectorResult:
+        """Run exactly one production detector with a reproducible stage key."""
+        detector = PRODUCTION_DETECTORS.get(detector_name)
+        if detector is None:
+            raise ValueError(f"unknown detector stage: {detector_name}")
+        stage_cfg = dict(config if config is not None else ((self.config.get("detectors") or {}).get(detector_name) or {}))
+        if stage_cfg.get("enabled", True) is False:
+            return DetectorResult(detector_name, str(stage_cfg.get("implementation_version") or detector.version), warnings=["detector_disabled_by_configuration"])
+        context = DetectorContext(source_id=source_id, media_hash=media_hash, duration_sec=duration_sec, windows=tuple(windows), observations=tuple(observations), config=stage_cfg, model_version=model_version)
+        configured_cache = (self.config.get("evidence_timeline") or {}).get("output_dir")
+        default_cache = BASE_DIR / (configured_cache or "data/evidence_timelines") / ".detector_cache"
+        cache = DetectorCache(cache_dir or default_cache)
+        return run_detector(detector, context, relevant_inputs=upstream, cache=cache, version_override=stage_cfg.get("implementation_version"))
+
+    def build_match_timeline(self, source_id: str, observations: list[Observation] | tuple[Observation, ...] = (), *, media_hash: str | None = None, duration_sec: float | None = None, windows: list[tuple[float, float]] | tuple[tuple[float, float], ...] = (), detector_names: list[str] | tuple[str, ...] | None = None, config: dict[str, Any] | None = None, model_version: str | None = None) -> tuple[EvidenceTimeline, dict[str, DetectorResult]]:
+        """Build a timeline from atomic inputs and independently run workstreams #4–9.
+
+        The existing death-centered assembly remains unchanged; callers opt into
+        this match-wide path and can rerun a single detector without rerunning
+        unrelated stages.
+        """
+        timeline = EvidenceTimeline()
+        timeline.extend(observations)
+        results: dict[str, DetectorResult] = {}
+        configured = self.config.get("detectors") or {}
+        names = tuple(detector_names or (name for name in PRODUCTION_DETECTORS if (config or {}).get(name, configured.get(name, {})).get("enabled", True)))
+        for name in names:
+            stage_config = (config or {}).get(name) if config and name in config else configured.get(name, {})
+            result = self.run_detector_stage(name, source_id, tuple(timeline.observations), media_hash=media_hash, duration_sec=duration_sec, windows=windows, config=stage_config, model_version=model_version)
+            results[name] = result
+            timeline.extend(result.observations)
+        return timeline, results
 
     def analyze_video(self, video_path: str, interactive: bool = True,
                       output: str | None = None, lang: str = "zh") -> int:
