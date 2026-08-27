@@ -45,6 +45,13 @@ allowed={'complete','pending','failed','unavailable','blocked_missing_media','no
 for m in manifests:
     stage=m.get('stage_status',{})
     assert all(v in allowed for v in stage.values()), (m['seed_id'],stage)
+    sm_path=OUT/'videos'/m['seed_id']/'stage_manifest.json'
+    if sm_path.exists():
+        sm=json.loads(sm_path.read_text(encoding='utf-8')); assert sm.get('schema_version')=='incremental-corpus-v1'
+        for name,rec in sm.get('stages',{}).items():
+            assert rec.get('status') in {'pending','running','complete','failed_retryable','failed_permanent','blocked','stale'}, (m['seed_id'],name,rec.get('status'))
+            for path,h in rec.get('output_hashes',{}).items(): assert Path(path).exists() and __import__('hashlib').sha256(Path(path).read_bytes()).hexdigest()==h, (m['seed_id'],name,path)
+            assert not any('/.tmp_' in path or '/tmp/' in path for path in rec.get('output_paths',[])), (m['seed_id'],name)
     if m.get('artifact_path'):
         assert m.get('artifact_sha256'), m['seed_id']
     else:
