@@ -23,12 +23,12 @@ The media files remain local and are not committed to Git. Source manifests and 
 
 The existing Video 1 profile `hokcoach-hud-1280x582-v1` was preserved unchanged. Its source compatibility check correctly returns **unsupported layout / abstain** for Video 7 because both the dimensions and source hash differ.
 
-A separate scaffold named `hokcoach-hud-1920x872-v1` was created. The direct crop review used candidate disjoint tuning timestamps of 60, 120, and 240 seconds and evaluation timestamps of 180 and 300 seconds. The Flash crop at 180 seconds showed a visible boot/icon and Chinese text but no unambiguous ready/on-cooldown state. The Ultimate crop showed a dark crossed/locked-looking icon without a readable countdown. Consequently, no direct cooldown labels were promoted.
+A separate scaffold named `hokcoach-hud-1920x872-v1` was created. The final layout check identified the actual gameplay composition and skill/HUD region, but reviewer composition/overlay content and the available temporal samples did not expose unambiguous ready/on-cooldown transitions. Cooldown calibration is therefore marked **unsupported by this recording**; no direct cooldown labels were promoted.
 
 | Metric | Result |
 |---|---:|
 | Existing Video 1 profile result | unsupported layout / abstain |
-| New profile status | scaffolded, disabled |
+| New profile status | scaffolded, disabled; calibration unsupported by recording |
 | Labeled cooldown cases | 0 |
 | Classified accuracy | not applicable |
 | Coverage | 0.0 |
@@ -41,12 +41,12 @@ Directly visible evidence includes gameplay, minimap, HUD/skill icons, and burne
 
 The existing Video 1 profile was run in compatibility-only mode and correctly requires **unsupported layout / abstain** for Video 8. The profile was not copied or altered.
 
-A separate `hokcoach-hud-1920x1080-v1` scaffold was created. Candidate disjoint tuning timestamps are 60, 120, and 240 seconds; evaluation timestamps are 180 and 300 seconds. The Flash crop at 180 seconds was clipped and did not expose a reliable state. The Ultimate crop showed a dark crossed/locked-looking icon without a readable countdown. No cooldown label was promoted.
+A separate `hokcoach-hud-1920x1080-v1` scaffold was created. The final layout check identified the distinct gameplay composition and skill/HUD region, but reviewer composition/overlay content and the available temporal samples did not expose unambiguous ready/on-cooldown transitions. Cooldown calibration is therefore marked **unsupported by this recording**; no cooldown label was promoted.
 
 | Metric | Result |
 |---|---:|
 | Existing Video 1 profile result | unsupported layout / abstain |
-| New profile status | scaffolded, disabled |
+| New profile status | scaffolded, disabled; calibration unsupported by recording |
 | Labeled cooldown cases | 0 |
 | Classified accuracy | not applicable |
 | Coverage | 0.0 |
@@ -61,4 +61,4 @@ The local frame extraction and crop inspection were completed without reopening 
 
 ## Final status
 
-The safe integration gate is closed successfully: the required modules and reviewed tests coexist, the combined integrated discovery passes, existing profiles abstain safely on incompatible layouts, and both new layout profiles remain explicitly scaffolded until direct visual labels are available. The next bounded task is direct visual labeling of cooldown states on the existing Video 7 and Video 8 crops—not additional pilot processing or infrastructure work.
+The safe integration gate is closed successfully: the required modules and reviewed tests coexist, the combined integrated discovery passes, existing profiles abstain safely on incompatible layouts, and both new layout profiles remain disabled. Both recordings are marked `cooldown calibration unsupported by this recording`. No unsupported visual capability has been promoted, and no further labeling or infrastructure work should be performed on these recordings.

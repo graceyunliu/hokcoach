@@ -19,3 +19,17 @@ At 180 seconds, the proposed Flash crop contains a clearly visible golden boot i
 ## Direct Video 8 crop labels
 
 At 180 seconds, the proposed Flash crop shows a partial golden boot/icon with Chinese text but is clipped and does not expose a reliable ready/on-cooldown state. The proposed Ultimate crop shows a dark blue crossed/locked-looking icon with no readable countdown. These samples are retained as directly visible HUD evidence but remain **unlabeled for cooldown classification**. No accuracy or coverage claim is made from them.
+
+## Final layout check — no relabeling
+
+### Video 7
+
+Normalized full-frame inspection confirms a 1920×872 recording containing a gameplay viewport with the game HUD concentrated toward the lower-right portion of the gameplay image, a minimap at upper-left, and reviewer text at the bottom. The full frame also includes composition/overlay content outside the game HUD. The previous candidate crops were not reliable enough to establish skill-state semantics. No cooldown labels or templates are created.
+
+### Video 8
+
+Normalized full-frame inspection confirms a 1920×1080 recording with a distinct gameplay composition, minimap at upper-left, skill/HUD icons in the lower-right gameplay region, and burned-in reviewer text. Its geometry differs from Video 7. The available arbitrary samples do not provide unambiguous temporal ready/on-cooldown transitions. No cooldown labels or templates are created.
+
+### Final disposition
+
+Both recordings are useful for unsupported-layout rejection and composition/viewport handling. For both videos, cooldown calibration is marked `cooldown calibration unsupported by this recording`. No thresholds, templates, or recognizers are promoted.
