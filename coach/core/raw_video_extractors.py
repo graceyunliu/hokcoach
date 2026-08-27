@@ -13,6 +13,7 @@ from typing import Any, Iterable
 from core.cooldown_recognizer import CooldownTemplateRecognizer
 from core.observations import Observation
 from core.tower_recognizer import TowerTemplateRecognizer
+from core.viewport_detector import detect_gameplay_viewport
 from utils import video_utils
 
 
@@ -36,6 +37,10 @@ class RawExtractionMetrics:
     coverage: float | None = None
     abstention_correct: int | None = None
     transition_count: int = 0
+    objective_observations: int = 0
+    objective_observed: int = 0
+    objective_unknown: int = 0
+    objective_unreadable: int = 0
     processing_seconds: float = 0.0
     processing_seconds_per_source_minute: float | None = None
     retained_derived_bytes: int = 0
@@ -60,6 +65,10 @@ class RawExtractionMetrics:
             "coverage": self.coverage,
             "abstention_correct": self.abstention_correct,
             "transition_count": self.transition_count,
+            "objective_observations": self.objective_observations,
+            "objective_observed": self.objective_observed,
+            "objective_unknown": self.objective_unknown,
+            "objective_unreadable": self.objective_unreadable,
             "processing_seconds": self.processing_seconds,
             "processing_seconds_per_source_minute": self.processing_seconds_per_source_minute,
             "retained_derived_bytes": self.retained_derived_bytes,
@@ -252,6 +261,7 @@ def extract_raw_video_observations(
     tower_recognizer: TowerTemplateRecognizer | None = None,
     cooldown_recognizer: CooldownTemplateRecognizer | None = None,
     cooldown_rois: dict[str, dict[str, int]] | None = None,
+    objective_recognizer: Any | None = None,
     calibration_debug: bool = False,
     window_padding_sec: float = 3.0,
     samples_before: int = 1,
@@ -313,9 +323,11 @@ def extract_raw_video_observations(
     )
 
     observations: list[Observation] = []
+    objective_frame_index: dict[float, tuple[Path, str]] = {}
     decoded = decode_failures = frames_unreadable = recognition_failures = semantic_unreadable_observations = 0
     retained = 0
     readable_crops = observed_predictions = unknown_predictions = unreadable_predictions = 0
+    objective_observed = objective_unknown = objective_unreadable = 0
     source_hash = _source_hash(video)
     calibration_version = getattr(tower_recognizer, "calibration_version", "uncalibrated")
     layout_profile = getattr(tower_recognizer, "layout_profile", "none")
@@ -341,7 +353,7 @@ def extract_raw_video_observations(
                 ref = _frame_ref(source_hash, timestamp, region)
                 media_ok = False
                 try:
-                    if region == "hud" and cooldown_recognizer is not None:
+                    if region == "hud" and (cooldown_recognizer is not None or objective_recognizer is not None):
                         _grab_hud_frame(video, timestamp, target, source_dimensions=source_dimensions)
                     else:
                         grabber(str(video), timestamp, target)
@@ -350,6 +362,9 @@ def extract_raw_video_observations(
                     if retain_crops:
                         retained += 1
                         ref = f"{ref}:{target}"
+                    if region == "hud" and objective_recognizer is not None and media_ok:
+                        objective_ref = _frame_ref(source_hash, timestamp, region, slot="objective", layout_profile=getattr(objective_recognizer, "layout_profile", "unknown"), detector_version=getattr(objective_recognizer, "version", "objective-visual-baseline-v1"), roi=getattr(objective_recognizer, "roi", None))
+                        objective_frame_index[round(timestamp, 3)] = (target, objective_ref)
                 except Exception:
                     decode_failures += 1
                 if region == "minimap":
@@ -520,6 +535,32 @@ def extract_raw_video_observations(
                             )
                         )
                     frames_unreadable += 1
+        if objective_recognizer is not None and objective_frame_index:
+            for window_start, window_end in candidates:
+                sequence = []
+                for timestamp, (path, evidence) in sorted(objective_frame_index.items()):
+                    if window_start <= timestamp <= window_end:
+                        try:
+                            viewport = detect_gameplay_viewport(path).to_dict()
+                        except (OSError, ValueError):
+                            viewport = None
+                        sequence.append((path, timestamp, evidence, viewport))
+
+                if not sequence:
+                    continue
+                try:
+                    objective_observations = objective_recognizer.recognize_sequence(sequence, source_hash=source_hash)
+                    observations.extend(objective_observations)
+                    for item in objective_observations:
+                        if item.status == "observed":
+                            objective_observed += 1
+                        elif item.status == "unknown":
+                            objective_unknown += 1
+                        else:
+                            objective_unreadable += 1
+                except Exception:
+                    recognition_failures += 1
+                    objective_unreadable += len(sequence)
 
     processing_seconds = time.perf_counter() - started
     total_predictions = observed_predictions + unknown_predictions + unreadable_predictions
@@ -543,6 +584,10 @@ def extract_raw_video_observations(
         observed_predictions / total_predictions if total_predictions else None,
         None,
         0,
+        objective_observed + objective_unknown + objective_unreadable,
+        objective_observed,
+        objective_unknown,
+        objective_unreadable,
         processing_seconds,
         processing_per_minute,
         _retained_bytes(Path(retain_dir) if retain_crops and retain_dir else None),

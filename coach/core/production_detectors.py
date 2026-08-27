@@ -33,15 +33,36 @@ class ObjectiveTowerFusionDetector:
         out: list[Observation] = []
         objectives = _selected(context, {"objective_visual", "objective_hud", "objective_audio", "objective_activity"})
         if not objectives:
-            out.append(_obs(self.name, "objective_state", 0.0, context.duration_sec or 0.0, {"state": "unknown"}, subject="match", confidence=0.0, status="unknown"))
-        for source in objectives:
+            out.append(_obs(self.name, "objective_state", 0.0, context.duration_sec or 0.0, {"state": "unknown", "reason": "no_objective_evidence"}, subject="match", confidence=0.0, status="unknown"))
+        audio = [item for item in objectives if item.type == "objective_audio"]
+        visual = [item for item in objectives if item.type in {"objective_visual", "objective_hud"}]
+        for source in audio:
             refs = [source.observation_id]
-            if source.type == "objective_audio":
-                out.append(_obs(self.name, "objective_activity", source.start_sec, source.end_sec, {"identity": source.value.get("identity") if isinstance(source.value, dict) else None, "basis": "audio_context_only"}, confidence=min(source.confidence or 0.0, .65), refs=refs, deps=refs))
-            elif source.type in {"objective_visual", "objective_hud"}:
-                value = dict(source.value) if isinstance(source.value, dict) else {"state": source.value}
-                output_type = "objective_result" if source.status == "observed" else "objective_state"
-                out.append(_obs(self.name, output_type, source.start_sec, source.end_sec, value, subject=str(value.get("identity", "unknown")), confidence=source.confidence if source.status == "observed" else 0.0, refs=refs, status=source.status, deps=refs))
+            value = dict(source.value) if isinstance(source.value, dict) else {"identity": "unknown"}
+            identity = str(value.get("identity") or "unknown")
+            out.append(_obs(self.name, "objective_activity", source.start_sec, source.end_sec, {"identity": identity, "basis": "audio_context_only", "result_confirmed": False}, subject=identity, confidence=min(source.confidence or 0.0, .65), refs=refs, deps=refs))
+        for source in visual:
+            refs = [source.observation_id]
+            value = dict(source.value) if isinstance(source.value, dict) else {"state": source.value}
+            identity = str(value.get("identity") or "unknown")
+            state = str(value.get("state") or ("result" if value.get("winner") not in (None, "unknown") else "result" if identity != "unknown" else "unknown"))
+            matching_audio = [item for item in audio if item.start_sec <= source.end_sec and item.end_sec >= source.start_sec and _objective_identity(item) in {identity, "unknown"}]
+            conflicting_audio = [item for item in audio if item.start_sec <= source.end_sec and item.end_sec >= source.start_sec and _objective_identity(item) not in {identity, "unknown"} and identity != "unknown"]
+            if conflicting_audio and source.status == "observed":
+                conflict_refs = refs + [item.observation_id for item in conflicting_audio]
+                out.append(_obs(self.name, "objective_state", source.start_sec, source.end_sec, {"identity": "unknown", "state": "unknown", "winner": "unknown", "reason": "audio_visual_identity_conflict"}, subject="unknown", confidence=0.0, refs=conflict_refs, status="unknown", deps=conflict_refs))
+                continue
+            all_refs = refs + [item.observation_id for item in matching_audio]
+            if source.status != "observed" or state in {"unknown", "ambiguous"}:
+                output_type, status, confidence = "objective_state", source.status, 0.0
+            elif state == "activity":
+                output_type, status, confidence = "objective_activity", "observed", source.confidence or 0.0
+            elif state == "result":
+                output_type, status, confidence = "objective_result", "observed", source.confidence or 0.0
+            else:
+                output_type, status, confidence = "objective_state", "unknown", 0.0
+            fused = {**value, "audio_corroborated": bool(matching_audio), "audio_only_result_forbidden": True}
+            out.append(_obs(self.name, output_type, source.start_sec, source.end_sec, fused, subject=identity, confidence=confidence, refs=all_refs, status=status, deps=all_refs))
         towers = _selected(context, {"tower_visual", "tower_hud"})
         by_subject: dict[str, list[Observation]] = defaultdict(list)
         for item in towers:
@@ -58,6 +79,11 @@ class ObjectiveTowerFusionDetector:
                         out.append(_obs(self.name, "tower_state_transition", item.start_sec, item.end_sec, {"from": previous_state, "to": state}, subject=subject, confidence=item.confidence, refs=refs, deps=refs))
                 previous = item
         return DetectorResult(self.name, self.version, out, warnings=["Audio never establishes objective identity or player responsibility."] if any(o.type == "objective_audio" for o in objectives) else []).ordered()
+
+
+def _objective_identity(item: Observation) -> str:
+    value = item.value if isinstance(item.value, dict) else {}
+    return str(value.get("identity") or value.get("objective") or "unknown")
 
 
 class LifecycleRecallDetector:

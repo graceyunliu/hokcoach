@@ -29,6 +29,7 @@ from core.production_detectors import PRODUCTION_DETECTORS
 from core.raw_video_extractors import extract_raw_video_observations
 from core.tower_recognizer import TowerTemplateRecognizer
 from core.cooldown_recognizer import CooldownConfigurationError, CooldownTemplateRecognizer, load_cooldown_manifest
+from core.objective_visual_recognizer import ObjectiveConfigurationError, ObjectiveVisualRecognizer
 from core.cooldown_messages import cooldown_messages
 from core.timeline_adapters import audio_events_to_observations, death_events_to_observations
 from core.llm_client import LLMClient, LLMError, VisionClient
@@ -66,6 +67,35 @@ def _resolve_project_path(path: str) -> Path:
         if resolved.exists():
             return resolved
     return BASE_DIR / candidate
+
+
+def _objective_recognizer_from_config(objective_cfg: dict[str, Any]) -> ObjectiveVisualRecognizer:
+    if not objective_cfg.get("enabled", False):
+        raise ObjectiveConfigurationError("objective visual recognizer is disabled")
+    expected = objective_cfg.get("expected_source_dimensions")
+    if not isinstance(expected, (list, tuple)) or len(expected) != 2:
+        raise ObjectiveConfigurationError("objective expected_source_dimensions must contain two integers")
+    compatibility = objective_cfg.get("source_compatibility") or {}
+    allowed_sources = compatibility.get("allowed_media_sha256") or objective_cfg.get("allowed_media_sha256") or []
+    if not allowed_sources:
+        raise ObjectiveConfigurationError("objective source compatibility allowlist is required")
+    templates = {}
+    for identity, path in (objective_cfg.get("templates") or {}).items():
+        candidate = Path(str(path))
+        templates[str(identity)] = candidate if candidate.is_absolute() else _resolve_project_path(str(candidate))
+    return ObjectiveVisualRecognizer(
+        roi=dict(objective_cfg.get("roi") or {}),
+        templates=templates,
+        layout_profile=str(objective_cfg.get("layout_profile") or ""),
+        expected_source_dimensions=tuple(expected),
+        change_threshold=float(objective_cfg.get("change_threshold", 18.0)),
+        max_template_error=float(objective_cfg.get("max_template_error", .22)),
+        min_margin=float(objective_cfg.get("min_margin", .02)),
+        min_persistence=int(objective_cfg.get("min_persistence", 2)),
+        visual_form=str(objective_cfg.get("visual_form", "announcement_banner")),
+        roi_coordinate_space=str(objective_cfg.get("roi_coordinate_space", "viewport_relative")),
+        allowed_source_hashes=allowed_sources,
+    )
 
 
 def _cooldown_recognizer_from_config(cooldown_cfg: dict[str, Any]) -> tuple[CooldownTemplateRecognizer, dict[str, dict[str, int]]]:
@@ -744,7 +774,7 @@ class Orchestrator:
         atomic: list[Observation] = death_events_to_observations(events)
         atomic.extend(audio_events_to_observations(audio_timeline or []))
         raw_cfg = self.config.get("raw_video") or {}
-        raw_metrics: dict[str, Any] = {"enabled": bool(raw_cfg.get("enabled", False)), "cooldown_enabled": False}
+        raw_metrics: dict[str, Any] = {"enabled": bool(raw_cfg.get("enabled", False)), "cooldown_enabled": False, "objective_enabled": False, "objective_observations": 0, "objective_observed": 0, "objective_unknown": 0, "objective_unreadable": 0}
         raw_duration: float | None = None
         raw_windows: list[tuple[float, float]] = []
         if raw_cfg.get("enabled", False):
@@ -754,6 +784,8 @@ class Orchestrator:
             tower_recognizer = None
             cooldown_recognizer = None
             cooldown_rois = None
+            objective_recognizer = None
+            objective_cfg = raw_cfg.get("objective_visual_recognizer") or {}
             cooldown_cfg = raw_cfg.get("cooldown_recognizer") or {}
             cooldown_config_error: str | None = None
             if cooldown_cfg.get("enabled", False):
@@ -766,6 +798,17 @@ class Orchestrator:
                     cooldown_config_error = str(err)
                     raw_metrics["cooldown_config_error"] = cooldown_config_error
                     logging.warning("[cooldown recognizer unavailable] %s", err)
+            if objective_cfg.get("enabled", False):
+                try:
+                    objective_recognizer = _objective_recognizer_from_config(objective_cfg)
+                    raw_metrics["objective_detector_version"] = objective_recognizer.version
+                    raw_metrics["objective_calibration_fingerprint"] = objective_recognizer.calibration_fingerprint
+                    raw_metrics["objective_enabled"] = True
+                except (KeyError, OSError, TypeError, ValueError) as err:
+                    raw_metrics["objective_config_error"] = str(err)
+                    logging.warning("[objective visual recognizer unavailable] %s", err)
+            else:
+                raw_metrics["objective_enabled"] = False
             tower_cfg = raw_cfg.get("tower_recognizer") or {}
             if tower_cfg.get("enabled", False):
                 try:
@@ -784,6 +827,7 @@ class Orchestrator:
                     tower_recognizer=tower_recognizer,
                     cooldown_recognizer=cooldown_recognizer,
                     cooldown_rois=cooldown_rois,
+                    objective_recognizer=objective_recognizer,
                     calibration_debug=bool(raw_cfg.get("calibration_debug", False)),
                     window_padding_sec=float(cooldown_cfg.get("window_padding_sec", raw_cfg.get("window_padding_sec", 3.0))),
                     samples_before=int(cooldown_cfg.get("samples_before", raw_cfg.get("samples_before", 1))),

@@ -182,6 +182,26 @@ raw_video:
   max_candidate_windows: 120
   retain_crops: false
   retain_dir: data/evidence_timelines/raw_crops
+  objective_visual_recognizer:
+    # Deliberately disabled until direct labels exist from independent sources.
+    enabled: false
+    implementation_version: objective-visual-baseline-v1
+    layout_profile: hokcoach-hud-1280x582-v1
+    expected_source_dimensions: [1280, 582]
+    source_compatibility:
+      # Populate only from a locally verified canonical source manifest.
+      allowed_media_sha256: []
+      allowed_source_dimensions: [[1280, 582]]
+      allowed_layout_profiles: [hokcoach-hud-1280x582-v1]
+    roi_coordinate_space: viewport_relative
+    # Placeholder until operators calibrate the direct game-banner region.
+    roi: {x: 440, y: 45, w: 400, h: 110}
+    visual_form: announcement_banner
+    change_threshold: 18.0
+    max_template_error: 0.22
+    min_margin: 0.02
+    min_persistence: 2
+    templates: {}
   cooldown_recognizer:
     # Deliberately disabled until independent Video 2 validation exists.
     enabled: false
