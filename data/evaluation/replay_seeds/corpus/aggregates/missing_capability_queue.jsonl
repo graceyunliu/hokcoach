@@ -1,0 +1,7 @@
+{"capability": "objectives", "implementation_status": "capability_missing", "execution_status": "not_run_missing_detector", "fixture_count": 7}
+{"capability": "towers", "implementation_status": "capability_missing", "execution_status": "not_run_missing_detector", "fixture_count": 13}
+{"capability": "lifecycle", "implementation_status": "capability_missing", "execution_status": "not_run_missing_detector", "fixture_count": 0}
+{"capability": "items_economy", "implementation_status": "capability_missing", "execution_status": "not_run_missing_detector", "fixture_count": 3}
+{"capability": "waves", "implementation_status": "capability_missing", "execution_status": "not_run_missing_detector", "fixture_count": 16}
+{"capability": "teamfights", "implementation_status": "capability_missing", "execution_status": "not_run_missing_detector", "fixture_count": 6}
+{"capability": "cooldowns", "implementation_status": "capability_missing", "execution_status": "not_run_missing_detector", "fixture_count": 35}

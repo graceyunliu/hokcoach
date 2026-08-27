@@ -1,0 +1,38 @@
+{
+  "schema_version": "seed-source-v4",
+  "generator_version": "claim-model-v3-stable-corpus",
+  "seed_id": "hokclass_055",
+  "video_id": "1Ccy3DLoRdk",
+  "url": "https://www.youtube.com/watch?v=1Ccy3DLoRdk",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘之甄姬｜神秘冰冻女子乐子大赏｜总会有意想不到出节奏的方式｜",
+  "hero": "甄姬",
+  "role": "法师",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "media_probe": {
+    "status": "blocked_missing_media"
+  },
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "blocked_missing_media",
+    "media_probe": "blocked_missing_media",
+    "bootstrap_labels": "unavailable",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending",
+    "detectors": "blocked_missing_media"
+  },
+  "terminal_status": "blocked_missing_media"
+}
