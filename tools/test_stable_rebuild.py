@@ -5,6 +5,19 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 class StableRebuildTests(unittest.TestCase):
+    def test_bootstrap_only_corpus_counts(self):
+        report=json.loads((ROOT/'data/evaluation/replay_seeds/corpus/aggregates/corpus_report.json').read_text())
+        self.assertEqual(report['bootstrap']['chinese_windowed_caption_hints'],242)
+        self.assertEqual(report['canonical']['chinese_ocr_observations'],0)
+        self.assertEqual(report['canonical']['chinese_commentary_segments'],0)
+        self.assertEqual(report['canonical']['claims'],0)
+        self.assertEqual(report['canonical']['event_fixtures'],0)
+
+    def test_requested_hokclass_065_transcripts_are_empty(self):
+        t=ROOT/'data/evaluation/replay_seeds/corpus/videos/hokclass_065/transcript'
+        self.assertEqual((t/'commentary_segments.jsonl').read_text(), '')
+        self.assertEqual((t/'ocr_intervals.jsonl').read_text(), '')
+
     def test_existing_canonical_files_and_stage_status_survive_rebuild(self):
         with tempfile.TemporaryDirectory() as td:
             t=Path(td); (t/'data/source_seeds/youtube').mkdir(parents=True); (t/'data/evaluation/replay_seeds').mkdir(parents=True)
