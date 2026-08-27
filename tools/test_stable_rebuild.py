@@ -9,9 +9,9 @@ class StableRebuildTests(unittest.TestCase):
         report=json.loads((ROOT/'data/evaluation/replay_seeds/corpus/aggregates/corpus_report.json').read_text())
         self.assertEqual(report['bootstrap']['chinese_windowed_caption_hints'],242)
         self.assertEqual(report['canonical']['chinese_ocr_observations'],0)
-        self.assertEqual(report['canonical']['chinese_commentary_segments'],48)
-        self.assertEqual(report['canonical']['claims'],123)
-        self.assertEqual(report['canonical']['event_fixtures'],123)
+        self.assertEqual(report['canonical']['chinese_commentary_segments'],80)
+        self.assertEqual(report['canonical']['claims'],214)
+        self.assertEqual(report['canonical']['event_fixtures'],214)
 
     def test_requested_hokclass_065_transcripts_are_empty(self):
         t=ROOT/'data/evaluation/replay_seeds/corpus/videos/hokclass_065/transcript'

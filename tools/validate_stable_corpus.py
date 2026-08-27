@@ -25,7 +25,7 @@ assert len({b['bootstrap_id'] for b in boot})==len(boot)
 assert all(b['canonical'] is False and b['language']=='en' and b['source_video_language']=='zh' and b['representation']=='ai_paraphrase' for b in boot)
 boot_ids={b['bootstrap_id'] for b in boot}; assert all(w['source_bootstrap_id'] in boot_ids and w['canonical'] is False for w in windows)
 assert all(h['canonical'] is False and h['language']=='zh' and h['representation']=='windowed_multimodal_caption_extraction' for h in hints)
-assert len({s['segment_id'] for s in seg})==len(seg); assert len({c['claim_id'] for c in claims})==len(claims)
+assert len({(s.get('seed_id'),s['segment_id']) for s in seg})==len(seg); assert len({(c.get('seed_id'),c['claim_id']) for c in claims})==len(claims)
 seg_ids={s['segment_id'] for s in seg}; claim_ids={c['claim_id'] for c in claims}
 assert all(s['canonical'] is True and s['language']=='zh' and s['representation']=='source_transcript' for s in seg)
 assert all(o.get('source_segment_id') in seg_ids for o in obs)
