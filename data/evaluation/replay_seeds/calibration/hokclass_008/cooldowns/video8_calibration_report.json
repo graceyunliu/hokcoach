@@ -1,0 +1,43 @@
+{
+  "schema_version": "video2-layout-calibration-v1",
+  "seed_id": "hokclass_008",
+  "video_id": "KkFUSKztLBA",
+  "source_media_sha256": "49439862f0d6de11cc42ca898398affd39cfdaea30c7b3f43dcd59ca8bcf9668",
+  "source_dimensions": [1920, 1080],
+  "source_duration_sec": 482.018,
+  "existing_profiles": [
+    {
+      "layout_profile": "hokcoach-hud-1280x582-v1",
+      "expected_source_dimensions": [1280, 582],
+      "result": "unsupported layout / abstain",
+      "thresholds_changed": false
+    }
+  ],
+  "layout_profile": "hokcoach-hud-1920x1080-v1",
+  "status": "scaffolded",
+  "roi_profiles": {
+    "summoner_flash": {"x": 1200, "y": 850, "w": 160, "h": 160, "status": "uncalibrated_candidate"},
+    "ultimate": {"x": 1500, "y": 760, "w": 240, "h": 240, "status": "uncalibrated_candidate"}
+  },
+  "tuning_timestamps_sec": [60, 120, 240],
+  "evaluation_timestamps_sec": [180, 300],
+  "split_policy": "frame-disjoint timestamps; direct crop review performed before labeling",
+  "cooldown_labels": [],
+  "cooldown_metrics": {"classified_accuracy": null, "coverage": 0.0, "abstentions": 0, "abstention_rate": 1.0, "reason": "visible crops did not expose an unambiguous ready/on-cooldown state"},
+  "wave_evidence": [{"timestamp_sec": 180, "status": "visible_but_unlabeled", "reason": "lane/gameplay visible; no conservative wave-state label promoted"}],
+  "capabilities": {
+    "recall_lifecycle": "not independently labeled",
+    "objectives": "not independently labeled",
+    "economy_items": "not independently labeled",
+    "towers": "not independently labeled",
+    "waves": "conservative visible evidence only",
+    "hero_positions_teamfights": "not independently labeled",
+    "cooldowns": "direct crops present; states unresolved"
+  },
+  "runtime": {"frame_extraction_seconds": null, "recognition_seconds": 0.0, "retained_bytes": 0},
+  "notes": [
+    "Video 1 templates, thresholds, and configuration were not copied or changed.",
+    "Claims and fixture windows remain navigation hints, not labels.",
+    "No recognizer is enabled from this uncalibrated profile."
+  ]
+}

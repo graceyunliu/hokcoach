@@ -1,0 +1,14 @@
+{
+  "layout_profile": "hokcoach-hud-1920x1080-v1",
+  "seed_id": "hokclass_008",
+  "video_id": "KkFUSKztLBA",
+  "source_media_sha256": "49439862f0d6de11cc42ca898398affd39cfdaea30c7b3f43dcd59ca8bcf9668",
+  "source_dimensions": [1920, 1080],
+  "status": "scaffolded",
+  "roi_profiles": {
+    "summoner_flash": {"x": 1200, "y": 850, "w": 160, "h": 160, "status": "uncalibrated_candidate"},
+    "ultimate": {"x": 1500, "y": 760, "w": 240, "h": 240, "status": "uncalibrated_candidate"}
+  },
+  "threshold_policy": "unchanged_until_visual_labels_exist",
+  "templates": {}
+}
