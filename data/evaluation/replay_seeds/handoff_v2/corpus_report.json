@@ -1,0 +1,29 @@
+{
+  "schema_version": "handoff-corpus-v2",
+  "eligible_seed_count": 100,
+  "seed_manifests": 100,
+  "commentary_segments": 1162,
+  "claims": 1162,
+  "observations": 1162,
+  "event_fixtures": 119,
+  "capability_inventory_count": 11,
+  "missing_capability_records": 7,
+  "stage_semantics": {
+    "bootstrap_labels": "silver only",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending"
+  },
+  "capability_fixture_counts": {
+    "deaths": 22,
+    "towers": 13,
+    "waves": 16,
+    "cooldowns": 35,
+    "minimap_positions": 9,
+    "teamfights": 7,
+    "objectives": 7,
+    "items_economy": 10
+  },
+  "note": "Fixtures are claim-linked and event-oriented. Reviewer assertions are silver/unverified; no detector predictions are fabricated."
+}
