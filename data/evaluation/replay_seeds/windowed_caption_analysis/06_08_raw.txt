@@ -1,0 +1,65 @@
+Starting video analysis...
+Submitting video analysis task...
+Task submitted (ID: video-analysis-2f3efb32-825a-4dfb-8d01-735d6e1cc6a8)
+[8s] Status: Analyzing video content with AI...
+[33s] Still processing, please wait...
+[50s] Status: Analysis completed
+[50s] Analysis completed!
+Full analysis result saved to: /home/ubuntu/video_TcPNUG4b6GE_analysis_20260827_001908.md
+Note: This tool performs AI-based visual and audio analysis, not verbatim transcription. For detailed speech transcription, use `manus-speech-to-text` instead.
+Analysis result:
+
+The following table provides a detailed analysis of the burned-in Chinese commentary captions and corresponding gameplay states for the video interval 06:00–08:01.
+
+### **Chinese Commentary Caption Analysis (06:00–08:01)**
+
+| Timestamp | Visible Caption Text | Confidence | Estimated Start/End | Gameplay/HUD/Minimap State |
+| :--- | :--- | :--- | :--- | :--- |
+| 06:00 | 第十二次复活出来 | 0.99 | 06:00 – 06:02 | Xishi respawns for the 12th time; HUD shows level 14. |
+| 06:02 | 这波守上路线 | 0.98 | 06:02 – 06:03 | Xishi moves toward the top lane to defend against minions. |
+| 06:03 | 对面的哪吒直接冲人堆里面脱节了 | 0.97 | 06:03 – 06:05 | Opponent Nezha dives into the team; minimap shows clusters at top lane. |
+| 06:05 | 往后拉扯保持好站位 | 0.98 | 06:05 – 06:07 | Xishi retreats slightly to maintain safe positioning during the skirmish. |
+| 06:07 | 然后丢2技能去打输出 | 0.98 | 06:07 – 06:09 | Xishi uses Skill 2 (Mystical Sphere) to deal damage to Nezha. |
+| 06:09 | 这一波没问题啊 | 0.99 | 06:09 – 06:10 | Skirmish continues; team coordination appears stable. |
+| 06:10 | 配合队友收下哪吒和火舞 | 0.97 | 06:10 – 06:12 | Teammates kill Nezha and Huowu; kill feed updates. |
+| 06:12 | 这个时候来看你的选择啊 | 0.98 | 06:12 – 06:14 | Xishi is at half health; HUD shows skills on cooldown. |
+| 06:14 | 半血的状态不回城 | 0.98 | 06:14 – 06:15 | Xishi stays in lane despite low health; minimap shows enemies nearby. |
+| 06:15 | 123技能都还没好 | 0.97 | 06:15 – 06:16 | HUD skill icons are grayed out (on cooldown). |
+| 06:16 | 要跑出去 | 0.99 | 06:16 – 06:17 | Xishi attempts to flee as Yunying approaches from the jungle. |
+| 06:17 | 然后吃一个2元燎原白斩 | 0.96 | 06:17 – 06:19 | Yunying hits Xishi with "Lianyuan Baizhan"; Xishi is killed. |
+| 06:19 | 你掉点队友开始发力 | 0.98 | 06:19 – 06:21 | Xishi is dead; teammates engage in the blue jungle area. |
+| 06:21 | 先在蓝区收下对面的大乔 | 0.97 | 06:21 – 06:23 | Teammates kill opponent Daqiao; minimap shows action in blue buff area. |
+| 06:23 | 然后再留住对面的公孙离 | 0.97 | 06:23 – 06:25 | Teammates chase and catch Gongsun Li. |
+| 06:25 | 成功打了对面两个人掉点 | 0.98 | 06:25 – 06:27 | Two opponents are down; team gains numerical advantage. |
+| 06:27 | 暴君有了 | 0.99 | 06:27 – 06:28 | Team secures the Tyrant; buff notification appears on HUD. |
+| 06:28 | 这个时候注意啊 | 0.99 | 06:28 – 06:29 | Commentary warns of upcoming map movements. |
+| 06:29 | 三个队友在上半图 | 0.97 | 06:29 – 06:31 | Minimap shows three allies in the top jungle/lane area. |
+| 06:31 | 盘古一个人跑蓝区来 | 0.97 | 06:31 – 06:33 | Pangu enters the blue jungle alone; Xishi respawns and follows. |
+| 06:33 | 你看见了赶紧过来支援一下 | 0.98 | 06:33 – 06:35 | Xishi moves to support Pangu in the jungle. |
+| 06:35 | 但是一顿操作猛如虎 | 0.98 | 06:35 – 06:38 | Xishi casts skills rapidly but misses key targets. |
+| 06:38 | 一看输出为0 | 0.99 | 06:38 – 06:39 | Skills fail to connect; no damage numbers appear over enemies. |
+| 06:39 | 这一波打下来 | 0.99 | 06:39 – 06:40 | Jungle skirmish concludes; Pangu is low on health. |
+| 06:40 | 盘古跟哪吒打了个一换一 | 0.97 | 06:40 – 06:42 | Pangu and Nezha kill each other; kill feed shows trade. |
+| 06:42 | 顺势推掉对面的中路一塔 | 0.97 | 06:42 – 06:44 | Remaining teammates destroy the opponent's first mid tower. |
+| 06:44 | 然后下路火舞在带线 | 0.98 | 06:44 – 06:45 | Minimap shows Huowu pushing the bottom lane. |
+| 06:45 | 上路你们线也不好 | 0.97 | 06:45 – 06:47 | Minimap shows enemy minions pushing the top lane. |
+| 06:47 | 鲁班大师给你链子你反正也不会点 | 0.96 | 06:47 – 06:50 | Master Luban casts his tether (Skill 2) to Xishi, but she doesn't interact. |
+| 06:50 | 然后吃一个燎原白斩 | 0.97 | 06:50 – 06:51 | Xishi is hit by Yunying's long-range strike again. |
+| 06:51 | 还好有炽热 | 0.98 | 06:51 – 06:53 | Xishi survives due to the shield from "Blazing Cape/Heart." |
+| 06:53 | 回去补完状态出来 | 0.98 | 06:53 – 06:54 | Xishi recalls to base and heals up. |
+| 06:54 | 这波蓝区打起来了 | 0.98 | 06:54 – 06:56 | A team fight erupts in the blue jungle; Xishi rushes over. |
+| 06:56 | 赶紧过来支援 | 0.99 | 06:56 – 06:57 | Xishi enters the fray, casting Skill 1 (Gaze of the Heart). |
+| 06:57 | 先配合队友打出云缨的复活甲 | 0.97 | 06:57 – 06:59 | Yunying's Guardian Angel (resurrection) is triggered by team damage. |
+| 06:59 | 这个时候魔丸降世了 | 0.97 | 06:59 – 07:01 | Nezha activates his Ultimate, targeting Xishi. |
+| 07:01 | 一路给你追到高地还在强行追 | 0.97 | 07:01 – 07:04 | Nezha flies across the map to Xishi's high ground; Xishi retreats. |
+| 07:04 | 好在这一波你们家鲁班大师过来了 | 0.97 | 07:04 – 07:06 | Master Luban arrives to provide CC and shields for Xishi. |
+| 07:06 | 自己身上也有金身 | 0.98 | 07:06 – 07:08 | Xishi activates "Splendor" (Golden Body) to avoid Nezha's impact. |
+| 07:08 | 你看吧金身这个东西肯定能让你少死一两次的 | 0.96 | 07:08 – 07:11 | Xishi remains invulnerable while Nezha's damage is mitigated. |
+| 07:11 | 金身救了一命 | 0.99 | 07:11 – 07:13 | Xishi survives the dive; Nezha is now out of position. |
+| 07:13 | 这个时候对面的哪吒掉脸 | 0.97 | 07:13 – 07:14 | Nezha is killed by the team; kill feed updates. |
+| 07:14 | 龙王刷了 | 0.99 | 07:14 – 07:15 | The Storm Dragon King spawns; map objective pinged. |
+| 07:15 | 赶紧过来跟队友开龙王 | 0.98 | 07:15 – 07:17 | Xishi and teammates move to the Dragon pit to start the objective. |
+| 07:17 | 这个时候注意啊 | 0.99 | 07:17 – 07:19 | Commentary warns of a potential steal attempt. |
+| 07:19 | 依旧是燎原白斩 | 0.98 | 07:19 – 07:20 | Yunying prepares her long-range strike outside the pit. |
+| 07:20 | 这个风暴龙王被对面云缨隔着墙一个燎原白斩给抢了 | 0.95 | 07:20 – 07:25 | Yunying steals the Storm Dragon King from behind the wall. |
+| 07:

@@ -1,0 +1,87 @@
+Starting video analysis...
+Submitting video analysis task...
+Task submitted (ID: video-analysis-e654bd50-6f24-44b2-b166-96fecfca2a2b)
+[8s] Status: Analyzing video content with AI...
+[33s] Still processing, please wait...
+[35s] Status: Analysis completed
+[35s] Analysis completed!
+Full analysis result saved to: /home/ubuntu/video_TcPNUG4b6GE_analysis_20260827_001853.md
+Note: This tool performs AI-based visual and audio analysis, not verbatim transcription. For detailed speech transcription, use `manus-speech-to-text` instead.
+Analysis result:
+
+The following table lists the burned-in Chinese commentary captions extracted from the video interval 04:00–06:00, including their estimated duration and the corresponding gameplay context.
+
+| Timestamp (Start/End) | Visible Caption Text | Confidence | Gameplay / HUD / Minimap State |
+| :--- | :--- | :--- | :--- |
+| 04:00 – 04:01 | 每次去拉人 | High | Xishi moving near the mid lane; HUD shows abilities and health. |
+| 04:01 – 04:03 | 就是走到对面脸上去拉人 | High | Xishi approaches the enemy; minimap shows enemy positions. |
+| 04:03 – 04:04 | 稍微有一点点意识 | High | Xishi retreats slightly; HUD shows cooldowns. |
+| 04:04 – 04:06 | 都不会让你这么轻易拉到的 | High | Xishi attempts a skill shot; enemy dodges. |
+| 04:06 – 04:09 | 除非你闪现去拉对不对 | High | Xishi uses Flash to close the gap. |
+| 04:09 – 04:10 | 玩西施的精髓 | High | Commentary on hero mechanics; Xishi in the jungle. |
+| 04:10 – 04:11 | 一定要学会藏好视野啊 | High | Xishi enters a bush; minimap shows vision control. |
+| 04:11 – 04:12 | 让他们不知道你在哪里 | High | Xishi waits in the bush; HUD shows passive status. |
+| 04:12 – 04:14 | 然后去拉人 | High | Xishi prepares to use Skill 1 from the bush. |
+| 04:14 – 04:15 | 这样你一技能的命中率 | High | Xishi fires Skill 1; HUD tracks hit status. |
+| 04:15 – 04:17 | 才会提升很多 | High | Skill 1 hits the target; teammate follows up. |
+| 04:17 – 04:18 | 来看这一波 | High | Camera pans to a team fight near the river. |
+| 04:18 – 04:19 | 对面的哪吒喝大了 | High | Nezha dives into the team; minimap shows fast movement. |
+| 04:19 – 04:21 | 前面连续收了你两次 | High | HUD shows death recap for previous encounters. |
+| 04:21 – 04:22 | 这波又想来收你啊 | High | Nezha targets Xishi; health bar decreases. |
+| 04:22 – 04:24 | 好在这波队友全在附近 | High | Teammates converge on Nezha; HUD shows team health. |
+| 04:24 – 04:25 | 打了个0 | High | Nezha is eliminated; score updates to 0 deaths for this fight. |
+| 04:25 – 04:26 | 换一纯赚 | High | Team gains an advantage; gold lead shown in HUD. |
+| 04:26 – 04:27 | 残血的状态呢 | High | Xishi is at low health; HUD flashes red. |
+| 04:27 – 04:28 | 又不回城 | High | Xishi stays in lane instead of recalling; HUD shows recall icon. |
+| 04:28 – 04:30 | 想着来守一下中塔没问题 | High | Xishi defends the mid-lane tower; minimap shows tower health. |
+| 04:30 – 04:32 | 那你这波把中线清了 | High | Xishi clears the minion wave; HUD shows gold earned. |
+| 04:32 – 04:35 | 赶紧赶紧回城对不对 | High | Xishi lingers near the tower; HUD shows enemy approaching. |
+| 04:35 – 04:37 | 还一直在这里转悠啊 | High | Xishi moves aimlessly; minimap shows enemy Yunying nearby. |
+| 04:37 – 04:39 | 被一个燎原百斩给收下 | High | Yunying uses ultimate; Xishi is eliminated; HUD shows death screen. |
+| 04:39 – 04:41 | 这把真的是被语音给打惨了 | High | Xishi respawns; HUD shows respawn timer. |
+| 04:41 – 04:42 | 刚复活出来又被语音 | High | Yunying attacks Xishi again near the base. |
+| 04:42 – 04:44 | 打成残血 | High | Xishi's health drops rapidly; HUD shows damage indicators. |
+| 04:44 – 04:45 | 不过身上有个恢复 | High | Xishi uses a health potion; HUD shows healing effect. |
+| 04:45 – 04:46 | 塔下也有个血包 | High | Xishi picks up a health pack near the tower. |
+| 04:46 – 04:49 | 吃完两个血包状态又满了 | High | Xishi's health bar is full; HUD shows status recovery. |
+| 04:49 – 04:51 | 终于知道要藏视野蹲人了 | High | Xishi hides in a bush; minimap shows hidden status. |
+| 04:51 – 04:53 | 但是你看一下小地图呢 | High | Camera focuses on the minimap; teammates are in the bot lane. |
+| 04:53 – 04:55 | 队友都去下路清线了对不对 | High | Minimap shows team distribution; Xishi is isolated. |
+| 04:55 – 04:58 | 中路就一个孙权能跟你伤害 | High | Xishi faces Sun Quan; HUD shows enemy level and items. |
+| 04:58 – 05:00 | 你是怎么敢在这里蹲人的呀 | High | Xishi attempts a gank; HUD shows ability readiness. |
+| 05:00 – 05:02 | 还要动手拉到对面的火舞 | High | Xishi targets Mai Shiranui; skill shot misses. |
+| 05:02 – 05:04 | 差点被大乔给单杀了 | High | Da Qiao attacks Xishi; health bar drops to critical. |
+| 05:04 – 05:06 | 再表演一个闪现圈粉 | High | Xishi uses Flash to escape; HUD shows Flash on cooldown. |
+| 05:06 – 05:07 | 固定节目来了 | High | Xishi is caught by the enemy team; HUD shows crowd control effects. |
+| 05:07 – 05:08 | 你先手掉 | High | Xishi is the first to die in the engagement. |
+| 05:08 – 05:10 | 然后后续你们家射手也走不掉 | High | Friendly marksman is targeted; minimap shows enemy pursuit. |
+| 05:10 – 05:11 | 又是这个魔丸啊 | High | Enemy Nezha uses ultimate; HUD shows targeting icon. |
+| 05:11 – 05:13 | 强行收下你们家射手 | High | Marksman is eliminated; HUD shows kill feed. |
+| 05:13 – 05:14 | 中路一塔也掉 | High | Mid-lane tower is destroyed; minimap updates. |
+| 05:14 – 05:16 | 来第九次复活出来 | High | Xishi respawns for the 9th time; HUD shows KDA 2-9. |
+| 05:16 – 05:17 | 对面火舞清完线 | High | Mai Shiranui clears mid lane; minimap shows her movement. |
+| 05:17 – 05:19 | 明牌是往你们家蓝区走了吧 | High | Enemy team enters the blue jungle; minimap shows pings. |
+| 05:19 – 05:20 | 你清完后 | High | Xishi clears a wave; HUD shows gold count. |
+| 05:20 – 05:22 | 手线搁这逛淘宝全忘了 | High | Xishi stands idle; HUD shows item shop open. |
+| 05:22 – 05:24 | 走到蓝区被对面火舞开到 | High | Xishi is ambushed in the jungle; HUD shows impact effects. |
+| 05:24 – 05:26 | 表演一个金身等死 | High | Xishi uses Zhonya's/Golden Body; HUD shows stasis effect. |
+| 05:26 – 05:28 | 战绩也是来到豪华的2-10 | High | Xishi dies; HUD shows KDA 2-10. |
+| 05:28 – 05:31 | 复活出来吃一个燎原百斩 | High | Xishi respawns and is immediately hit by Yunying's skill. |
+| 05:31 – 05:32 | 被打成半血 | High | Xishi's health bar is halved; HUD shows damage numbers. |
+| 05:32 – 05:33 | 然后这波躲塔下呢 | High | Xishi retreats under the tower; minimap shows tower protection. |
+| 05:33 – 05:35 | 又来一个燎原百斩 | High | Yunying dives the tower; HUD shows ability effects. |
+| 05:35 – 05:36 | 直接给秒了 | High | Xishi is eliminated instantly; HUD shows death recap. |
+| 05:36 – 05:38 | 就这一波还真不怪你啊 | High | Commentary on the unavoidable death; KDA updates to 2-11. |
+| 05:38 – 05:40 | 半血对面云一一个暴击给你收了 | High | HUD shows a critical hit from Yunying. |
+| 05:40 – 05:41 | 成功上211了 | High | Xishi respawns; HUD shows KDA 2-11. |
+| 05:41 – 05:43 | 这波中路二塔也掉 | High | Mid-lane second tower is destroyed; minimap updates. |
+| 05:43 – 05:45 | 复活这一波 | High | Xishi moves out of the base; HUD shows team grouping. |
+| 05:45 – 05:47 | 对面大乔一个人在塔前清线 | High | Da Qiao is seen on the minimap near the tower. |
+| 05:47 – 05:49 | 闪现想拉但是没拉到 | High | Xishi uses Flash and Skill 1; the pull fails to connect. |
+| 05:49 – 05:50 | 这波操作打完 | High | Xishi retreats after the failed attempt; HUD shows cooldowns. |
+| 05:50 – 05:52 | 右上角立马开始发福袋了 | High | HUD shows a notification/gift icon in the corner. |
+| 05:52 – 05:53 | 再继续来看你啊 | High | Camera follows Xishi into the river. |
+| 05:53 – 05:55 | 谈笑间又被对面火舞给蹲了 | High | Mai Shiranui ambushes Xishi; HUD shows knock-up effect. |
+| 05:55 – 05:57 | 再次被融化 | High | Xishi is eliminated quickly; health bar disappears. |
+| 05:57 – 05:59 | 战绩来到豪华的2-12 | High | HUD shows death screen; KDA updates to 2-12. |
+| 05:59 – 06:00 | 然后下路二塔也掉 | High | Bot-lane second tower is destroyed; minimap updates. |

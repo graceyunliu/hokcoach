@@ -1,0 +1,28 @@
+Starting video analysis...
+Submitting video analysis task...
+Task submitted (ID: video-analysis-c09fd400-374b-43f7-8825-b1d8dd8419e6)
+[9s] Status: Analyzing video content with AI...
+[20s] Status: Analysis completed
+[20s] Analysis completed!
+Full analysis result saved to: /home/ubuntu/hokcoach/video_TcPNUG4b6GE_analysis_20260827_002133.md
+Note: This tool performs AI-based visual and audio analysis, not verbatim transcription. For detailed speech transcription, use `manus-speech-to-text` instead.
+Analysis result:
+
+Here is the table of burned-in Chinese commentary captions from the video interval 07:20–08:01:
+
+| Timestamp | Caption Text | Confidence | State Description |
+| :--- | :--- | :--- | :--- |
+| 07:20 - 07:24 | 这个风暴龙王被对面云鹰隔着墙一个燎原百斩给抢了 | High | Dragon pit fight, Yun Ying steals dragon across the wall. |
+| 07:25 - 07:27 | 这一把打完多了5个进语音的人啊 | High | Post-dragon steal, team morale low, chat active. |
+| 07:28 - 07:29 | 那龙王被抢 | High | Minimap shows enemies pushing with dragon buff. |
+| 07:30 - 07:32 | 对面哪吒是可以快速支援来正面的 | High | Nezha uses ultimate to join the front-line fight. |
+| 07:33 - 07:35 | 射手被打出复活甲第一时间卖啊 | High | Team fight near base, shooter dies after armor trigger. |
+| 07:35 - 07:38 | 肯定是救不了了但是想着救一下啊跟射手一起掉 | High | Xishi dies attempting to save the shooter. |
+| 07:39 - 07:40 | 打野射手法师全掉 | High | Three core teammates dead, screen turns gray. |
+| 07:41 - 07:42 | 这个时候还剩个鲁班和盘古 | High | Only Luban and Pangu remain to defend the base. |
+| 07:43 - 07:46 | 来看你们家鲁班啊一技能大招全给小兵但是就是清不掉这个兵啊 | High | Luban uses all skills but fails to clear enhanced minions. |
+| 07:47 - 07:50 | 觉得自己压力大的可以看看这个鲁班大师啊 | High | Close-up on Luban struggling against the push. |
+| 07:51 - 07:53 | 所有技能都放完了但是还有个兵没清掉 | High | Skills exhausted, a single minion reaches the crystal. |
+| 07:54 - 07:56 | 然后对面推掉水晶成功拿下这一把对局 | High | Crystal explodes, "Defeat" animation starts. |
+| 07:57 - 07:59 | 最终战绩定格在豪华的3-14哦 | High | Post-game stats screen shows Xishi's 3/14/10 KDA. |
+| 08:00 - 08:01 | 我真是馋死了 | High | Final commentary over the defeat screen. |

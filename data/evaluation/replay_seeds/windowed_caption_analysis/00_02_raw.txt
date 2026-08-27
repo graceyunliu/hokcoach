@@ -1,0 +1,51 @@
+Starting video analysis...
+Submitting video analysis task...
+Task submitted (ID: video-analysis-7c6670a5-fc59-40c8-8333-9240c9d4a28f)
+[8s] Status: Analyzing video content with AI...
+[33s] Still processing, please wait...
+[42s] Status: Analysis completed
+[42s] Analysis completed!
+Full analysis result saved to: /home/ubuntu/video_TcPNUG4b6GE_analysis_20260827_001900.md
+Note: This tool performs AI-based visual and audio analysis, not verbatim transcription. For detailed speech transcription, use `manus-speech-to-text` instead.
+Analysis result:
+
+The following table extracts the burned-in Chinese commentary captions from the video between **00:00 and 02:00**, including transcription, confidence levels, and the corresponding gameplay context.
+
+| Timestamp | Caption Text (Chinese) | Confidence | Gameplay / HUD / Minimap State |
+| :--- | :--- | :--- | :--- |
+| 00:00 - 00:01 | 老娘求复盘 | 100% | Intro screen with a text box overlay showing a user's request for a game review. |
+| 00:01 - 00:03 | 玩西施场均死10次 | 100% | Intro screen; the text box highlights the problem: averaging 10 deaths per game as Xi Shi. |
+| 00:03 - 00:06 | 怎么解决 | 100% | Intro screen; the text box asks for a solution to the high mortality rate. |
+| 00:06 - 00:08 | 这个死亡率过高的原因啊 | 100% | Intro screen; the text box mentions confusing gameplay ideas. |
+| 00:08 - 00:11 | 游戏思路都很混乱嗷吗 | 100% | Character selection screen; Xi Shi is selected. HUD shows team composition. |
+| 00:11 - 00:15 | 我们第一视角进入复盘 | 100% | Gameplay begins; Xi Shi is in the mid lane. Minimap shows minions arriving. |
+| 00:15 - 00:18 | 原来是被云音大人的燎原白斩给哄睡着了 | 100% | Xi Shi is killed by the enemy Yun Ying. Death recap screen is visible. |
+| 00:18 - 00:20 | 好了我们来到对线环节 | 100% | Xi Shi respawns and moves toward the mid lane for the laning phase. |
+| 00:20 - 00:24 | 一级西施的战斗力也是堪比神秘冰冻女子了 | 100% | Xi Shi reaches Level 1 and begins clearing the first wave of minions in mid. |
+| 00:24 - 00:29 | 对线嘎jose肯定没线权的直接躲塔下清后手线不要被打太多的状态 | 100% | Xi Shi plays defensively under the tower against the enemy Mai Shiranui. |
+| 00:29 - 00:32 | 谈笑风生间你们家对抗路完成单杀了 | 100% | Xi Shi clears minions; a notification appears showing a teammate got a kill in the top lane. |
+| 00:32 - 00:36 | 然后对面火舞是往下转的吗对面有兵线没清掉火舞肯定是补线去了 | 100% | Xi Shi clears the mid wave; the enemy Mai Shiranui is missing from the lane. |
+| 00:36 - 00:39 | 清完后首先来站住河道没问题啊 | 100% | Xi Shi moves into the river bush to gain vision and control. |
+| 00:39 - 00:41 | 尝试卡一下对面火舞的回线 | 100% | Xi Shi waits in the bush, attempting to intercept the enemy mid-laner. |
+| 00:41 - 00:44 | 很好啊一个精准的一技能拉到地板 | 100% | Xi Shi uses her first skill but misses, hitting the ground instead. |
+| 00:44 - 00:47 | 被火舞踢了一脚老实了 | 100% | Mai Shiranui attacks Xi Shi, forcing her to retreat toward her tower. |
+| 00:47 - 00:50 | 回中路清线的时候又被草里的火舞偷了一扇子 | 100% | Xi Shi is hit by Mai Shiranui's fan from a side bush while clearing minions. |
+| 00:50 - 00:53 | 继续来看对线上的失误点啊 | 100% | Commentary continues as Xi Shi stays in lane with reduced health. |
+| 00:53 - 00:56 | 这波跟小兵站一起那对面火舞连人带兵一起踢 | 100% | Xi Shi stands too close to her minions, allowing Mai Shiranui to hit both with one skill. |
+| 00:56 - 00:59 | 清一个中线的功夫被对面火舞打成残血 | 100% | Xi Shi's health bar is very low after the exchange in the mid lane. |
+| 00:59 - 01:03 | 不过也拿到线权了这一波来发育路控赤甲 | 100% | Xi Shi roams toward the bottom jungle to help take a neutral objective (Chijia). |
+| 01:03 - 01:06 | 这一波4个人打一个赤甲你为什么要把一技能给交了呀 | 100% | Four teammates are attacking the neutral creep; Xi Shi wastes her first skill on it. |
+| 01:06 - 01:12 | 拿完赤甲这个状态老老实实回中路待着吃个血包补状态对不对一直在梦游 | 100% | Xi Shi wanders in the river with low health and mana instead of recalling or healing. |
+| 01:12 - 01:17 | 走到对面脸上这次一技能拉到墙然后闪现呢也不知道放 | 100% | Xi Shi walks into the enemy team, misses her skill, and dies without using Flash. |
+| 01:17 - 01:22 | 这一波我说实话也算是进步点了没有闪现牵粉 | 100% | Xi Shi respawns. The commentary critiques her previous death. |
+| 01:22 - 01:26 | 你看吧上一波神闪现肯定是有它的作用的 | 100% | Xi Shi returns to the mid lane. HUD shows her Flash is now available. |
+| 01:26 - 01:29 | 这波手上有闪现闪现去拉精准拉到对面火舞 | 100% | Xi Shi uses Flash and her first skill to successfully catch Mai Shiranui. |
+| 01:29 - 01:33 | 不过这一波伤害有点不够打野跟不上伤害 | 100% | A skirmish ensues, but the team's follow-up damage is insufficient to secure the kill. |
+| 01:33 - 01:36 | 结果对面火舞一个平A回来了 | 100% | Mai Shiranui survives the burst and counter-attacks with basic attacks. |
+| 01:36 - 01:40 | 那你们家打野赶过来收下火舞对面打野赶过来收下你 | 100% | A trade occurs: the friendly jungler kills Mai, but the enemy jungler kills Xi Shi. |
+| 01:40 - 01:43 | 双方打野都很舒服双方中单都很难受 | 100% | Xi Shi is dead again (grey screen). Minimap shows the junglers moving away. |
+| 01:43 - 01:46 | 复活出来对面火舞拿到线权往下路转了 | 100% | Xi Shi respawns. Mai Shiranui clears the mid wave and roams toward the bottom lane. |
+| 01:46 - 01:50 | 那没线权要做的点好信号养成这个习惯没问题 | 100% | Xi Shi pings the map to warn teammates that the enemy mid-laner is missing. |
+| 01:50 - 01:54 | 再接着往下看啊这波辅助发力了游走到中路 | 100% | The friendly support roams to the mid lane to initiate a fight. |
+| 01:54 - 01:59 | 这一波形成一个3打2然后你一技能也拉到对面云音 | 100% | A 3v2 fight occurs in mid; Xi Shi successfully hits the enemy Yun Ying with her first skill. |
+| 01:59 - 02:00 | 成功打对面云音一个掉点 | 100% | The team successfully kills Yun Ying, securing a pick-off. |
