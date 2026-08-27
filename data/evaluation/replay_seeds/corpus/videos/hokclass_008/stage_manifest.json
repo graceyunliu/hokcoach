@@ -1,0 +1,183 @@
+{
+  "schema_version": "incremental-corpus-v1",
+  "seed_id": "hokclass_008",
+  "updated_at": "2026-08-27T09:38:16.524742+00:00",
+  "stages": {
+    "media_probe": {
+      "status": "blocked",
+      "input_fingerprint": "8de51684e4ec263d04702c896eb5c08101d1edd37c7a15a2af03fac536530343",
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": "7cfc073add7cbdffa0d338f12a8c05cf5e825d560926fc8118fc3aa95902e0c9",
+      "model_version": null,
+      "started_at": "2026-08-27T09:38:16.524734+00:00",
+      "completed_at": "2026-08-27T09:38:16.524736+00:00",
+      "output_paths": [],
+      "output_hashes": {},
+      "error": null,
+      "blocked_by": [
+        "media"
+      ]
+    },
+    "audio_extraction": {
+      "status": "blocked",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": "missing_or_invalid_webm",
+      "blocked_by": [
+        "media_probe"
+      ]
+    },
+    "speech_to_text": {
+      "status": "blocked",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": "missing_or_invalid_webm",
+      "blocked_by": [
+        "media_probe"
+      ]
+    },
+    "caption_sampling": {
+      "status": "blocked",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": "missing_or_invalid_webm",
+      "blocked_by": [
+        "media_probe"
+      ]
+    },
+    "caption_ocr": {
+      "status": "blocked",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": "missing_or_invalid_webm",
+      "blocked_by": [
+        "media_probe"
+      ]
+    },
+    "ocr_interval_reconstruction": {
+      "status": "blocked",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": "missing_or_invalid_webm",
+      "blocked_by": [
+        "media_probe"
+      ]
+    },
+    "commentary_fusion": {
+      "status": "blocked",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": "missing_or_invalid_webm",
+      "blocked_by": [
+        "media_probe"
+      ]
+    },
+    "claim_extraction": {
+      "status": "blocked",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": "missing_or_invalid_webm",
+      "blocked_by": [
+        "media_probe"
+      ]
+    },
+    "fixture_generation": {
+      "status": "blocked",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": "missing_or_invalid_webm",
+      "blocked_by": [
+        "media_probe"
+      ]
+    },
+    "detectors": {
+      "status": "blocked",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": "missing_or_invalid_webm",
+      "blocked_by": [
+        "media_probe"
+      ]
+    },
+    "aggregate_participation": {
+      "status": "pending",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": null,
+      "blocked_by": []
+    },
+    "retention_cleanup": {
+      "status": "pending",
+      "input_fingerprint": null,
+      "implementation_version": "process-seed-corpus-v1",
+      "configuration_hash": null,
+      "model_version": null,
+      "started_at": null,
+      "completed_at": null,
+      "output_paths": [],
+      "output_hashes": {},
+      "error": null,
+      "blocked_by": []
+    }
+  }
+}
