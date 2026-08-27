@@ -85,7 +85,7 @@ def fuse_records(speech, intervals):
         if matches:
             o=matches[0]; used.add(o['interval_id']); text=s.get('raw_text') or s.get('text') or o.get('raw_text'); relation='semantic_agreement' if norm(text)==norm(o.get('raw_text')) else 'variant'; refs={'speech_segment_ids':[s.get('speech_segment_id') or s.get('segment_id')],'ocr_interval_ids':[o['interval_id']]}
         else: text=s.get('raw_text') or s.get('text') or ''; relation='speech_only'; refs={'speech_segment_ids':[s.get('speech_segment_id') or s.get('segment_id')],'ocr_interval_ids':[]}
-        if text: out.append({'segment_id':f"commentary_{len(out):06d}",'seed_id':s.get('seed_id'),'video_id':s.get('video_id'),'start_sec':ss,'end_sec':se,'raw_text':text,'language':'zh','representation':'source_transcript','canonical':True,'fusion_relationship':relation,'source_record_ids':refs})
+        if text: out.append({'segment_id':f"commentary_{len(out):06d}",'seed_id':s.get('seed_id'),'video_id':s.get('video_id'),'start_sec':ss,'end_sec':se,'raw_text':text,'language':'zh','representation':'source_transcript','canonical':True,'fusion_relationship':relation,'source_record_ids':refs,'source_media_sha256':s.get('source_media_sha256')})
     for o in intervals:
         if o['interval_id'] not in used: out.append({'segment_id':f"commentary_{len(out):06d}",'seed_id':o.get('seed_id'),'video_id':o.get('video_id'),'start_sec':o['start_sec'],'end_sec':o['end_sec'],'raw_text':o['raw_text'],'language':'zh','representation':'source_transcript','canonical':True,'fusion_relationship':'ocr_only','source_record_ids':{'speech_segment_ids':[],'ocr_interval_ids':[o['interval_id']]}})
     return out
@@ -95,7 +95,7 @@ def split_claims(segments):
         parts=[x.strip() for x in re.split(r'[。！？!?；;]',s.get('raw_text','')) if x.strip() and re.search(r'[\u4e00-\u9fffA-Za-z0-9]',x)]
         for i,text in enumerate(parts or [s.get('raw_text','').strip()]):
             if not text: continue
-            out.append({'claim_id':f"{s.get('segment_id')}_claim_{i:02d}",'seed_id':s.get('seed_id'),'video_id':s.get('video_id'),'source_segment_id':s.get('segment_id'),'raw_text':text,'language':'zh','canonical':True,'split_status':'sentence_split_unverified' if len(parts)>1 else 'unsplit'})
+            out.append({'claim_id':f"{s.get('segment_id')}_claim_{i:02d}",'seed_id':s.get('seed_id'),'video_id':s.get('video_id'),'source_segment_id':s.get('segment_id'),'raw_text':text,'language':'zh','source_media_sha256':s.get('source_media_sha256'),'canonical':True,'split_status':'sentence_split_unverified' if len(parts)>1 else 'unsplit'})
     return out
 def process_one(root,sid,force_from=None):
     out=root/'data/evaluation/replay_seeds/corpus'; v=out/'videos'/sid; t=v/'transcript'; media_dir=root/'data/evaluation/replay_seeds/media'; manifest=read_json(v/'source_manifest.json',{}); media=media_dir/f"{manifest.get('video_id',sid)}.webm"; smp=v/'stage_manifest.json'; sm=load_stage(smp); sm['seed_id']=sid
@@ -147,7 +147,7 @@ def process_one(root,sid,force_from=None):
     else: set_stage(sm,'claim_extraction','blocked',error='no canonical commentary segments',blocked_by=['commentary_fusion'])
     claims=rows(v/'claims.jsonl')
     if claims:
-        fixture_rows=[{'fixture_id':f"{c['claim_id']}_fixture",'seed_id':c.get('seed_id'),'video_id':c.get('video_id'),'source_segment_id':c.get('source_segment_id'),'source_claim_id':c.get('claim_id'),'capability':c.get('capability','unknown'),'time_range':None,'time_semantics':'unknown_gameplay_time','verification_status':'unverified','label_tier':'silver'} for c in claims]
+        fixture_rows=[{'fixture_id':f"{c['claim_id']}_fixture",'seed_id':c.get('seed_id'),'video_id':c.get('video_id'),'source_media_sha256':c.get('source_media_sha256'),'source_segment_id':c.get('source_segment_id'),'source_claim_id':c.get('claim_id'),'capability':c.get('capability','unknown'),'time_range':None,'time_semantics':'unknown_gameplay_time','verification_status':'unverified','label_tier':'silver'} for c in claims]
         xfp=fp({'claims_hash':file_hash(v/'claims.jsonl'),'implementation':IMPLEMENTATION,'schema':SCHEMA})
         if not valid_hit(sm['stages']['fixture_generation'],xfp): atomic_jsonl(v/'fixture_candidates.jsonl',fixture_rows); set_stage(sm,'fixture_generation','complete',input_fingerprint=xfp,configuration_hash=fp({'time_semantics':'unknown_gameplay_time'}),started_at=now(),completed_at=now(),output_paths=[str(v/'fixture_candidates.jsonl')],output_hashes=output_hashes([v/'fixture_candidates.jsonl']),error=None,blocked_by=[])
     else: set_stage(sm,'fixture_generation','blocked',error='no canonical claims',blocked_by=['claim_extraction'])
@@ -166,6 +166,13 @@ def process_one(root,sid,force_from=None):
     remaining_owned=audio_tmp.exists()
     retention_status='complete' if not remaining_owned else 'pending'
     set_stage(sm,'retention_cleanup',retention_status,input_fingerprint=fp({'owned_paths':[str(audio_tmp)]}),configuration_hash=fp({'owned_paths_only':True}),started_at=now(),completed_at=now() if retention_status=='complete' else None,output_paths=[],output_hashes={},error=None if retention_status=='complete' else 'awaiting successful STT completion before deleting owned temporary audio',blocked_by=[] if retention_status=='complete' else ['speech_to_text'])
+    manifest['artifact_path']=str(media); manifest['artifact_sha256']=file_hash(media); manifest['media_probe']=p
+    manifest.setdefault('stage_status',{})['acquisition']='complete'; manifest['stage_status']['media_probe']='complete'
+    status_map={'speech_to_text':'speech_to_text','caption_ocr':'caption_ocr','ocr_interval_reconstruction':'ocr_stt_alignment','detectors':'detectors'}
+    for stage,key in status_map.items():
+        st=sm['stages'][stage]['status']; manifest['stage_status'][key]='complete' if st=='complete' else ('blocked_missing_media' if st=='blocked' and p['status']!='complete' else 'pending')
+    manifest['terminal_status']='complete' if sm['stages']['speech_to_text']['status']=='complete' else 'media_ready_transcript_pending'
+    (v/'source_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     save_stage(smp,sm)
     return {'seed_id':sid,'status':'processed','media_probe':p,'stage_manifest':str(smp)}
 def rebuild(root):

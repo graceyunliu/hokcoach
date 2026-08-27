@@ -13,10 +13,17 @@
     "peak_score": null,
     "hero_power": null
   },
-  "artifact_path": null,
-  "artifact_sha256": null,
+  "artifact_path": "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/media/KkFUSKztLBA.webm",
+  "artifact_sha256": "49439862f0d6de11cc42ca898398affd39cfdaea30c7b3f43dcd59ca8bcf9668",
   "media_probe": {
-    "status": "blocked_missing_media"
+    "status": "complete",
+    "duration_sec": 482.018,
+    "video_stream": true,
+    "width": 1920,
+    "height": 1080,
+    "frame_rate": "30/1",
+    "codec": "vp8",
+    "audio_stream": true
   },
   "timestamp_contract": {
     "captured_media_presentation_time": "unknown",
@@ -25,14 +32,14 @@
     "referenced_gameplay_time": "unknown"
   },
   "stage_status": {
-    "acquisition": "blocked_missing_media",
-    "media_probe": "blocked_missing_media",
+    "acquisition": "complete",
+    "media_probe": "complete",
     "bootstrap_labels": "available_silver_remote_multimodal",
-    "speech_to_text": "pending",
+    "speech_to_text": "complete",
     "caption_ocr": "pending",
     "ocr_stt_alignment": "pending",
     "gameplay_reference_alignment": "pending",
-    "detectors": "blocked_missing_media"
+    "detectors": "pending"
   },
-  "terminal_status": "blocked_missing_media"
+  "terminal_status": "complete"
 }

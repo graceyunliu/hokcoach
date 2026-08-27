@@ -1,7 +1,7 @@
 {
   "schema_version": "incremental-corpus-v1",
   "seed_id": "hokclass_007",
-  "updated_at": "2026-08-27T14:36:37.144615+00:00",
+  "updated_at": "2026-08-27T14:56:52.521538+00:00",
   "stages": {
     "media_probe": {
       "status": "complete",
@@ -9,8 +9,8 @@
       "implementation_version": "process-seed-corpus-v1",
       "configuration_hash": "7cfc073add7cbdffa0d338f12a8c05cf5e825d560926fc8118fc3aa95902e0c9",
       "model_version": null,
-      "started_at": "2026-08-27T14:36:36.961946+00:00",
-      "completed_at": "2026-08-27T14:36:36.961968+00:00",
+      "started_at": "2026-08-27T14:56:51.526110+00:00",
+      "completed_at": "2026-08-27T14:56:51.526129+00:00",
       "output_paths": [],
       "output_hashes": {},
       "error": null,
@@ -22,8 +22,8 @@
       "implementation_version": "process-seed-corpus-v1",
       "configuration_hash": "23dfda9cbf97cd3ba07832a0a63f095cf98f9e9174a7325ccbf0b8e968f8d7c4",
       "model_version": null,
-      "started_at": "2026-08-27T14:36:10.867953+00:00",
-      "completed_at": "2026-08-27T14:36:10.867970+00:00",
+      "started_at": "2026-08-27T14:56:52.346859+00:00",
+      "completed_at": "2026-08-27T14:56:52.346874+00:00",
       "output_paths": [],
       "output_hashes": {},
       "error": null,
@@ -69,8 +69,8 @@
       "implementation_version": "process-seed-corpus-v1",
       "configuration_hash": "5b92e58e2ddb8be44ae1d48254b9471b59e380e9d0a34732adb136a5b6317a6c",
       "model_version": null,
-      "started_at": "2026-08-27T14:36:37.083312+00:00",
-      "completed_at": "2026-08-27T14:36:37.083327+00:00",
+      "started_at": "2026-08-27T14:56:52.408386+00:00",
+      "completed_at": "2026-08-27T14:56:52.408396+00:00",
       "output_paths": [
         "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_007/transcript/ocr_observations.jsonl"
       ],
@@ -182,8 +182,8 @@
       "implementation_version": "process-seed-corpus-v1",
       "configuration_hash": "577bd51e0d10da42356c00b5c419bcc800e5c03af8b175e297ad4c9f0fb899a4",
       "model_version": null,
-      "started_at": "2026-08-27T14:36:37.144595+00:00",
-      "completed_at": "2026-08-27T14:36:37.144609+00:00",
+      "started_at": "2026-08-27T14:56:52.465920+00:00",
+      "completed_at": "2026-08-27T14:56:52.465931+00:00",
       "output_paths": [],
       "output_hashes": {},
       "error": null,

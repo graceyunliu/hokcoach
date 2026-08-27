@@ -1,0 +1,62 @@
+{
+  "schema_version": "video2-layout-calibration-v1",
+  "seed_id": "hokclass_007",
+  "video_id": "Tq5eD3ECpyw",
+  "source_media_sha256": "44f26786b2709957ad7499162b7d04b811903ca82f175d2cdcfe7fc07ef88af7",
+  "source_dimensions": [
+    1920,
+    872
+  ],
+  "source_duration_sec": 325.338,
+  "video1_profile": {
+    "layout_profile": "hokcoach-hud-1280x582-v1",
+    "expected_source_dimensions": [
+      1280,
+      582
+    ],
+    "compatible": false,
+    "result": "unsupported layout / abstain"
+  },
+  "layout_profile": "hokcoach-hud-1920x872-v1",
+  "status": "scaffolded",
+  "roi_profiles": {
+    "summoner_flash": {
+      "x": 1200,
+      "y": 711,
+      "w": 128,
+      "h": 135,
+      "status": "uncalibrated_scaled_candidate"
+    },
+    "ultimate": {
+      "x": 1560,
+      "y": 674,
+      "w": 180,
+      "h": 180,
+      "status": "uncalibrated_scaled_candidate"
+    }
+  },
+  "templates": {},
+  "threshold_policy": "unchanged_until_visual_labels_exist",
+  "tuning_timestamps_sec": [],
+  "evaluation_timestamps_sec": [],
+  "capabilities": {
+    "recall_lifecycle": "not represented",
+    "cooldowns": "scaffolded",
+    "objective_hud": "not represented",
+    "economy_items": "not represented",
+    "towers": "not represented",
+    "waves": "not represented",
+    "hero_positions_teamfights": "not represented"
+  },
+  "metrics": {
+    "classified": 0,
+    "coverage": 0.0,
+    "abstentions": 0,
+    "timestamp_error_sec": null
+  },
+  "notes": [
+    "Claims and fixture windows are navigation hints, not visual labels.",
+    "No recognizer is enabled from this single uncalibrated layout.",
+    "Tuning/evaluation timestamps remain empty until direct visual labels are assigned."
+  ]
+}

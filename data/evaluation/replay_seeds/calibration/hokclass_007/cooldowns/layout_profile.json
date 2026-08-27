@@ -1,0 +1,25 @@
+{
+  "layout_profile": "hokcoach-hud-1920x872-v1",
+  "source_dimensions": [
+    1920,
+    872
+  ],
+  "source_media_sha256": "44f26786b2709957ad7499162b7d04b811903ca82f175d2cdcfe7fc07ef88af7",
+  "roi_profiles": {
+    "summoner_flash": {
+      "x": 1200,
+      "y": 711,
+      "w": 128,
+      "h": 135,
+      "status": "uncalibrated_scaled_candidate"
+    },
+    "ultimate": {
+      "x": 1560,
+      "y": 674,
+      "w": 180,
+      "h": 180,
+      "status": "uncalibrated_scaled_candidate"
+    }
+  },
+  "status": "scaffolded"
+}

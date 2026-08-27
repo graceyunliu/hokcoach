@@ -1,81 +1,85 @@
 {
   "schema_version": "incremental-corpus-v1",
   "seed_id": "hokclass_008",
-  "updated_at": "2026-08-27T09:38:16.524742+00:00",
+  "updated_at": "2026-08-27T14:56:54.171369+00:00",
   "stages": {
     "media_probe": {
-      "status": "blocked",
-      "input_fingerprint": "8de51684e4ec263d04702c896eb5c08101d1edd37c7a15a2af03fac536530343",
+      "status": "complete",
+      "input_fingerprint": "65516f596a1996a47affde698e659d50d79837fc7021028ef5bdae6de989c07c",
       "implementation_version": "process-seed-corpus-v1",
       "configuration_hash": "7cfc073add7cbdffa0d338f12a8c05cf5e825d560926fc8118fc3aa95902e0c9",
       "model_version": null,
-      "started_at": "2026-08-27T09:38:16.524734+00:00",
-      "completed_at": "2026-08-27T09:38:16.524736+00:00",
+      "started_at": "2026-08-27T14:56:52.676792+00:00",
+      "completed_at": "2026-08-27T14:56:52.676815+00:00",
       "output_paths": [],
       "output_hashes": {},
       "error": null,
-      "blocked_by": [
-        "media"
-      ]
+      "blocked_by": []
     },
     "audio_extraction": {
-      "status": "blocked",
-      "input_fingerprint": null,
+      "status": "complete",
+      "input_fingerprint": "b16d2e719cb99dd1e1274ef34990307eef8302694749183432488034ccfdb4af",
       "implementation_version": "process-seed-corpus-v1",
-      "configuration_hash": null,
+      "configuration_hash": "23dfda9cbf97cd3ba07832a0a63f095cf98f9e9174a7325ccbf0b8e968f8d7c4",
       "model_version": null,
-      "started_at": null,
-      "completed_at": null,
+      "started_at": "2026-08-27T14:56:53.902169+00:00",
+      "completed_at": "2026-08-27T14:56:53.902185+00:00",
       "output_paths": [],
       "output_hashes": {},
-      "error": "missing_or_invalid_webm",
-      "blocked_by": [
-        "media_probe"
-      ]
+      "error": null,
+      "blocked_by": []
     },
     "speech_to_text": {
-      "status": "blocked",
-      "input_fingerprint": null,
+      "status": "complete",
+      "input_fingerprint": "d624d01afe984bf066ce2ab41f3d05437647c046b059430fbe4a8f4804c6508e",
       "implementation_version": "process-seed-corpus-v1",
-      "configuration_hash": null,
-      "model_version": null,
-      "started_at": null,
-      "completed_at": null,
-      "output_paths": [],
-      "output_hashes": {},
-      "error": "missing_or_invalid_webm",
-      "blocked_by": [
-        "media_probe"
-      ]
+      "configuration_hash": "08def1f2870444f331a6ea71bdc245f29a629259cedd6c049edb898b23410dde",
+      "model_version": "manus-speech-to-text",
+      "started_at": "2026-08-27T14:54:52.996073+00:00",
+      "completed_at": "2026-08-27T14:54:52.996091+00:00",
+      "output_paths": [
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/transcript/speech_segments.jsonl"
+      ],
+      "output_hashes": {
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/transcript/speech_segments.jsonl": "15490f613ebb3e548f0222d36dda734c2f8969e26c632249b1eebd2775b0cf32"
+      },
+      "error": null,
+      "blocked_by": []
     },
     "caption_sampling": {
-      "status": "blocked",
-      "input_fingerprint": null,
+      "status": "complete",
+      "input_fingerprint": "031c685390b15a159bb6bd88ae0da80136bfe6759b003c83e40f9c388440d44b",
       "implementation_version": "process-seed-corpus-v1",
-      "configuration_hash": null,
+      "configuration_hash": "66d9a539977e5c53aaaef00303d06afa2dfe9df1cd761dabb27e229b6d7e6adc",
       "model_version": null,
-      "started_at": null,
-      "completed_at": null,
-      "output_paths": [],
-      "output_hashes": {},
-      "error": "missing_or_invalid_webm",
-      "blocked_by": [
-        "media_probe"
-      ]
+      "started_at": "2026-08-27T14:54:04.041768+00:00",
+      "completed_at": "2026-08-27T14:54:04.041782+00:00",
+      "output_paths": [
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/evidence/selected_frames/sample-0001.jpg"
+      ],
+      "output_hashes": {
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/evidence/selected_frames/sample-0001.jpg": "7bef1d2286fe4799cd002ded448e4111d59973f8ec8ff60aba580461c1b50634"
+      },
+      "error": null,
+      "blocked_by": []
     },
     "caption_ocr": {
       "status": "blocked",
-      "input_fingerprint": null,
+      "input_fingerprint": "0b705fcb9e6c60c0da94afb42538ec893ce33734c33ffd956ce9be9326756644",
       "implementation_version": "process-seed-corpus-v1",
-      "configuration_hash": null,
+      "configuration_hash": "5b92e58e2ddb8be44ae1d48254b9471b59e380e9d0a34732adb136a5b6317a6c",
       "model_version": null,
-      "started_at": null,
-      "completed_at": null,
-      "output_paths": [],
-      "output_hashes": {},
-      "error": "missing_or_invalid_webm",
+      "started_at": "2026-08-27T14:56:53.997879+00:00",
+      "completed_at": "2026-08-27T14:56:53.997898+00:00",
+      "output_paths": [
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/transcript/ocr_observations.jsonl"
+      ],
+      "output_hashes": {
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/transcript/ocr_observations.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "error": "no deterministic OCR backend configured",
       "blocked_by": [
-        "media_probe"
+        "ocr_backend"
       ]
     },
     "ocr_interval_reconstruction": {
@@ -88,69 +92,75 @@
       "completed_at": null,
       "output_paths": [],
       "output_hashes": {},
-      "error": "missing_or_invalid_webm",
+      "error": "no canonical OCR observations",
       "blocked_by": [
-        "media_probe"
+        "caption_ocr"
       ]
     },
     "commentary_fusion": {
-      "status": "blocked",
-      "input_fingerprint": null,
+      "status": "complete",
+      "input_fingerprint": "260837e252fbf6f34f93ee47dce2359b4cf70ac13a8307e3653ac80d211d8bd6",
       "implementation_version": "process-seed-corpus-v1",
-      "configuration_hash": null,
+      "configuration_hash": "c63e3d86dd83b3a5fc69422ae0ef13196aa0f5af0ef3260acb2a30779a5f1948",
       "model_version": null,
-      "started_at": null,
-      "completed_at": null,
-      "output_paths": [],
-      "output_hashes": {},
-      "error": "missing_or_invalid_webm",
-      "blocked_by": [
-        "media_probe"
-      ]
+      "started_at": "2026-08-27T14:54:53.308533+00:00",
+      "completed_at": "2026-08-27T14:54:53.308540+00:00",
+      "output_paths": [
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/transcript/commentary_segments.jsonl"
+      ],
+      "output_hashes": {
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/transcript/commentary_segments.jsonl": "2fa6a461a9d7e82f7fb384c14d1b5d25dcd29f1d60aa4719b839f3c516cad932"
+      },
+      "error": null,
+      "blocked_by": []
     },
     "claim_extraction": {
-      "status": "blocked",
-      "input_fingerprint": null,
+      "status": "complete",
+      "input_fingerprint": "6ec4341f0623b3c8f1462bc9111bcd2a3b1dcef3de0554625b088e9437821ba4",
       "implementation_version": "process-seed-corpus-v1",
-      "configuration_hash": null,
+      "configuration_hash": "b66e53ac971633c57c6a1a3d4a73dbf97438fea66aa54e0f58c6baeb8e9c0eeb",
       "model_version": null,
-      "started_at": null,
-      "completed_at": null,
-      "output_paths": [],
-      "output_hashes": {},
-      "error": "missing_or_invalid_webm",
-      "blocked_by": [
-        "media_probe"
-      ]
+      "started_at": "2026-08-27T14:55:13.099438+00:00",
+      "completed_at": "2026-08-27T14:55:13.099446+00:00",
+      "output_paths": [
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/claims.jsonl"
+      ],
+      "output_hashes": {
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/claims.jsonl": "faaa345ebd6f12de4a80a293b11ec5243849c8c1ca2c01eec58e3d7d23187aef"
+      },
+      "error": null,
+      "blocked_by": []
     },
     "fixture_generation": {
-      "status": "blocked",
-      "input_fingerprint": null,
+      "status": "complete",
+      "input_fingerprint": "a056e219af0f129902e6b45292c392a3d9d200c6c5f56e3836cb743afd90a2fc",
       "implementation_version": "process-seed-corpus-v1",
-      "configuration_hash": null,
+      "configuration_hash": "7935772f2d82da93036a429155fee3549a83b5b2da16e4d096b85afdafb21f33",
       "model_version": null,
-      "started_at": null,
-      "completed_at": null,
-      "output_paths": [],
-      "output_hashes": {},
-      "error": "missing_or_invalid_webm",
-      "blocked_by": [
-        "media_probe"
-      ]
+      "started_at": "2026-08-27T14:55:13.100472+00:00",
+      "completed_at": "2026-08-27T14:55:13.100477+00:00",
+      "output_paths": [
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/fixture_candidates.jsonl"
+      ],
+      "output_hashes": {
+        "/home/ubuntu/hokcoach/data/evaluation/replay_seeds/corpus/videos/hokclass_008/fixture_candidates.jsonl": "6481c7abeb22983c976cad416a6110215bae7d6924216cce1b298ab63ba07736"
+      },
+      "error": null,
+      "blocked_by": []
     },
     "detectors": {
       "status": "blocked",
-      "input_fingerprint": null,
+      "input_fingerprint": "96ba286a6a137c9c55d7ca58263b331dcfa39aa0ccffe1756ba927592430f5f9",
       "implementation_version": "process-seed-corpus-v1",
-      "configuration_hash": null,
+      "configuration_hash": "4d46251981b339caa04427d6b06d7f4cd2cbc0b70c40f0393c1ce274d75754f4",
       "model_version": null,
-      "started_at": null,
-      "completed_at": null,
+      "started_at": "2026-08-27T14:54:04.127529+00:00",
+      "completed_at": "2026-08-27T14:54:04.127547+00:00",
       "output_paths": [],
       "output_hashes": {},
-      "error": "missing_or_invalid_webm",
+      "error": "no existing corpus detector runner configured",
       "blocked_by": [
-        "media_probe"
+        "detector_backend"
       ]
     },
     "aggregate_participation": {
@@ -167,13 +177,13 @@
       "blocked_by": []
     },
     "retention_cleanup": {
-      "status": "pending",
-      "input_fingerprint": null,
+      "status": "complete",
+      "input_fingerprint": "a58343b344826bf797e86f8800a6a506b9d1ed4bf65dd07643d09bf4d58b51e1",
       "implementation_version": "process-seed-corpus-v1",
-      "configuration_hash": null,
+      "configuration_hash": "577bd51e0d10da42356c00b5c419bcc800e5c03af8b175e297ad4c9f0fb899a4",
       "model_version": null,
-      "started_at": null,
-      "completed_at": null,
+      "started_at": "2026-08-27T14:56:54.086917+00:00",
+      "completed_at": "2026-08-27T14:56:54.086935+00:00",
       "output_paths": [],
       "output_hashes": {},
       "error": null,
