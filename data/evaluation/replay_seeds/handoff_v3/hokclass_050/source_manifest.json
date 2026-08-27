@@ -1,0 +1,39 @@
+{
+  "schema_version": "seed-source-v3",
+  "seed_id": "hokclass_050",
+  "video_id": "D8hXADxqcJs",
+  "url": "https://www.youtube.com/watch?v=D8hXADxqcJs",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘安琪拉｜什么？1-12？｜你确定你不是来折磨我的吗？宝贝｜",
+  "hero": "安琪拉",
+  "role": "法师",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "media_probe": {
+    "status": "blocked_missing_media"
+  },
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "blocked_missing_media",
+    "media_probe": "blocked_missing_media",
+    "bootstrap_labels": "available_silver_remote_multimodal",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending",
+    "detectors": "blocked_missing_media"
+  },
+  "terminal_status": "blocked_missing_media",
+  "errors": []
+}

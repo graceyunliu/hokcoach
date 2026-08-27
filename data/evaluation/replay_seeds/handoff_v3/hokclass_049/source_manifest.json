@@ -1,0 +1,39 @@
+{
+  "schema_version": "seed-source-v3",
+  "seed_id": "hokclass_049",
+  "video_id": "b1QCk5cIO9w",
+  "url": "https://www.youtube.com/watch?v=b1QCk5cIO9w",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜线条小猪已经成神奇宝贝专属｜前期节奏堪比教科书？后期玩不来？",
+  "hero": "小乔",
+  "role": "法师",
+  "series": "神奇宝贝TV",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "media_probe": {
+    "status": "blocked_missing_media"
+  },
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "blocked_missing_media",
+    "media_probe": "blocked_missing_media",
+    "bootstrap_labels": "available_silver_remote_multimodal",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending",
+    "detectors": "blocked_missing_media"
+  },
+  "terminal_status": "blocked_missing_media",
+  "errors": []
+}

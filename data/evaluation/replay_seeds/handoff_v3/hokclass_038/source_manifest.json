@@ -1,0 +1,39 @@
+{
+  "schema_version": "seed-source-v3",
+  "seed_id": "hokclass_038",
+  "video_id": "bpSXo6Xt8Nc",
+  "url": "https://www.youtube.com/watch?v=bpSXo6Xt8Nc",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘敖隐｜今天算是为终于抓到了神奇宝贝了｜10分钟了一个大招没用过｜44%胜率卡在1400｜一点原因你自己找不到吗？你开局就屏蔽队友？我算是懂了｜",
+  "hero": "敖隐",
+  "role": "射手",
+  "series": "神奇宝贝TV",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "media_probe": {
+    "status": "blocked_missing_media"
+  },
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "blocked_missing_media",
+    "media_probe": "blocked_missing_media",
+    "bootstrap_labels": "available_silver_remote_multimodal",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending",
+    "detectors": "blocked_missing_media"
+  },
+  "terminal_status": "blocked_missing_media",
+  "errors": []
+}

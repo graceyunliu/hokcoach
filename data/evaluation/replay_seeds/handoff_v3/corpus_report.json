@@ -1,0 +1,31 @@
+{
+  "schema_version": "handoff-corpus-v3",
+  "eligible_seed_count": 100,
+  "seed_manifests": 100,
+  "commentary_segments": 1162,
+  "claims": 1162,
+  "observations": 1162,
+  "event_fixtures": 1513,
+  "capability_inventory_count": 7,
+  "capability_fixture_counts": {
+    "cooldowns": 339,
+    "deaths": 229,
+    "items_economy": 104,
+    "towers": 108,
+    "waves": 307,
+    "minimap_positions": 228,
+    "teamfights": 111,
+    "objectives": 87
+  },
+  "routing_source_categories_preserved": true,
+  "bilingual_keyword_routing": true,
+  "gameplay_time_policy": "unknown_until_gameplay_reference_alignment",
+  "stage_semantics": {
+    "bootstrap_labels": "silver only",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending"
+  },
+  "note": "Reviewer assertions are silver/unverified. Current predictions are empty; detector status is derived from media probe and capability availability."
+}

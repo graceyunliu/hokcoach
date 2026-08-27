@@ -1,0 +1,39 @@
+{
+  "schema_version": "seed-source-v3",
+  "seed_id": "hokclass_088",
+  "video_id": "huajmeIBDnE",
+  "url": "https://www.youtube.com/watch?v=huajmeIBDnE",
+  "title": "｜王者荣耀｜粉丝复盘之不知火舞｜终于不是跟我学的中路找我复盘了｜必须是天赋型选手｜",
+  "hero": "不知火舞",
+  "role": "法师",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "media_probe": {
+    "status": "blocked_missing_media"
+  },
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "blocked_missing_media",
+    "media_probe": "blocked_missing_media",
+    "bootstrap_labels": "available_silver_remote_multimodal",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending",
+    "detectors": "blocked_missing_media"
+  },
+  "terminal_status": "blocked_missing_media",
+  "errors": []
+}
