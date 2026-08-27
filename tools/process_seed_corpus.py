@@ -155,9 +155,17 @@ def process_one(root,sid,force_from=None):
     if dr.get('status') not in {'complete','blocked'}: set_stage(sm,'detectors','blocked',input_fingerprint=d_fp,configuration_hash=fp({'detectors':'existing-detectors-only'}),started_at=now(),completed_at=now(),output_paths=[],output_hashes={},error='no existing corpus detector runner configured',blocked_by=['detector_backend'])
     set_stage(sm,'aggregate_participation','pending',input_fingerprint=None,output_paths=[],output_hashes={})
     cleanup_paths=[]
-    if audio_tmp.exists() and sm['stages']['speech_to_text']['status']=='complete': cleanup_paths.append(audio_tmp.parent)
-    for owned in cleanup_paths: shutil.rmtree(owned,ignore_errors=True)
-    set_stage(sm,'retention_cleanup','complete',input_fingerprint=fp({'owned_paths':[str(x) for x in cleanup_paths]}),configuration_hash=fp({'owned_paths_only':True}),started_at=now(),completed_at=now(),output_paths=[],output_hashes={},error=None,blocked_by=[])
+    owned_present=audio_tmp.exists()
+    if owned_present and sm['stages']['speech_to_text']['status']=='complete': cleanup_paths.append(audio_tmp.parent)
+    for owned in cleanup_paths:
+        shutil.rmtree(owned,ignore_errors=True)
+        for rec in sm.get('stages',{}).values():
+            kept=[(p,h) for p,h in rec.get('output_hashes',{}).items() if not Path(p).is_relative_to(owned)]
+            rec['output_paths']=[p for p,_ in kept]
+            rec['output_hashes']={p:h for p,h in kept}
+    remaining_owned=audio_tmp.exists()
+    retention_status='complete' if not remaining_owned else 'pending'
+    set_stage(sm,'retention_cleanup',retention_status,input_fingerprint=fp({'owned_paths':[str(audio_tmp)]}),configuration_hash=fp({'owned_paths_only':True}),started_at=now(),completed_at=now() if retention_status=='complete' else None,output_paths=[],output_hashes={},error=None if retention_status=='complete' else 'awaiting successful STT completion before deleting owned temporary audio',blocked_by=[] if retention_status=='complete' else ['speech_to_text'])
     save_stage(smp,sm)
     return {'seed_id':sid,'status':'processed','media_probe':p,'stage_manifest':str(smp)}
 def rebuild(root):

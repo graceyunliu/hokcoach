@@ -10,10 +10,10 @@
   },
   "canonical": {
     "chinese_ocr_observations": 0,
-    "chinese_commentary_segments": 0,
-    "claims": 0,
+    "chinese_commentary_segments": 48,
+    "claims": 123,
     "reviewer_observations": 0,
-    "event_fixtures": 0
+    "event_fixtures": 123
   },
   "canonical_language": "zh",
   "bootstrap_language": "en",

@@ -5,13 +5,13 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 class StableRebuildTests(unittest.TestCase):
-    def test_bootstrap_only_corpus_counts(self):
+    def test_current_corpus_counts_and_bootstrap_invariant(self):
         report=json.loads((ROOT/'data/evaluation/replay_seeds/corpus/aggregates/corpus_report.json').read_text())
         self.assertEqual(report['bootstrap']['chinese_windowed_caption_hints'],242)
         self.assertEqual(report['canonical']['chinese_ocr_observations'],0)
-        self.assertEqual(report['canonical']['chinese_commentary_segments'],0)
-        self.assertEqual(report['canonical']['claims'],0)
-        self.assertEqual(report['canonical']['event_fixtures'],0)
+        self.assertEqual(report['canonical']['chinese_commentary_segments'],48)
+        self.assertEqual(report['canonical']['claims'],123)
+        self.assertEqual(report['canonical']['event_fixtures'],123)
 
     def test_requested_hokclass_065_transcripts_are_empty(self):
         t=ROOT/'data/evaluation/replay_seeds/corpus/videos/hokclass_065/transcript'

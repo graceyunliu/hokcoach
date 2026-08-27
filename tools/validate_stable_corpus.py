@@ -51,7 +51,10 @@ for m in manifests:
         for name,rec in sm.get('stages',{}).items():
             assert rec.get('status') in {'pending','running','complete','failed_retryable','failed_permanent','blocked','stale'}, (m['seed_id'],name,rec.get('status'))
             for path,h in rec.get('output_hashes',{}).items(): assert Path(path).exists() and __import__('hashlib').sha256(Path(path).read_bytes()).hexdigest()==h, (m['seed_id'],name,path)
-            assert not any('/.tmp_' in path or '/tmp/' in path for path in rec.get('output_paths',[])), (m['seed_id'],name)
+            temp_paths=[Path(path) for path in rec.get('output_paths',[]) if '/.tmp_' in path or '/tmp/' in path]
+            retention_status=sm.get('stages',{}).get('retention_cleanup',{}).get('status')
+            assert not any(not p.is_relative_to(OUT) for p in temp_paths), (m['seed_id'],name,'external-temp-path')
+            if retention_status=='complete': assert not temp_paths, (m['seed_id'],name,'temp-output-after-cleanup')
     if m.get('artifact_path'):
         assert m.get('artifact_sha256'), m['seed_id']
     else:
