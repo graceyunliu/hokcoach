@@ -1,0 +1,41 @@
+{
+  "schema_version": "seed-source-v4",
+  "seed_id": "hokclass_014",
+  "video_id": "tisYvla3eJQ",
+  "url": "https://www.youtube.com/watch?v=tisYvla3eJQ",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘花木兰｜历史小国花木兰｜巅峰1400被打成2-10｜毋庸置疑必须是宝贝｜",
+  "hero": "花木兰",
+  "role": "对抗",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": {
+      "value": 1400,
+      "unit": "peak_score",
+      "evidence": "title-cue"
+    },
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "media_probe": {
+    "status": "blocked_missing_media"
+  },
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "blocked_missing_media",
+    "media_probe": "blocked_missing_media",
+    "bootstrap_labels": "available_silver_remote_multimodal",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending",
+    "detectors": "blocked_missing_media"
+  },
+  "terminal_status": "blocked_missing_media"
+}

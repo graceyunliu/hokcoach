@@ -1,0 +1,32 @@
+{
+  "schema_version": "handoff-corpus-v4",
+  "generator_version": "claim-model-v3-stable-corpus",
+  "eligible_seed_count": 100,
+  "source_segments": 1162,
+  "reviewer_observations": 1162,
+  "claims": 1378,
+  "event_fixtures": 1357,
+  "capability_inventory_count": 7,
+  "source_segment_model": "one_source_segment_to_one_reviewer_observation_to_one_or_more_child_claims",
+  "caption_records_raw": 242,
+  "caption_intervals_reconstructed": 242,
+  "caption_context_only_intervals": 4,
+  "capability_fixture_counts": {
+    "cooldowns": 349,
+    "deaths": 103,
+    "items_economy": 110,
+    "towers": 84,
+    "waves": 274,
+    "minimap_positions": 239,
+    "teamfights": 116,
+    "objectives": 82
+  },
+  "gameplay_time_policy": "unknown_until_gameplay_reference_alignment",
+  "stage_semantics": {
+    "bootstrap_labels": "silver only",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending"
+  }
+}

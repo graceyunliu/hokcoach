@@ -59,11 +59,15 @@ def category_caps(category: str) -> list[str]:
     c = (category or '').strip().lower().replace(' ', '_')
     return list(CATEGORY_MAP.get(c, []))
 
+def _term_matches(text: str, term: str) -> bool:
+    if any('\u4e00' <= ch <= '\u9fff' for ch in term):
+        return term in text
+    return re.search(r'(?<![A-Za-z0-9_])' + re.escape(term.lower()) + r'(?![A-Za-z0-9_])', text.lower()) is not None
+
 def relevant_capabilities(text: str, category: str = '') -> list[str]:
     found = set(category_caps(category))
-    low = (text or '').lower()
     for cap, words in KEYWORDS.items():
-        if any(w.lower() in low for w in words): found.add(cap)
+        if any(_term_matches(text or '', w) for w in words): found.add(cap)
     return sorted(found)
 
 def claim_type(text: str, category: str) -> str:
@@ -80,7 +84,7 @@ def claim_type(text: str, category: str) -> str:
 
 def split_assertions(text: str) -> list[str]:
     """Split reviewer prose into atomic assertions without inventing gameplay timing."""
-    parts = [p.strip(' ，,') for p in re.split(r'[。！？!?；;]+', text or '') if p.strip(' ，,')]
+    parts = [p.strip(' ，,') for p in re.split(r'[。！？!?；;.]+', text or '') if p.strip(' ，,')]
     return parts or ([text.strip()] if text and text.strip() else [])
 
 def probe_media(path: Path) -> dict[str, Any]:
