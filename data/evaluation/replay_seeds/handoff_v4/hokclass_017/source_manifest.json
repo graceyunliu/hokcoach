@@ -1,0 +1,41 @@
+{
+  "schema_version": "seed-source-v4",
+  "seed_id": "hokclass_017",
+  "video_id": "O8rOf8jL4ug",
+  "url": "https://www.youtube.com/watch?v=O8rOf8jL4ug",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘裴擒虎｜打野位神奇宝贝卡巅峰1200一个月｜神奇宝贝算不上｜最多是个草里虫｜",
+  "hero": "裴擒虎",
+  "role": "打野",
+  "series": "神奇宝贝TV",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": {
+      "value": 1200,
+      "unit": "peak_score",
+      "evidence": "title-cue"
+    },
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "media_probe": {
+    "status": "blocked_missing_media"
+  },
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "blocked_missing_media",
+    "media_probe": "blocked_missing_media",
+    "bootstrap_labels": "available_silver_remote_multimodal",
+    "speech_to_text": "pending",
+    "caption_ocr": "pending",
+    "ocr_stt_alignment": "pending",
+    "gameplay_reference_alignment": "pending",
+    "detectors": "blocked_missing_media"
+  },
+  "terminal_status": "blocked_missing_media"
+}
