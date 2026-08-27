@@ -38,6 +38,20 @@ def load_local_secrets(path: Path = SECRETS_PATH) -> None:
             os.environ.setdefault(key, value)
 
 
+def _split_inline_items(raw: str) -> list[str]:
+    items=[]; start=0; depth=0; quote=None
+    for i,ch in enumerate(raw):
+        if quote:
+            if ch==quote: quote=None
+        elif ch in "\\\"'": quote=ch
+        elif ch in "[{": depth+=1
+        elif ch in "]}": depth-=1
+        elif ch==',' and depth==0:
+            items.append(raw[start:i].strip()); start=i+1
+    items.append(raw[start:].strip())
+    return items
+
+
 def _parse_scalar(raw: str) -> Any:
     s = raw.strip()
     if s == "" or s in ("null", "~", "None"):
@@ -50,11 +64,11 @@ def _parse_scalar(raw: str) -> Any:
         return s[1:-1]
     if s.startswith("[") and s.endswith("]"):
         inner = s[1:-1].strip()
-        return [_parse_scalar(x) for x in inner.split(",")] if inner else []
+        return [_parse_scalar(x) for x in _split_inline_items(inner)] if inner else []
     if s.startswith("{") and s.endswith("}"):
         inner = s[1:-1].strip()
         out: dict[str, Any] = {}
-        for part in inner.split(","):
+        for part in _split_inline_items(inner):
             if ":" in part:
                 k, _, v = part.partition(":")
                 out[k.strip()] = _parse_scalar(v)
