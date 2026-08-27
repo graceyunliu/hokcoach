@@ -1,0 +1,39 @@
+{
+  "schema_version": "seed-source-v1",
+  "seed_id": "hokclass_039",
+  "video_id": "0vF6F-FACuc",
+  "url": "https://www.youtube.com/watch?v=0vF6F-FACuc",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘西施｜省标是你的目标？这7000战力感觉一半是场次堆的｜",
+  "hero": "西施",
+  "role": "法师",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": {
+      "value": 7000,
+      "unit": "hero_power",
+      "hero": "西施",
+      "evidence": "title-cue"
+    }
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "pending",
+    "media_probe": "pending",
+    "speech_to_text": "silver_remote_multimodal",
+    "caption_ocr": "pending",
+    "alignment": "silver_remote_multimodal",
+    "detectors": "pending"
+  },
+  "terminal_status": "labeled_silver",
+  "errors": []
+}

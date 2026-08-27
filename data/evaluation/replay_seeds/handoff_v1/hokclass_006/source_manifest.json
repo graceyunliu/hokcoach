@@ -1,0 +1,39 @@
+{
+  "schema_version": "seed-source-v1",
+  "seed_id": "hokclass_006",
+  "video_id": "7_JF8s0S4x0",
+  "url": "https://www.youtube.com/watch?v=7_JF8s0S4x0",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘小乔｜排位百星被1200巅峰赛打成5-14｜还敢不知道原因在哪里？",
+  "hero": "小乔",
+  "role": "法师",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": {
+      "label": "百星",
+      "value": 100,
+      "unit": "stars",
+      "evidence": "title-cue"
+    },
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "pending",
+    "media_probe": "pending",
+    "speech_to_text": "silver_remote_multimodal",
+    "caption_ocr": "pending",
+    "alignment": "silver_remote_multimodal",
+    "detectors": "pending"
+  },
+  "terminal_status": "labeled_silver",
+  "errors": []
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": "seed-source-v1",
+  "seed_id": "hokclass_125",
+  "video_id": "xSkMAIdqUjw",
+  "url": "https://www.youtube.com/watch?v=xSkMAIdqUjw",
+  "title": "【王者荣耀】孙膑高分句里的超标辅助，为什么在低分段却被人各种嫌弃今天一期视频带你真正了解孙膑明白到底如何玩好这个英雄#孙膑#辅助#王者荣耀 #HonorofKings #hok",
+  "hero": "孙膑",
+  "role": "辅助",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "pending",
+    "media_probe": "pending",
+    "speech_to_text": "silver_remote_multimodal",
+    "caption_ocr": "pending",
+    "alignment": "silver_remote_multimodal",
+    "detectors": "pending"
+  },
+  "terminal_status": "labeled_silver",
+  "errors": []
+}

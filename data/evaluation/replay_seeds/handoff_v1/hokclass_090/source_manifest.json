@@ -1,0 +1,34 @@
+{
+  "schema_version": "seed-source-v1",
+  "seed_id": "hokclass_090",
+  "video_id": "jDwgrNF_HNc",
+  "url": "https://www.youtube.com/watch?v=jDwgrNF_HNc",
+  "title": "｜王者荣耀｜粉丝复盘之安琪拉｜12连跪被匹配机制制裁｜这是匹配机制黑的最惨的一次｜",
+  "hero": "安琪拉",
+  "role": "法师",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "pending",
+    "media_probe": "pending",
+    "speech_to_text": "silver_remote_multimodal",
+    "caption_ocr": "pending",
+    "alignment": "silver_remote_multimodal",
+    "detectors": "pending"
+  },
+  "terminal_status": "labeled_silver",
+  "errors": []
+}

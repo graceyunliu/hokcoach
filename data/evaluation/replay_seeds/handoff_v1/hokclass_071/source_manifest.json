@@ -1,0 +1,43 @@
+{
+  "schema_version": "seed-source-v1",
+  "seed_id": "hokclass_071",
+  "video_id": "C447HrpEU4Q",
+  "url": "https://www.youtube.com/watch?v=C447HrpEU4Q",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘之小乔｜排位百星来打巅峰赛1200被4个队友说不会玩｜",
+  "hero": "小乔",
+  "role": "法师",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": {
+      "label": "百星",
+      "value": 100,
+      "unit": "stars",
+      "evidence": "title-cue"
+    },
+    "peak_score": {
+      "value": 1200,
+      "unit": "peak_score",
+      "evidence": "title-cue"
+    },
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "pending",
+    "media_probe": "pending",
+    "speech_to_text": "silver_remote_multimodal",
+    "caption_ocr": "pending",
+    "alignment": "silver_remote_multimodal",
+    "detectors": "pending"
+  },
+  "terminal_status": "labeled_silver",
+  "errors": []
+}

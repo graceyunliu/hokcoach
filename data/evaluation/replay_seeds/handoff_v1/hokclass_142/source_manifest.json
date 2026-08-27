@@ -1,0 +1,34 @@
+{
+  "schema_version": "seed-source-v1",
+  "seed_id": "hokclass_142",
+  "video_id": "j6V2tFR1am0",
+  "url": "https://www.youtube.com/watch?v=j6V2tFR1am0",
+  "title": "｜王者荣耀｜当中路85段法王玩射手时｜那就是高地规划大师｜排位赛",
+  "hero": "澜",
+  "role": "射手",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "pending",
+    "media_probe": "pending",
+    "speech_to_text": "silver_remote_multimodal",
+    "caption_ocr": "pending",
+    "alignment": "silver_remote_multimodal",
+    "detectors": "pending"
+  },
+  "terminal_status": "labeled_silver",
+  "errors": []
+}

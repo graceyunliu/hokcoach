@@ -1,0 +1,34 @@
+{
+  "schema_version": "seed-source-v1",
+  "seed_id": "hokclass_066",
+  "video_id": "jJnLU7g34F0",
+  "url": "https://www.youtube.com/watch?v=jJnLU7g34F0",
+  "title": "｜王者荣耀｜Hok｜粉丝复盘之奕星｜是谁把我家粉丝打哭了？排位和巅峰赛都输｜",
+  "hero": "奕星",
+  "role": "法师",
+  "series": "其他",
+  "rank_profile": {
+    "regular_rank": null,
+    "peak_score": null,
+    "hero_power": null
+  },
+  "artifact_path": null,
+  "artifact_sha256": null,
+  "capture_method": null,
+  "timestamp_contract": {
+    "captured_media_presentation_time": "unknown",
+    "normalized_derivative_time": "unknown",
+    "reviewer_speech_caption_time": "unknown",
+    "referenced_gameplay_time": "unknown"
+  },
+  "stage_status": {
+    "acquisition": "pending",
+    "media_probe": "pending",
+    "speech_to_text": "silver_remote_multimodal",
+    "caption_ocr": "pending",
+    "alignment": "silver_remote_multimodal",
+    "detectors": "pending"
+  },
+  "terminal_status": "labeled_silver",
+  "errors": []
+}

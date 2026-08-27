@@ -1,0 +1,28 @@
+{
+  "schema_version": "handoff-corpus-v1",
+  "eligible_seed_count": 100,
+  "seed_manifests": 100,
+  "commentary_segments": 920,
+  "claims": 920,
+  "observations": 920,
+  "fixtures": 1000,
+  "missing_capability_records": 700,
+  "capability_status": {
+    "deaths": "implemented_partial",
+    "minimap_positions": "implemented_partial",
+    "audio": "implemented_partial",
+    "objectives": "capability_missing",
+    "towers": "capability_missing",
+    "lifecycle": "capability_missing",
+    "items_economy": "capability_missing",
+    "waves": "capability_missing",
+    "teamfights": "capability_missing",
+    "cooldowns": "capability_missing"
+  },
+  "typed_rank_dimensions": {
+    "regular_rank": "preserved",
+    "peak_score": "preserved",
+    "hero_power": "preserved"
+  },
+  "note": "Reviewer-derived silver labels are not gameplay ground truth; missing detectors remain explicit."
+}
