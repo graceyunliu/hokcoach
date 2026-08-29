@@ -1,8 +1,21 @@
 # Honor of Kings AI Coach
 
-An AI-powered replay coach for **Honor of Kings (王者荣耀)** that analyzes gameplay evidence and turns it into personalized, actionable feedback about player decisions.
+An AI-powered coaching system for **Honor of Kings (王者荣耀)** that analyzes gameplay context and provides actionable, personalized coaching.
 
-> HokCoach explores how an AI system can coach from incomplete multimodal evidence—video, HUD state, game audio, and player context—without presenting guesses as facts.
+The goal is not to build another generic game chatbot. HokCoach is designed to help players understand **what they should have done differently, why it mattered, and what to do next time**.
+
+## What It Does
+
+The coach is designed to:
+
+- Analyze gameplay and game-state information.
+- Identify important decisions, mistakes, and opportunities.
+- Reason about *why* a decision was suboptimal.
+- Prioritize the highest-impact coaching opportunities.
+- Provide specific, actionable recommendations.
+- Adapt advice to the player's situation rather than relying only on generic game rules.
+
+HokCoach explores how an AI system can do this from incomplete multimodal evidence—video, HUD state, game audio, and player context—without presenting guesses as facts.
 
 ## Demo
 
@@ -85,16 +98,16 @@ Verify it at [http://localhost:8000/health](http://localhost:8000/health), then 
 ## How It Works
 
 ```mermaid
-flowchart LR
-    A["Replay video or manual input"] --> B["Media and HUD extractors"]
-    B --> C["Normalized observations"]
-    C --> D["Evidence timeline"]
-    D --> E["Detector and fusion stages"]
-    E --> F["Replay reasoning"]
-    G["Player profile"] --> F
-    H["Reviewed coaching knowledge"] --> F
-    F --> I["Evidence-linked coaching feedback"]
-    I --> J["Training tasks and progress history"]
+flowchart TD
+    A["Game and player context"] --> B["Context extraction"]
+    B --> C["Normalized evidence timeline"]
+    C --> D["Game-state analysis"]
+    D --> E["Decision identification"]
+    E --> F["Alternative evaluation"]
+    F --> G["Coaching prioritization"]
+    G --> H["Actionable feedback"]
+    H --> I["Training tasks and progress history"]
+    J["Reviewed coaching knowledge"] --> D
 ```
 
 ### Replay evidence workflow
@@ -102,9 +115,10 @@ flowchart LR
 1. **Acquire evidence.** The replay pipeline reads supported HUD regions, death/KDA changes, minimap signals, and game audio. Manual replay input remains available when extraction is unsupported.
 2. **Normalize observations.** Each signal records its source, timestamp, detector version, confidence, and evidence state.
 3. **Build a match timeline.** Independent observations are ordered without discarding conflicting evidence.
-4. **Fuse cautiously.** Detector stages combine atomic evidence for lifecycle, objectives, economy, waves, teamfights, and cooldown readiness.
-5. **Generate coaching.** The replay engine combines supported match evidence with the player's profile and reviewed coaching principles.
-6. **Close the loop.** Feedback becomes training tasks, check-ins, weekly reviews, and progress history.
+4. **Analyze decisions.** Detector and reasoning stages identify supported decisions, mistakes, and opportunities across lifecycle, objectives, economy, waves, teamfights, and cooldown readiness.
+5. **Evaluate alternatives.** The coach considers what information and options were available, then compares plausible alternatives without inventing missing state.
+6. **Prioritize coaching.** The replay engine combines supported match evidence with the player's profile and reviewed coaching principles to select the highest-impact lesson.
+7. **Close the loop.** Feedback becomes a concrete next action, training task, check-in, weekly review, and progress history.
 
 The key state distinction is intentional:
 
@@ -175,7 +189,49 @@ Compact labels and reports are stored under `data/evaluation/operator_labeling/`
 
 ## Product and AI Design
 
-### Why an AI coach?
+### Why I built this
+
+I wanted to explore what an AI coach could look like when it is grounded in the actual decision-making context of a game rather than simply answering questions about game mechanics.
+
+Traditional game guides tell you what is generally optimal:
+
+> “Build this item.”
+>
+> “Rotate at this time.”
+>
+> “Don't overextend.”
+
+But real gameplay is contextual. The right decision depends on the game state, the player's role, teammates, opponents, timing, resources, and what happened previously.
+
+That makes coaching an interesting agent problem: **the AI needs to reason about context, identify the most important mistake or opportunity, and translate that reasoning into advice a player can actually apply.**
+
+### Product approach: coach the decision
+
+The core product principle is:
+
+> **Coach the decision, not just the outcome.**
+
+A player does not necessarily improve by being told that a play was “wrong.” They improve by understanding:
+
+1. What happened?
+2. What information was available at the time?
+3. What options did the player have?
+4. Which decision had the higher probability of success?
+5. Why?
+6. What should the player recognize next time?
+
+This creates a coaching loop rather than simply generating commentary.
+
+### Project goals
+
+- Reconstruct enough game context to evaluate decisions rather than only outcomes.
+- Turn evidence into prioritized coaching instead of an exhaustive event summary.
+- Personalize recommendations to the player's role, goals, constraints, and recurring patterns.
+- Make every important coaching claim traceable to evidence and explicit uncertainty.
+- Convert each review into a behavior the player can recognize and practice in the next match.
+- Measure detector quality and abstain when the recording cannot support a reliable conclusion.
+
+### Why this is an AI coaching problem
 
 Most game assistants answer mechanics questions or summarize statistics. HokCoach is designed around a different question: can software reconstruct enough match context to explain **why a decision succeeded or failed**, then turn that explanation into the next practice task?
 
