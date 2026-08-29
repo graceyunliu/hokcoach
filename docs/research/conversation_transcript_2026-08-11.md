@@ -277,7 +277,7 @@ One question, and I want the honest answer, not the flattering one: did you grav
 
 **Grace:** summarize in depth everything in this chat about 王者荣耀
 
-**Claude:** *(produced the document `wzry_content_and_ai_coach_summary.md` — an in-depth structured summary of the 王者荣耀 discussion)*
+**Claude:** *(produced the document `../product/wzry_content_and_ai_coach_summary.md` — an in-depth structured summary of the 王者荣耀 discussion)*
 
 ---
 

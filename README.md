@@ -270,6 +270,7 @@ HokCoach addresses this by making provenance and abstention part of the architec
 
 - [Coach application guide](coach/README.md)
 - [Production detector architecture](docs/production_detector_architecture.md)
-- [Replay corpus system design](seed_corpus_system_design.md)
+- [Documentation index](docs/README.md)
+- [Replay corpus system design](docs/architecture/seed_corpus_system_design.md)
 
 HokCoach is under active development. Metrics are pilot or stress-set results unless explicitly identified as held-out, multi-video evaluation.

@@ -24,10 +24,10 @@ Direct diagnostic calls confirmed the root cause is the VLM itself, not the samp
 
 - Re-querying the **exact same saved frame** 4 times in a row (temperature=0, identical bytes) returned `[3,0,1]`, `[3,0,1]`, `[3,0,1]`, then `null` on the 4th call.
 - Cross-checking the pipeline's logged counter values against fresh reads of the same timestamps did not match at all — e.g. the pipeline logged `kda_before=(1,3,0)` at one boundary; a fresh read of that same instant returned `[3,0,1]`.
-- Visually confirming ground truth by eye (see `assets/age131_kda_hud_example.png`) showed the VLM's misreads take two distinct forms: **digit misreads** (reading "2" as "10") and **field-swap errors** (reporting kills and deaths in the wrong slots — at ts=450 the VLM reported `[2,1,0]` when the true value, confirmed visually, was `(K=1, D=2, A=0)`).
+- Visually confirming ground truth by eye (see `../../assets/age131_kda_hud_example.png`) showed the VLM's misreads take two distinct forms: **digit misreads** (reading "2" as "10") and **field-swap errors** (reporting kills and deaths in the wrong slots — at ts=450 the VLM reported `[2,1,0]` when the true value, confirmed visually, was `(K=1, D=2, A=0)`).
 - The VLM also appears to occasionally confuse the on-screen **team kill score** ("2 vs 10" — a different, unrelated number rendered directly above the personal KDA row) with the personal death counter, which plausibly explains the observed "jump to 10" artifact.
 
-![Ground-truth HUD frame used to catch the VLM's error: true value is K=1, D=2, A=0. The VLM read this as (2,1,0) — kills and deaths swapped.](assets/age131_kda_hud_example.png)
+![Ground-truth HUD frame used to catch the VLM's error: true value is K=1, D=2, A=0. The VLM read this as (2,1,0) — kills and deaths swapped.](../../assets/age131_kda_hud_example.png)
 
 This is a known class of failure for general-purpose VLMs on small, isolated visual elements: research on VLM OCR reliability (e.g. "Reading or Guessing? Visual Grounding Failures of VLMs for OCR", and the VLM-OCR-in-dynamic-video benchmark) documents that these models frequently produce plausible-but-visually-unsupported text for small UI elements, leaning on language priors rather than actually reading pixels — consistent with what was observed here.
 
@@ -56,14 +56,14 @@ All work in this section is a standalone scratch prototype (`/tmp/age131_templat
 
 The KDA HUD row renders three single-digit counters (kills/deaths/assists) next to three fixed icons (sword/skull/fist). Because these are UI elements docked at a fixed screen position, their pixel coordinates are stable across frames — confirmed empirically by locating the icon bounding boxes across four different timestamps and finding them unchanged (sword icon consistently at x≈380, skull at x≈467, fist at x≈552, within the 650×140 HUD crop).
 
-![Isolated digit-slot region (sword/kill, skull/death, fist/assist) used as the fixed crop boxes for template matching.](assets/age131_kda_slots_crop.png)
+![Isolated digit-slot region (sword/kill, skull/death, fist/assist) used as the fixed crop boxes for template matching.](../../assets/age131_kda_slots_crop.png)
 
 ### 4.2 Pipeline
 
 1. **Crop** a fixed pixel box immediately after each icon (three boxes: kill/death/assist).
 2. **Threshold** each box with Otsu adaptive thresholding on grayscale (not a fixed brightness cutoff — digit brightness varies frame to frame with the underlying map/compression; a fixed `V>150` HSV cutoff was tried first and silently missed two ground-truth frames where max brightness was only 127-132).
 
-![One of the low-contrast frames a fixed brightness threshold silently missed (max V=127, below the 150 cutoff) — this is what pushed the fix to Otsu adaptive thresholding.](assets/age131_kda_low_contrast_example.png)
+![One of the low-contrast frames a fixed brightness threshold silently missed (max V=127, below the 150 cutoff) — this is what pushed the fix to Otsu adaptive thresholding.](../../assets/age131_kda_low_contrast_example.png)
 3. **Isolate the glyph** via connected-component analysis, taking the largest blob as the digit shape.
 4. **Normalize**: aspect-ratio-preserving resize into a fixed 32×32 canvas, centered (a naive stretch-to-size resize was tried first and specifically broke the digit "1" by warping its narrow shape — see §4.4).
 5. **Compare** against a reference library of stored digit glyphs using `cv2.matchTemplate` (`TM_CCOEFF_NORMED`); take the highest-scoring digit as the reading.
@@ -81,19 +81,19 @@ The KDA HUD row renders three single-digit counters (kills/deaths/assists) next 
 | v3 — + aspect-preserving center-pad resize | 11/14 (79%) | fixed glyph distortion for most digits |
 | v4 — + multiple reference exemplars per digit (5 templates for "1" instead of 1, sourced from 3 additional real frames not in the test set) | **14/14 (100%)** | fixed the remaining 3 misses, all the digit "1" |
 
-![Accuracy climbing from 57% to 100% across four iterations, each fixing a specific, diagnosed failure mode.](assets/age131_chart_accuracy.png)
+![Accuracy climbing from 57% to 100% across four iterations, each fixing a specific, diagnosed failure mode.](../../assets/age131_chart_accuracy.png)
 
 The v3→v4 fix is the one worth understanding in depth: every remaining error was the digit "1" specifically, misread only when tested against a frame different from the single frame its template was built from. "1" is a thin vertical stroke, more sensitive to per-frame rendering variance (JPEG/HEVC compression, background bleed-through) than the other digits. A single reference example wasn't representative. Adding 3 more real examples of "1" from different frames/backgrounds, and matching against the best score across **all** stored exemplars of a digit (not just one), resolved every remaining case. This is not a new algorithm — same comparison, same math — just a more representative reference set.
 
 Confidence scores separated cleanly: correct matches scored 0.85-1.0; the "1" misconfusions (pre-fix) scored 0.39-0.51 — a usable, thresholdable confidence signal that the VLM does not provide.
 
-![Match confidence scores for correct vs. incorrect reads, before the exemplar fix. Right and wrong answers cluster on opposite sides of a clean gap — a signal the VLM never gives you.](assets/age131_chart_confidence.png)
+![Match confidence scores for correct vs. incorrect reads, before the exemplar fix. Right and wrong answers cluster on opposite sides of a clean gap — a signal the VLM never gives you.](../../assets/age131_chart_confidence.png)
 
 ### 4.5 Determinism check
 
 The same saved frame was matched 5 times in a row: identical output and identical scores every time (`(2, 3, 3)`, scores `(0.947, 0.991, 0.998)`, all 5 calls). Contrast with the VLM's 4-calls-on-the-same-image test in §2, which produced 2 different outputs (3 identical, then a `null` refusal).
 
-![Same frame, repeated calls: the VLM changes its answer (and once refuses outright) while template matching returns the identical result every time.](assets/age131_chart_determinism.png)
+![Same frame, repeated calls: the VLM changes its answer (and once refuses outright) while template matching returns the identical result every time.](../../assets/age131_chart_determinism.png)
 
 ### 4.6 Head-to-head vs. the VLM (3 frames with both readings available)
 
@@ -107,7 +107,7 @@ The same saved frame was matched 5 times in a row: identical output and identica
 
 The figure below is a static reconstruction of the interactive walkthrough reviewed during this investigation — same layout, colors, and data, laid out as one summary view (pipeline steps, the reference-digit library with per-digit exemplar counts, the 79%→100% fix, the determinism comparison, and the head-to-head table all together).
 
-![Full summary explainer: pipeline, reference-digit library, the 79%→100% fix, determinism comparison, and head-to-head table.](assets/age131_widget_explainer.png)
+![Full summary explainer: pipeline, reference-digit library, the 79%→100% fix, determinism comparison, and head-to-head table.](../../assets/age131_widget_explainer.png)
 
 ---
 
