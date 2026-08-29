@@ -8,6 +8,8 @@ pyyaml
 # 另需系统安装 ffmpeg/ffprobe（非pip包）
 opencv-python
 numpy
+# Deterministic tower templates and calibration overlays
+pillow
 
 # 知识库冷启动：YouTube字幕拉取（python -m utils.transcript_utils）
 youtube-transcript-api
