@@ -1,0 +1,1081 @@
+{
+  "schema_version": "hokcoach-kda-audio-resampled-fusion-audit-v1",
+  "samples": 38,
+  "both_kda_readable": 35,
+  "positive_samples": 27,
+  "positive_with_player_kill_or_death_change": 2,
+  "negative_with_player_kill_or_death_change": 0,
+  "rows": [
+    {
+      "candidate_id": "v01_001_537_56",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 537.56,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_001/clips/v01_001_537_56.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "enemy has been slain",
+      "split": "tuning",
+      "probability": 0.992995,
+      "predicted": 1,
+      "kda_before": [
+        3,
+        1,
+        4
+      ],
+      "kda_after": [
+        3,
+        1,
+        4
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v01_002_821_22",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 821.22,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_001/clips/v01_002_821_22.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.861444,
+      "predicted": 1,
+      "kda_before": [
+        6,
+        3,
+        9
+      ],
+      "kda_after": [
+        6,
+        3,
+        9
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v01_003_926_76",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 926.76,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_001/clips/v01_003_926_76.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.974308,
+      "predicted": 1,
+      "kda_before": [
+        6,
+        3,
+        9
+      ],
+      "kda_after": [
+        6,
+        3,
+        9
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v02_001_685_66",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 685.66,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_001/clips/v02_001_685_66.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "ally slain",
+      "split": "tuning",
+      "probability": 0.983503,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        3,
+        3
+      ],
+      "kda_after": [
+        2,
+        3,
+        3
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v01_002_770_50",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 770.5,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v01_002_770_50.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.930394,
+      "predicted": 1,
+      "kda_before": [
+        6,
+        2,
+        9
+      ],
+      "kda_after": [
+        6,
+        3,
+        9
+      ],
+      "kda_delta": [
+        0,
+        1,
+        0
+      ],
+      "player_kill_or_death_change": true
+    },
+    {
+      "candidate_id": "v01_003_812_04",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 812.04,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v01_003_812_04.mp4",
+      "target": 1,
+      "operator_verdict": "incorrect",
+      "operator_note": "enemy has been slain",
+      "split": "tuning",
+      "probability": 0.940501,
+      "predicted": 1,
+      "kda_before": [
+        6,
+        3,
+        9
+      ],
+      "kda_after": [
+        6,
+        3,
+        9
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v02_002_368_40",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 368.4,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v02_002_368_40.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.990439,
+      "predicted": 1,
+      "kda_before": [
+        0,
+        0,
+        1
+      ],
+      "kda_after": [
+        0,
+        0,
+        1
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v02_003_417_42",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 417.42,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v02_003_417_42.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.986809,
+      "predicted": 1,
+      "kda_before": [
+        0,
+        0,
+        1
+      ],
+      "kda_after": [
+        0,
+        0,
+        1
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v02_005_625_82",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 625.82,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v02_005_625_82.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.993009,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        2,
+        2
+      ],
+      "kda_after": [
+        2,
+        2,
+        2
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v03_001_567_34",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 567.34,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v03_001_567_34.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "enemy rampage",
+      "split": "evaluation",
+      "probability": 0.979816,
+      "predicted": 1,
+      "kda_before": [
+        1,
+        3,
+        1
+      ],
+      "kda_after": [
+        1,
+        3,
+        1
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v03_002_714_88",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 714.88,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v03_002_714_88.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "",
+      "split": "evaluation",
+      "probability": 0.987384,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        4,
+        3
+      ],
+      "kda_after": [
+        2,
+        4,
+        4
+      ],
+      "kda_delta": [
+        0,
+        0,
+        1
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v03_003_717_72",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 717.72,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v03_003_717_72.mp4",
+      "target": 1,
+      "operator_verdict": "incorrect",
+      "operator_note": "enemy legendary",
+      "split": "evaluation",
+      "probability": 0.993063,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        4,
+        4
+      ],
+      "kda_after": [
+        2,
+        4,
+        4
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v03_004_728_58",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 728.58,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v03_004_728_58.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "",
+      "split": "evaluation",
+      "probability": 0.997178,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        4,
+        4
+      ],
+      "kda_after": [
+        2,
+        4,
+        4
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "v03_005_775_38",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 775.38,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_batch_002_boundary/clips/v03_005_775_38.mp4",
+      "target": 1,
+      "operator_verdict": "correct",
+      "operator_note": "",
+      "split": "evaluation",
+      "probability": 0.415807,
+      "predicted": 0,
+      "kda_before": [
+        2,
+        4,
+        4
+      ],
+      "kda_after": [
+        2,
+        4,
+        4
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v01_01_234_41",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 234.414,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v01_01_234_41.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "first blood",
+      "split": "tuning",
+      "probability": 0.99637,
+      "predicted": 1,
+      "kda_before": [
+        0,
+        0,
+        0
+      ],
+      "kda_after": [
+        0,
+        0,
+        0
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v01_02_468_83",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 468.828,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v01_02_468_83.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "an enemy has been slain",
+      "split": "tuning",
+      "probability": 0.958485,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        0,
+        3
+      ],
+      "kda_after": [
+        2,
+        0,
+        3
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v01_03_703_24",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 703.242,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v01_03_703_24.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "shut down and unstoppable both showed up",
+      "split": "tuning",
+      "probability": 0.953969,
+      "predicted": 1,
+      "kda_before": [
+        6,
+        2,
+        9
+      ],
+      "kda_after": [
+        6,
+        2,
+        9
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v01_04_954_66",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 954.656,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v01_04_954_66.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "shut down (I killed an enemy). then you have been slain (I died)",
+      "split": "tuning",
+      "probability": 0.954114,
+      "predicted": 1,
+      "kda_before": [
+        6,
+        3,
+        9
+      ],
+      "kda_after": [
+        7,
+        3,
+        9
+      ],
+      "kda_delta": [
+        1,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": true
+    },
+    {
+      "candidate_id": "gap_v02_01_166_81",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 166.814,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v02_01_166_81.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.000598,
+      "predicted": 0,
+      "kda_before": null,
+      "kda_after": null,
+      "kda_delta": null,
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v02_02_333_63",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 333.628,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v02_02_333_63.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.003518,
+      "predicted": 0,
+      "kda_before": [
+        0,
+        0,
+        1
+      ],
+      "kda_after": [
+        0,
+        0,
+        1
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v02_03_517_44",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 517.443,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v02_03_517_44.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.021156,
+      "predicted": 0,
+      "kda_before": [
+        1,
+        1,
+        1
+      ],
+      "kda_after": [
+        1,
+        1,
+        1
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v02_04_667_26",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 667.257,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v02_04_667_26.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "an ally has been slain",
+      "split": "tuning",
+      "probability": 0.861047,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        2,
+        3
+      ],
+      "kda_after": [
+        2,
+        2,
+        3
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v03_01_186_78",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 186.784,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v03_01_186_78.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "evaluation",
+      "probability": 0.007368,
+      "predicted": 0,
+      "kda_before": [
+        0,
+        0,
+        0
+      ],
+      "kda_after": [
+        0,
+        0,
+        0
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v03_02_373_57",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 373.568,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v03_02_373_57.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "evaluation",
+      "probability": 0.972468,
+      "predicted": 1,
+      "kda_before": [
+        1,
+        2,
+        0
+      ],
+      "kda_after": [
+        1,
+        2,
+        0
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v03_03_594_35",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 594.352,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v03_03_594_35.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "evaluation",
+      "probability": 0.003215,
+      "predicted": 0,
+      "kda_before": [
+        1,
+        3,
+        1
+      ],
+      "kda_after": [
+        1,
+        3,
+        1
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v03_04_747_14",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 747.136,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_gap_audit_001/clips/gap_v03_04_747_14.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "evaluation",
+      "probability": 0.987588,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        4,
+        4
+      ],
+      "kda_after": [
+        2,
+        4,
+        4
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v02_07_648_72",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 648.722,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v02_07_648_72.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "shut down",
+      "split": "tuning",
+      "probability": 0.947629,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        2,
+        2
+      ],
+      "kda_after": [
+        2,
+        2,
+        3
+      ],
+      "kda_delta": [
+        0,
+        0,
+        1
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v03_02_207_54",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 207.538,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v03_02_207_54.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "evaluation",
+      "probability": 0.994021,
+      "predicted": 1,
+      "kda_before": [
+        0,
+        0,
+        0
+      ],
+      "kda_after": [
+        0,
+        0,
+        0
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v03_06_622_61",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 622.614,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v03_06_622_61.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "enemy double kill",
+      "split": "evaluation",
+      "probability": 0.955095,
+      "predicted": 1,
+      "kda_before": [
+        1,
+        3,
+        3
+      ],
+      "kda_after": [
+        1,
+        3,
+        3
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v02_03_278_02",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 278.024,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v02_03_278_02.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "first blood",
+      "split": "tuning",
+      "probability": 0.927014,
+      "predicted": 1,
+      "kda_before": [
+        0,
+        0,
+        0
+      ],
+      "kda_after": [
+        0,
+        0,
+        0
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v03_07_794_38",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 794.382,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v03_07_794_38.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "partial voice of enemy has been slain. kill can be fully identified from the image of the hero icon- \"red team icon 击败blue team icon\". you can even tell who killed who based from the image based on the hero icons. in this video it's 安其拉击败六耳",
+      "split": "evaluation",
+      "probability": 0.742478,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        4,
+        4
+      ],
+      "kda_after": [
+        2,
+        4,
+        4
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v02_06_556_05",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 556.047,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v02_06_556_05.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "three deaths in this video. you have been slain. an enemy has been slain. enemy killing spree",
+      "split": "tuning",
+      "probability": 0.929852,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        2,
+        2
+      ],
+      "kda_after": [
+        2,
+        2,
+        2
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v01_06_849_38",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 849.38,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v01_06_849_38.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "tow deaths. rampage. an enemy has been slain.",
+      "split": "tuning",
+      "probability": 0.894549,
+      "predicted": 1,
+      "kda_before": [
+        6,
+        3,
+        9
+      ],
+      "kda_after": [
+        6,
+        3,
+        9
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v03_05_518_84",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 518.845,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v03_05_518_84.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "an ally has been slain",
+      "split": "evaluation",
+      "probability": 0.712148,
+      "predicted": 1,
+      "kda_before": [
+        1,
+        3,
+        0
+      ],
+      "kda_after": [
+        1,
+        3,
+        0
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v02_08_741_40",
+      "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+      "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+      "center_sec": 741.397,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v02_08_741_40.mp4",
+      "target": 1,
+      "operator_verdict": "missed_kill_announcement",
+      "operator_note": "killing spree",
+      "split": "tuning",
+      "probability": 0.868063,
+      "predicted": 1,
+      "kda_before": [
+        2,
+        4,
+        3
+      ],
+      "kda_after": [
+        2,
+        4,
+        3
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v01_08_1041_84",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 1041.84,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v01_08_1041_84.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.043724,
+      "predicted": 0,
+      "kda_before": null,
+      "kda_after": null,
+      "kda_delta": null,
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v01_01_130_23",
+      "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+      "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+      "center_sec": 130.23,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v01_01_130_23.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "tuning",
+      "probability": 0.032596,
+      "predicted": 0,
+      "kda_before": null,
+      "kda_after": null,
+      "kda_delta": null,
+      "player_kill_or_death_change": false
+    },
+    {
+      "candidate_id": "gap_v03_08_830_15",
+      "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+      "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+      "center_sec": 830.151,
+      "clip": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_audio_hard_negative_batch_001/clips/gap_v03_08_830_15.mp4",
+      "target": 0,
+      "operator_verdict": "no_kill_announcement",
+      "operator_note": "",
+      "split": "evaluation",
+      "probability": 0.02224,
+      "predicted": 0,
+      "kda_before": [
+        3,
+        4,
+        5
+      ],
+      "kda_after": [
+        3,
+        4,
+        5
+      ],
+      "kda_delta": [
+        0,
+        0,
+        0
+      ],
+      "player_kill_or_death_change": false
+    }
+  ],
+  "limitations": [
+    "KDA confirms player-only changes",
+    "neighbor resampling can span adjacent events",
+    "unreadable remains abstention"
+  ]
+}

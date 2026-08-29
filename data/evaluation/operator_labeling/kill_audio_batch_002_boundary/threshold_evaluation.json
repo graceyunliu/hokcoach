@@ -1,0 +1,42 @@
+{
+  "schema_version": "hokcoach-audio-threshold-evaluation-v1",
+  "high_threshold": {
+    "threshold": 0.78,
+    "candidates": 5,
+    "verdicts": {
+      "correct": 4,
+      "unreadable": 1
+    },
+    "readable_coverage": 0.8,
+    "accuracy_on_readable": 1.0
+  },
+  "boundary_band": {
+    "score_range": [
+      0.74,
+      0.78
+    ],
+    "candidates": 13,
+    "verdicts": {
+      "correct": 8,
+      "incorrect": 2,
+      "unreadable": 3
+    },
+    "readable_coverage": 0.7692307692307693,
+    "accuracy_on_readable": 0.8
+  },
+  "combined_0_74": {
+    "candidates": 18,
+    "verdicts": {
+      "correct": 12,
+      "unreadable": 4,
+      "incorrect": 2
+    },
+    "readable_coverage": 0.7777777777777778,
+    "accuracy_on_readable": 0.8571428571428571
+  },
+  "limitations": [
+    "candidate-only evaluation; recall is not measured",
+    "unreadable labels are abstentions",
+    "continuous announcements need target-time highlighting"
+  ]
+}

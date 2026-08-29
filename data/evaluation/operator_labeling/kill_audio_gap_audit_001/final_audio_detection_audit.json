@@ -1,0 +1,49 @@
+{
+  "schema_version": "hokcoach-kill-audio-audit-v1",
+  "source_videos": 3,
+  "candidate_evaluation": {
+    "threshold_0_78": {
+      "candidates": 5,
+      "correct": 4,
+      "incorrect": 0,
+      "unreadable": 1,
+      "accuracy_on_readable": 1.0
+    },
+    "threshold_0_74_combined": {
+      "candidates": 18,
+      "correct": 12,
+      "incorrect": 2,
+      "unreadable": 4,
+      "accuracy_on_readable": 0.8571428571428571
+    }
+  },
+  "gap_audit": {
+    "sampled_windows": 12,
+    "no_kill_announcement": 7,
+    "missed_kill_announcement": 5,
+    "unreadable": 0,
+    "missed_window_rate": 0.4166666666666667,
+    "sampling": "four deterministic 12-second non-candidate windows per source; excludes ±15 seconds around >=0.74 candidates"
+  },
+  "targeted_low_threshold_audit": {
+    "threshold": 0.5,
+    "missed_windows_checked": 5,
+    "correct_semantic_template_recovered": 1,
+    "no_correct_template_recovered": 4,
+    "finding": "lowering the correlation threshold alone does not solve recorded-mix generalization and introduces semantic confusions"
+  },
+  "production_decision": {
+    "standalone_kill_audio_detection": "not_ready",
+    "high_confidence_audio_corroboration": {
+      "allowed": true,
+      "threshold": 0.78
+    },
+    "automatic_event_creation_from_audio_only": false,
+    "next_model": "train or calibrate a noise-robust recorded-audio classifier/embedding model using operator-labeled replay clips; retain template matcher as corroboration"
+  },
+  "limitations": [
+    "gap audit estimates missed-window prevalence, not event-level recall",
+    "three source recordings only",
+    "some clips contain multiple consecutive announcements"
+  ]
+}

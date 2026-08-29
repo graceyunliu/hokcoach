@@ -1,0 +1,327 @@
+[
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v01_002_770_50",
+    "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-11-2026 15-57-29_1.MP4",
+    "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+    "source_duration_sec": 1172.07,
+    "center_sec": 770.5,
+    "clip_start_sec": 767.5,
+    "clip_end_sec": 775.5,
+    "clip": "clips/v01_002_770_50.mp4",
+    "max_score": 0.7482484117677931,
+    "predictions": [
+      {
+        "ts": 770.5,
+        "event": "multi_kill_2",
+        "perspective": "enemy",
+        "score": 0.7482484117677931,
+        "template": "王者荣耀 敌人双杀.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v01_003_812_04",
+    "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-11-2026 15-57-29_1.MP4",
+    "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+    "source_duration_sec": 1172.07,
+    "center_sec": 812.04,
+    "clip_start_sec": 809.04,
+    "clip_end_sec": 817.04,
+    "clip": "clips/v01_003_812_04.mp4",
+    "max_score": 0.7455574106025019,
+    "predictions": [
+      {
+        "ts": 812.04,
+        "event": "hero_killed",
+        "perspective": "allied",
+        "score": 0.7455574106025019,
+        "template": "王者荣耀 敌人被杀1.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v01_005_896_04",
+    "source_name": "ScreenRecording_08-11-2026 15-57-29_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-11-2026 15-57-29_1.MP4",
+    "source_sha256": "77d58c30c05490c532d1d1f950a5564a7779891a3ba950a553be965b268f562e",
+    "source_duration_sec": 1172.07,
+    "center_sec": 896.04,
+    "clip_start_sec": 893.04,
+    "clip_end_sec": 901.04,
+    "clip": "clips/v01_005_896_04.mp4",
+    "max_score": 0.7710904220494639,
+    "predictions": [
+      {
+        "ts": 896.04,
+        "event": "kill_streak_6",
+        "perspective": "allied",
+        "score": 0.7710904220494639,
+        "template": "王者荣耀 GodLike.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v02_001_365_90",
+    "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+    "source_duration_sec": 834.071,
+    "center_sec": 365.9,
+    "clip_start_sec": 362.9,
+    "clip_end_sec": 370.9,
+    "clip": "clips/v02_001_365_90.mp4",
+    "max_score": 0.7566934301865037,
+    "predictions": [
+      {
+        "ts": 365.90000000000003,
+        "event": "hero_killed",
+        "perspective": "enemy",
+        "score": 0.7566934301865037,
+        "template": "王者荣耀 盟友被杀1.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v02_002_368_40",
+    "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+    "source_duration_sec": 834.071,
+    "center_sec": 368.4,
+    "clip_start_sec": 365.4,
+    "clip_end_sec": 373.4,
+    "clip": "clips/v02_002_368_40.mp4",
+    "max_score": 0.7647963987141221,
+    "predictions": [
+      {
+        "ts": 368.40000000000003,
+        "event": "multi_kill_2",
+        "perspective": "enemy",
+        "score": 0.7647963987141221,
+        "template": "王者荣耀 敌人双杀.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v02_003_417_42",
+    "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+    "source_duration_sec": 834.071,
+    "center_sec": 417.42,
+    "clip_start_sec": 414.42,
+    "clip_end_sec": 422.42,
+    "clip": "clips/v02_003_417_42.mp4",
+    "max_score": 0.741003053274717,
+    "predictions": [
+      {
+        "ts": 417.42,
+        "event": "kill_streak_3",
+        "perspective": "enemy",
+        "score": 0.741003053274717,
+        "template": "王者荣耀 Enemy Killing Spree.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v02_004_495_28",
+    "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+    "source_duration_sec": 834.071,
+    "center_sec": 495.28,
+    "clip_start_sec": 492.28,
+    "clip_end_sec": 500.28,
+    "clip": "clips/v02_004_495_28.mp4",
+    "max_score": 0.7528747213236171,
+    "predictions": [
+      {
+        "ts": 495.28000000000003,
+        "event": "hero_killed",
+        "perspective": "enemy",
+        "score": 0.7528747213236171,
+        "template": "王者荣耀 盟友被杀1.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v02_005_625_82",
+    "source_name": "ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 01-16-28_1.MP4",
+    "source_sha256": "41ee2b5e13c834e041bcb8961377085d438be0d49dbff091974c583f5756df1f",
+    "source_duration_sec": 834.071,
+    "center_sec": 625.82,
+    "clip_start_sec": 622.82,
+    "clip_end_sec": 630.82,
+    "clip": "clips/v02_005_625_82.mp4",
+    "max_score": 0.7434966644518926,
+    "predictions": [
+      {
+        "ts": 625.82,
+        "event": "kill_streak_3",
+        "perspective": "enemy",
+        "score": 0.7434966644518926,
+        "template": "王者荣耀 Enemy Killing Spree.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v03_001_567_34",
+    "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+    "source_duration_sec": 933.92,
+    "center_sec": 567.34,
+    "clip_start_sec": 564.34,
+    "clip_end_sec": 572.34,
+    "clip": "clips/v03_001_567_34.mp4",
+    "max_score": 0.7634550641283393,
+    "predictions": [
+      {
+        "ts": 567.34,
+        "event": "kill_streak_4",
+        "perspective": "enemy",
+        "score": 0.7634550641283393,
+        "template": "王者荣耀 Enemy Rampage.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v03_002_714_88",
+    "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+    "source_duration_sec": 933.92,
+    "center_sec": 714.88,
+    "clip_start_sec": 711.88,
+    "clip_end_sec": 719.88,
+    "clip": "clips/v03_002_714_88.mp4",
+    "max_score": 0.7697439735879918,
+    "predictions": [
+      {
+        "ts": 714.88,
+        "event": "kill_streak_7_plus",
+        "perspective": "enemy",
+        "score": 0.7697439735879918,
+        "template": "王者荣耀 Enemy Legendary.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v03_003_717_72",
+    "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+    "source_duration_sec": 933.92,
+    "center_sec": 717.72,
+    "clip_start_sec": 714.72,
+    "clip_end_sec": 722.72,
+    "clip": "clips/v03_003_717_72.mp4",
+    "max_score": 0.7582776755472247,
+    "predictions": [
+      {
+        "ts": 717.72,
+        "event": "hero_killed",
+        "perspective": "enemy",
+        "score": 0.7582776755472247,
+        "template": "王者荣耀 盟友被杀1.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v03_004_728_58",
+    "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+    "source_duration_sec": 933.92,
+    "center_sec": 728.58,
+    "clip_start_sec": 725.58,
+    "clip_end_sec": 733.58,
+    "clip": "clips/v03_004_728_58.mp4",
+    "max_score": 0.7616407989252952,
+    "predictions": [
+      {
+        "ts": 728.58,
+        "event": "kill_streak_7_plus",
+        "perspective": "enemy",
+        "score": 0.7616407989252952,
+        "template": "王者荣耀 Enemy Legendary.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  },
+  {
+    "schema_version": "hokcoach-event-candidate-v1",
+    "candidate_id": "v03_005_775_38",
+    "source_name": "ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_path": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/Replay/ScreenRecording_08-12-2026 02-03-33_1.MP4",
+    "source_sha256": "6beae5bffe65ff8d676dca16865c9e9eb69c5979552797a26e72922abbfc69eb",
+    "source_duration_sec": 933.92,
+    "center_sec": 775.38,
+    "clip_start_sec": 772.38,
+    "clip_end_sec": 780.38,
+    "clip": "clips/v03_005_775_38.mp4",
+    "max_score": 0.7626530761862709,
+    "predictions": [
+      {
+        "ts": 775.38,
+        "event": "kill_streak_7_plus",
+        "perspective": "enemy",
+        "score": 0.7626530761862709,
+        "template": "王者荣耀 Enemy Legendary.wav",
+        "category": "combat",
+        "usage": "evidence"
+      }
+    ],
+    "label_status": "unlabeled"
+  }
+]

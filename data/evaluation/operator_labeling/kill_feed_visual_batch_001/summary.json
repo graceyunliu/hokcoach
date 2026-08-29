@@ -1,0 +1,6 @@
+{
+  "schema_version": "hokcoach-kill-feed-package-v1",
+  "samples": 14,
+  "split": "evaluation",
+  "index": "/Users/graceliu/Claude/Projects/王者荣耀AI教练/data/evaluation/operator_labeling/kill_feed_visual_batch_001/index.html"
+}
